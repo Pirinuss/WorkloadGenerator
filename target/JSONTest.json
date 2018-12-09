@@ -1,0 +1,18 @@
+{
+  "targets": [
+         {"target1": {
+            "servername":"www.nichtgoogle.de",
+            "port":"8080"
+         }
+         },
+        {"target2": {
+            "servername":"www.example.com",
+            "port":"2000"
+        }
+        },
+        {"target3": {
+            "servername":"www.ntv.de"
+        } 
+        }
+  ]
+}  
