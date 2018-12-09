@@ -1,6 +1,8 @@
 package wg.requests;
 
-public class FtpRequest {
+import wg.workload.Request;
+
+public class FtpRequest extends Request{
 
 	private FtpMethodType method;
 	private String localResource;

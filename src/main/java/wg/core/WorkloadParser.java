@@ -1,5 +1,7 @@
 package wg.core;
 
+import wg.requests.FtpRequest;
+import wg.requests.FtpMethodType;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
 import wg.workload.ProtocolType;
@@ -27,11 +29,11 @@ public class WorkloadParser {
 			HashMap<String, Request> requests = parseRequests(jo);
 			//***DEBUG***
 			System.out.println(requests.size());
-			HttpRequest request = (HttpRequest) requests.get("request2");
+			FtpRequest request = (FtpRequest) requests.get("request3");
 			System.out.println(request.getProtocol());
 			System.out.println(request.getMethod());
-			System.out.println(request.getResourcePath());
-			System.out.println(new String(request.getContent()));
+			System.out.println(request.getUsername());
+			System.out.println(request.getPassword());
 			//***DEBUG ENDE***
 			Schedule schedule = parseSchedule(jo);
 			w = new Workload(targets, requests, schedule);
@@ -101,59 +103,78 @@ public class WorkloadParser {
 	}
 	
 	/**
-	 * Erzeugt je nach angegebenem Protokoll den entsprechenden Request 
-	 * und gibt diesen zurück
+	 * Mappt das Protokoll auf den spezifischen Request und lässt 
+	 * diesen erzeugen
 	 * @param requestContent Das JSON Objekt aus dem JSON Dokument mit den
 	 * 		  einzelnen Request Parametern
 	 * @return Das ensprechende Request Objekt
 	 */
 	private Request getSpecificRequest(JSONObject requestContent) {
+		Request request = null;
 		String protocol = (String) requestContent.get("protocol");
 		ProtocolType protocolType = ProtocolType.valueOf(protocol);
 		switch (protocolType) {
 			
 		case HTTP:
-			HttpRequest httpRequest = new HttpRequest();
-			httpRequest.setProtocol(ProtocolType.HTTP);
-			String methodTypeName = (String) requestContent.get("method");
-			HttpMethodType methodType = HttpMethodType.valueOf(methodTypeName);
-			switch (methodType) {
-			case GET:
-				httpRequest.setMethod(HttpMethodType.GET);
-				break;
-			case DELETE:
-				httpRequest.setMethod(HttpMethodType.DELETE);
-				break;
-			case POST:
-				httpRequest.setMethod(HttpMethodType.POST);
-				break;
-			case PUT:
-				httpRequest.setMethod(HttpMethodType.PUT);
-				break;
-			default:
-				httpRequest.setMethod(null);
-	
-			}
-			String resourcePath = (String) requestContent.get("resourcePath");
-			httpRequest.setResourcePath(resourcePath);
-			String content = (String) requestContent.get("content");
-			if (content != null) {
-				httpRequest.setContent(content.getBytes());
-			}
-			return httpRequest;
+			return request = createHttpRequest(requestContent);
 		case FTP:
-			//TODO Konstruieren und Rückgeben eines neuen FtpRequest 
-			return null;
+			return request = createFtpRequest(requestContent);
 		case TCP:
 			//TODO Konstruieren und Rückgeben eines neuen TcpRequest 
-			return null;
+			return request;
 		case UDP:
 			//TODO Konstruieren und Rückgeben eines neuen UdpRequest 
-			return null;
+			return request;
 		default:
-			return null;
+			return request;
 				
 		}
+	}
+	
+	/**
+	 * Erzeugt einen neuen HTTP Request, füllt ihn mit den
+	 * Werten aus dem JSON Objekt und gibt ihn zurück
+	 * @param requestContent Das JSON Objekt aus dem JSON
+	 * Dokument welches die einzelnen Parameter des Requests
+	 * enthält
+	 * @return httpRequest Der erzeugte und befüllte Request
+	 */
+	private Request createHttpRequest(JSONObject requestContent) {
+		HttpRequest httpRequest = new HttpRequest();
+		httpRequest.setProtocol(ProtocolType.HTTP);
+		String methodTypeName = (String) requestContent.get("method");
+		HttpMethodType methodType = HttpMethodType.valueOf(methodTypeName);
+		httpRequest.setMethod(methodType);
+		String resourcePath = (String) requestContent.get("resourcePath");
+		httpRequest.setResourcePath(resourcePath);
+		String content = (String) requestContent.get("content");
+		httpRequest.setContent(content.getBytes());
+		return httpRequest;
+	}
+	
+	/**
+	 * Erzeugt einen neuen FTP Request, füllt ihn mit den
+	 * Werten aus dem JSON Objekt und gibt ihn zurück
+	 * @param requestContent Das JSON Objekt aus dem JSON
+	 * Dokument welches die einzelnen Parameter des Requests
+	 * enthält
+	 * @return ftpRequest Der erzeugte und befüllte Request
+	 */
+	private Request createFtpRequest(JSONObject requestContent) {
+		FtpRequest ftpRequest = new FtpRequest();
+		ftpRequest.setProtocol(ProtocolType.FTP);
+		String methodTypeName = (String) requestContent.get("method");
+		FtpMethodType methodType = FtpMethodType.valueOf(methodTypeName);
+		ftpRequest.setMethod(methodType);
+		String localResource = (String) requestContent.get("localResource");
+		ftpRequest.setLocalResource(localResource);
+		String remoteResource = (String) requestContent.get("remoteResource");
+		ftpRequest.setRemoteResource(remoteResource);
+		String username = (String) requestContent.get("username");
+		ftpRequest.setUsername(username);
+		String password = (String) requestContent.get("password");
+		ftpRequest.setPassword(password);
+		return ftpRequest;
 	}
 	
 }
