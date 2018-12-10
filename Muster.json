@@ -1,0 +1,92 @@
+{
+  "targets": [
+         {"target1": {
+            "servername":"www.nichtgoogle.de",
+            "port":"8080"
+         }
+         },
+        {"target2": {
+            "servername":"www.example.com",
+            "port":"80"
+        }
+        },
+        {"target3": {
+            "servername":"www.ntv.de"
+        } 
+        }
+  ],
+  "requests": [
+         {"request1": {
+            "protocol":"HTTP",
+            "method":"GET",
+            "resourcePath":"infotext.html",
+             "content":"ach was weiß ich denn"
+         }
+         },
+         {"request2" : {
+             "protocol":"HTTP",
+             "method":"POST",
+             "resourcePath":"wiki/München",
+             "content":"Cool"
+         }
+         },
+         {"request3": {
+            "protocol":"FTP",
+            "method": "GET",
+            "localResource": "test",
+            "remoteResource": "wiki/München",
+             "username":"marc",
+             "password":"weiß ich grad nicht"
+         }
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "frame1": {
+                "events": [
+                    {"event1": {
+                      "target":"target1", "request":"request2", "time":5
+                    }
+                    },
+                    {"event2": {
+                        "target":"target2", "request":"request2", "time":5
+                    }
+                    }
+                ]
+            }},
+            { "frame2": {
+                "events": [
+                    {"event1": {
+                      "target":"target1", "request":"request2", "time":5
+                    }
+                    },
+                    {"event2": {
+                        "target":"target1", "request":"request1", "time":10
+                    }
+                    }
+                ]
+            }},
+            { "frame3": {
+                "events": [
+                    {"event1": {
+                      "target":"target2", "request":"request1", "time":1
+                    }
+                    },
+                    {"event2": {
+                        "target":"target2", "request":"request2", "time":1
+                    }
+                    },
+                    {"event3": {
+                        "target":"target2", "request":"request3", "time":1
+                    }
+                    },
+                    {"event4": {
+                        "target":"target2", "request":"request4", "time":5
+                    }
+                    }
+                ]
+            }
+            }
+        ]
+  }
+}

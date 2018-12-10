@@ -4,6 +4,8 @@ import wg.requests.FtpRequest;
 import wg.requests.FtpMethodType;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
+import wg.workload.EventDiscriptor;
+import wg.workload.Frame;
 import wg.workload.ProtocolType;
 import wg.workload.Request;
 import wg.workload.Schedule;
@@ -27,15 +29,11 @@ public class WorkloadParser {
 			JSONObject jo = (JSONObject) obj;
 			HashMap<String, Target> targets = parseTargets(jo);
 			HashMap<String, Request> requests = parseRequests(jo);
+			Schedule schedule = parseSchedule(jo);
 			//***DEBUG***
 			System.out.println(requests.size());
-			FtpRequest request = (FtpRequest) requests.get("request3");
-			System.out.println(request.getProtocol());
-			System.out.println(request.getMethod());
-			System.out.println(request.getUsername());
-			System.out.println(request.getPassword());
+			System.out.println(schedule.getFrames().length);
 			//***DEBUG ENDE***
-			Schedule schedule = parseSchedule(jo);
 			w = new Workload(targets, requests, schedule);
 		} catch (FileNotFoundException e ) {
 			//TODO Fehlerbehandlung nicht via Exception
@@ -97,9 +95,43 @@ public class WorkloadParser {
 		return null;
 	}
 	
-	//Liest den Schedule aus dem JSON Dokument aus
+	/**
+	 * Liest den Schedule aus dem JSON Dokument aus
+	 * @param jo Das JSON Dokument als JSONObject
+	 * @return schedule Der Schedule mit allen Frames und allen Events 
+	 */
 	private Schedule parseSchedule(JSONObject jo) {
-		return null;
+		Schedule schedule = new Schedule();
+		JSONObject scheduleObj = (JSONObject) jo.get("schedule");
+		JSONArray framesObj = (JSONArray) scheduleObj.get("frames");
+		Frame[] frames = new Frame[framesObj.size()];
+		for (int i=0; i<framesObj.size(); i++) {
+			Frame frame = new Frame();
+			JSONObject frameObj = (JSONObject) framesObj.get(i);
+			String frameName = ("frame").concat(String.valueOf(i+1));
+			frame.setFrameName(frameName);
+			JSONObject frameContent = (JSONObject) frameObj.get(frameName);
+			JSONArray eventsObj = (JSONArray) frameContent.get("events");
+			EventDiscriptor[] events = new EventDiscriptor[eventsObj.size()];
+			for (int j=0; j<eventsObj.size(); j++) {
+				EventDiscriptor event = new EventDiscriptor();
+				JSONObject eventObj = (JSONObject) eventsObj.get(j);
+				String eventName = ("event").concat(String.valueOf(j+1));
+				JSONObject eventContent = (JSONObject) eventObj.get(eventName);
+				event.setEventName(eventName);
+				String targetName = (String) eventContent.get("target");
+				event.setTargetName(targetName);
+				String requestName = (String) eventContent.get("request");
+				event.setRequestName(requestName);
+				long time = (Long) eventContent.get("time");
+				event.setTime(time);
+				events[j] = event; 
+			}
+			frame.setEvents(events);
+			frames[i] = frame;
+		}
+		schedule.setFrames(frames);
+		return schedule;
 	}
 	
 	/**
