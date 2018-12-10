@@ -30,10 +30,6 @@ public class WorkloadParser {
 			HashMap<String, Target> targets = parseTargets(jo);
 			HashMap<String, Request> requests = parseRequests(jo);
 			Schedule schedule = parseSchedule(jo);
-			//***DEBUG***
-			System.out.println(requests.size());
-			System.out.println(schedule.getFrames().length);
-			//***DEBUG ENDE***
 			w = new Workload(targets, requests, schedule);
 		} catch (FileNotFoundException e ) {
 			//TODO Fehlerbehandlung nicht via Exception
@@ -63,7 +59,8 @@ public class WorkloadParser {
 				JSONObject targetContent = (JSONObject) targetObj.get(targetName);
 				String servername = (String) targetContent.get("servername");
 				String port = (String) targetContent.get("port");
-				newTarget.setServername(servername);
+				newTarget.setTargetName(targetName);
+				newTarget.setServerName(servername);
 				newTarget.setPort(port);
 				targetMap.put(targetName, newTarget);
 			}

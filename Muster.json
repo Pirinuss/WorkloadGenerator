@@ -11,7 +11,8 @@
         }
         },
         {"target3": {
-            "servername":"www.ntv.de"
+            "servername":"www.ntv.de",
+            "port": "80"
         } 
         }
   ],
