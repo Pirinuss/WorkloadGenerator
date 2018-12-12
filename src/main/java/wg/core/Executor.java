@@ -3,6 +3,7 @@ package wg.core;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,13 +13,17 @@ import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
+import wg.workload.Request;
+import wg.workload.Target;
 import wg.workload.Workload;
 
 public class Executor {
 	
 	ExecutorService exeService;
+	Workload w;
 
 	public void executeWorkload(Workload w) {
+		this.w = w;
 		ResponseStorage responseStorage;
 		responseStorage = ResponseStorage.getInstance();
 		Frame[] frames = w.getSchedule().getFrames();
@@ -41,17 +46,16 @@ public class Executor {
 		long exeTime;
 		Response[] responses = new Response[events.size()];
 		Future[] futures = new Future[events.size()];
-		ArrayList<EventDiscriptor> executedEvents = null;
 		Timestamp startTime = new Timestamp(System.currentTimeMillis());
 		while (events.size() > 0) {
-			executedEvents = new ArrayList<EventDiscriptor>();
 			for (int i=0; i<events.size(); i++) {
 				currentEvent = events.get(i);
 				exeTime = currentEvent.getTime();
 				Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-				long dif = currentTime.getTime()-startTime.getTime();
 				if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
-					Event event = new Event();
+					Target target = mapTarget(currentEvent.getTargetName());
+					Request request = mapRequest(currentEvent.getRequestName());
+					Event event = new Event(target, request);
 					Future<Response> response = exeService.submit(event);
 					//***DEBUG
 					System.out.println("---NEUES EVENT---");
@@ -65,14 +69,8 @@ public class Executor {
 					}
 					//***DEBUGENDE
 					futures[i] = response;
-					executedEvents.add(events.get(i));
-				}
-			}
-			for (int j=0; j<executedEvents.size(); j++) {
-				for (int x =0; x<events.size(); x++) {
-					if (events.get(x).equals(executedEvents.get(j))) {
-						events.remove(events.get(x));
-					}
+					events.remove(currentEvent);
+					i--;
 				}
 			}
 		}
@@ -85,6 +83,18 @@ public class Executor {
 			}
 		}
 		return responses;
+	}
+	
+	private Target mapTarget(String targetName) {
+		HashMap<String, Target> targets = w.getTargets();
+		Target target = targets.get(targetName);
+		return target;
+	}
+	
+	private Request mapRequest(String requestName) {
+		HashMap<String, Request> requests = w.getRequests();
+		Request request = requests.get(requestName);
+		return request;
 	}
 	
 }

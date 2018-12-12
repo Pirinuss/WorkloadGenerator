@@ -58,7 +58,7 @@
             { "frame2": {
                 "events": [
                     {"event1": {
-                      "target":"target1", "request":"request2", "time":50000
+                      "target":"target1", "request":"request2", "time":50
                     }
                     },
                     {"event2": {
