@@ -30,7 +30,10 @@ public class WorkloadParser {
 			HashMap<String, Target> targets = parseTargets(jo);
 			HashMap<String, Request> requests = parseRequests(jo);
 			Schedule schedule = parseSchedule(jo);
-			w = new Workload(targets, requests, schedule);
+			w = new Workload();
+			w.setTargets(targets);
+			w.setRequests(requests);
+			w.setSchedule(schedule);
 		} catch (FileNotFoundException e ) {
 			//TODO Fehlerbehandlung nicht via Exception
 			System.out.println("File not found!");	

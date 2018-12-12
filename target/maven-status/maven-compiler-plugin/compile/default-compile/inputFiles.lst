@@ -1,4 +1,6 @@
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\requests\FtpRequest.java
+C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\Event.java
+C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\Response.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Frame.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Schedule.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\requests\HttpRequest.java
@@ -9,6 +11,7 @@ C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\requests\
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\Controller.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\WorkloadParser.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Target.java
+C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\ResponseStorage.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\ProtocolType.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Request.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Workload.java

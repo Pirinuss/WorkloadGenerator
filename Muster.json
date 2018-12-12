@@ -46,11 +46,11 @@
             { "frame1": {
                 "events": [
                     {"event1": {
-                      "target":"target1", "request":"request2", "time":5
+                      "target":"target1", "request":"request2", "time":18
                     }
                     },
                     {"event2": {
-                        "target":"target2", "request":"request2", "time":5
+                        "target":"target2", "request":"request2", "time":12
                     }
                     }
                 ]
@@ -58,11 +58,11 @@
             { "frame2": {
                 "events": [
                     {"event1": {
-                      "target":"target1", "request":"request2", "time":5
+                      "target":"target1", "request":"request2", "time":50000
                     }
                     },
                     {"event2": {
-                        "target":"target1", "request":"request1", "time":10
+                        "target":"target1", "request":"request1", "time":5
                     }
                     }
                 ]
@@ -74,15 +74,15 @@
                     }
                     },
                     {"event2": {
-                        "target":"target2", "request":"request2", "time":1
+                        "target":"target2", "request":"request2", "time":5
                     }
                     },
                     {"event3": {
-                        "target":"target2", "request":"request3", "time":1
+                        "target":"target2", "request":"request3", "time":3
                     }
                     },
                     {"event4": {
-                        "target":"target2", "request":"request4", "time":5
+                        "target":"target2", "request":"request4", "time":1
                     }
                     }
                 ]
