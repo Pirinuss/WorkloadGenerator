@@ -1,15 +1,52 @@
 package wg.core;
 
+import wg.workload.Request;
+import wg.workload.Target;
+
 public class Response {
 	
-	String test;
-
-	public String getTest() {
-		return test;
+	Target target;
+	Request request;
+	long eventStartTime;
+	long eventStopTime;
+	String responseInfos;
+	String responseContent;
+	
+	public Target getTarget() {
+		return target;
 	}
-
-	public void setTest(String test) {
-		this.test = test;
+	public void setTarget(Target target) {
+		this.target = target;
+	}
+	public Request getRequest() {
+		return request;
+	}
+	public void setRequest(Request request) {
+		this.request = request;
+	}
+	public long getEventStartTime() {
+		return eventStartTime;
+	}
+	public void setEventStartTime(long eventStartTime) {
+		this.eventStartTime = eventStartTime;
+	}
+	public long getEventStopTime() {
+		return eventStopTime;
+	}
+	public void setEventStopTime(long eventStopTime) {
+		this.eventStopTime = eventStopTime;
+	}
+	public String getResponseInfos() {
+		return responseInfos;
+	}
+	public void setResponseInfos(String responseInfos) {
+		this.responseInfos = responseInfos;
+	}
+	public String getResponseContent() {
+		return responseContent;
+	}
+	public void setResponseContent(String responseContent) {
+		this.responseContent = responseContent;
 	}
 
 }

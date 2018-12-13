@@ -1,5 +1,7 @@
 package wg.workload;
 
+import wg.core.Response;
+
 public class Frame {
 	
 	String frameName;

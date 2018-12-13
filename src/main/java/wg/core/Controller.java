@@ -21,7 +21,9 @@ public class Controller {
 		workload = parseCommands(args);
 		if (workload != null) {
 			executor.executeWorkload(workload);
+			responseStorage.printResponses();
 		}
+		System.exit(0);
 	}
 	
 	private static Workload parseCommands(String[] args) {

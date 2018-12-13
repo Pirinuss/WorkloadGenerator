@@ -88,6 +88,7 @@ public class WorkloadParser {
 				String requestName = ("request").concat(String.valueOf(i+1));
 				JSONObject requestContent = (JSONObject) requestObj.get(requestName);
 				newRequest = getSpecificRequest(requestContent);
+				newRequest.setRequestName(requestName);
 				requestMap.put(requestName, newRequest);
 			}
 			return requestMap;
