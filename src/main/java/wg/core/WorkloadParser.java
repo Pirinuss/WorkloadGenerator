@@ -35,7 +35,6 @@ public class WorkloadParser {
 			w.setRequests(requests);
 			w.setSchedule(schedule);
 		} catch (FileNotFoundException e ) {
-			//TODO Fehlerbehandlung nicht via Exception
 			System.out.println("File not found!");	
 		} catch (ParseException e) {
 			System.out.println("Invalid JSON Document!");
@@ -143,9 +142,14 @@ public class WorkloadParser {
 	 * @return Das ensprechende Request Objekt
 	 */
 	private Request getSpecificRequest(JSONObject requestContent) {
-		Request request = null;
+		Request request = new Request();
 		String protocol = (String) requestContent.get("protocol");
-		ProtocolType protocolType = ProtocolType.valueOf(protocol);
+		ProtocolType protocolType;
+		if (protocol != null) {
+			protocolType = ProtocolType.valueOf(protocol);
+		} else {
+			protocolType = ProtocolType.NONE;
+		}
 		switch (protocolType) {
 			
 		case HTTP:
@@ -181,7 +185,11 @@ public class WorkloadParser {
 		String resourcePath = (String) requestContent.get("resourcePath");
 		httpRequest.setResourcePath(resourcePath);
 		String content = (String) requestContent.get("content");
-		httpRequest.setContent(content.getBytes());
+		if (content == null) {
+			httpRequest.setContent("");
+		} else {
+			httpRequest.setContent(content);
+		}
 		return httpRequest;
 	}
 	

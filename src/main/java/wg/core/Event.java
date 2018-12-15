@@ -1,11 +1,10 @@
 package wg.core;
 
 import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.concurrent.Callable;
@@ -19,6 +18,8 @@ public class Event implements Callable<Response> {
 	
 	private Target target;
 	private Request request;
+	private Response response;
+	final String USER_AGENT = "Mozilla/5.0";
 	
 	public Target getTarget() {
 		return target;
@@ -42,80 +43,80 @@ public class Event implements Callable<Response> {
 	}
 
 	public Response call() throws Exception {
-		Response response = new Response();
+		response = new Response();
+		response.setTarget(target);
+		response.setRequest(request);
 		switch(request.getProtocol()) {
 		
 		case HTTP:
 			return response = executeHttpEvent();
 		case FTP:
-			break;
+			return response;
 		case TCP:
-			break;
+			return response;
 		case UDP:
-			break;
+			return response;
 		default:
-			break;
+			return response;
 		}
-		return response;
 	}
 	
-	private Response executeHttpEvent() throws IOException{
-		//Initialwerte
-		Response response = new Response();
-		response.setTarget(target);
-		response.setRequest(request);
+	private Response executeHttpEvent() {
 		HttpRequest httpRequest = (HttpRequest) request;
 		String serverName = "http://" + target.getServerName()+"/";
 		String path = httpRequest.getResourcePath();
 		String url = serverName.concat(path);
 		String methodType = HttpMethodType.parseToString(httpRequest.getMethod());
-		final String USER_AGENT = "Mozilla/5.0";
-		
-		//Aufbau und Ausführen der Verbindung
-		//TODO Timestamps richt setzen
-		URL obj = null;
-		try {
-			obj = new URL(url);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+		String content = httpRequest.getContent();
 		Timestamp startTime = new Timestamp(System.currentTimeMillis());
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		String redirect = con.getHeaderField("Location");
-		if (redirect != null){
-		    con = (HttpURLConnection) new URL(redirect).openConnection();
-		    
-		}
-		con.setRequestProperty("User-Agent", USER_AGENT);
-		try {
-			con.setRequestMethod(methodType);
-		} catch (ProtocolException e) {
-			System.out.println("Unknown protocol");
-			e.printStackTrace();
-		}
+		response = executeHttpRequest(url, methodType, content);
 		Timestamp endTime = new Timestamp(System.currentTimeMillis());
-		
-		//Ergebnisauswertung
-		StringBuilder sb = new StringBuilder();
-		int responseCode = con.getResponseCode();
-		sb.append("Response Code: " + responseCode);
-		BufferedReader in = null;
-		//StringBuffer responseString = null;
-		/**try {
-			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			responseString = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				responseString.append(inputLine);
-			}
-			in.close();
-		} catch (Exception e ) {
-			return null;
-		} **/
-		response.setResponseInfos(sb.toString());
-		//response.setResponseContent(responseString.toString());
 		response.setEventStartTime(startTime.getTime());
 		response.setEventStopTime(endTime.getTime());
+		return response;
+	}
+	
+	private Response executeHttpRequest(String url, String methodType, String content) {
+		HttpURLConnection httpCon = null;
+		try {
+			URL urlObj = new URL(url);
+			httpCon = (HttpURLConnection) urlObj.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
+			httpCon.setRequestProperty("User-Agent", USER_AGENT);
+			httpCon.setRequestMethod(methodType);
+			if (methodType.equals("PUT") || methodType.equals("POST")) {
+				OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+				out.write(content);
+				out.flush();
+				out.close();
+			}
+			String redirect = httpCon.getHeaderField("Location");
+			if (redirect != null){
+			    httpCon = (HttpURLConnection) new URL(redirect).openConnection();  
+			}
+			int responseCode = httpCon.getResponseCode();
+			if (responseCode == 200) {
+				BufferedReader in = new BufferedReader(new InputStreamReader(httpCon.getInputStream()));
+				String inputLine;
+				StringBuffer responseContent = new StringBuffer();
+				while ((inputLine = in.readLine()) != null) {
+					responseContent.append(inputLine);
+				}
+				in.close();
+				response.setResponseContent(responseContent.toString());
+			}
+			response.setResponseInfos(String.valueOf(responseCode));
+		} catch (FileNotFoundException e) {
+			response.setResponseInfos(String.valueOf(404));
+			System.out.println("Invalid Url " + url);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error at executeHttpGet");
+		} finally {
+			httpCon.disconnect();
+		}
 		return response;
 	}
 

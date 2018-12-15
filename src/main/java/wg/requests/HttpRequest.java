@@ -6,7 +6,7 @@ public class HttpRequest extends Request {
 	
 	private HttpMethodType method;
 	private String resourcePath;
-	private byte[] content;
+	private String content;
 	
 	public HttpMethodType getMethod() {
 		return method;
@@ -20,10 +20,10 @@ public class HttpRequest extends Request {
 	public void setResourcePath(String resourcePath) {
 		this.resourcePath = resourcePath;
 	}
-	public byte[] getContent() {
+	public String getContent() {
 		return content;
 	}
-	public void setContent(byte[] content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 

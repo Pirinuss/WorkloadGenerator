@@ -26,15 +26,19 @@ public class Controller {
 		System.exit(0);
 	}
 	
+	/**
+	 * Generates input options, parses the arguments to one of this options
+	 * and executes it.
+	 * @param args The arguments of the console command
+	 * @return workload The resulting workload of the JSON file parsing
+	 */
 	private static Workload parseCommands(String[] args) {
-		//Generierung der Eingabeoptionen
 		CommandLineParser parser = new DefaultParser();
 		Options options = new Options();
 	    Option packageOption = Option.builder("h").longOpt("help").hasArg(false).build();
 	    Option classOption = Option.builder("f").longOpt("file").hasArg(true).build();
 	    options.addOption(packageOption);
 	    options.addOption(classOption);
-	    //Verarbeiten der Konsoleneingabe
 	    try {
 	    	CommandLine cmd = parser.parse(options, args);
 	    	if (cmd.hasOption("f")) {
@@ -52,12 +56,16 @@ public class Controller {
 		return null;
 	}
 	
+	/**
+	 * Prints a text to the console for a given option
+	 * @param text The option
+	 */
 	private static void printToConsole(String text) {
 		if (text.equals("help")) {
 			//TODO Hilfstext auf Konsole ausgeben
 		}
 		if (text.equals("noInput")) {
-			//TODO Text für fehlende Parameter auf Konsole ausgeben
+			System.out.println("Use -f [filepath] to insert a file!");
 		}
 	}
 	

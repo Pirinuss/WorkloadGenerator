@@ -1,7 +1,5 @@
 package wg.workload;
 
-import wg.core.Response;
-
 public class Frame {
 	
 	String frameName;
@@ -18,14 +16,6 @@ public class Frame {
 	}
 	public void setEvents(EventDiscriptor[] events) {
 		this.events = events;
-	}
-	
-	public EventDiscriptor getEventDisriptorByName(String eventName) {
-		for (int i=0; i<events.length; i++) {
-			if (events[i].getEventName().equals(eventName)) {
-				return events[i];
-			}
-		} return null;
 	}
 
 }

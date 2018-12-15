@@ -5,6 +5,7 @@ public enum ProtocolType {
 	HTTP,
 	FTP, 
 	TCP, 
-	UDP;
+	UDP,
+	NONE;
 	
 }

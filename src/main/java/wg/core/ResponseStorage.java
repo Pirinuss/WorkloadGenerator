@@ -58,11 +58,15 @@ public class ResponseStorage {
 					System.out.println("   Event: " + eventDis.getEventName());
 					System.out.println("     Target: " + target.getServerName() + ", "+ port );
 					System.out.println("     Request: " + request.getProtocol() );
-					System.out.println("     Eventdauert: " + exeTime );
-					System.out.println("     Antwort: " + response.getResponseInfos());
-					//System.out.println("     Inhalt der Antwort: " + response.getResponseContent());
+					System.out.println("     Execution time: " + exeTime );
+					System.out.println("     Response code: " + response.getResponseInfos());
+					if (response.getResponseContent() != null) {
+						System.out.println("     Response length: " + response.getResponseContent().length());
+					} else {
+						System.out.println("     Response length: 0");
+					}
 				} else {
-					System.out.println("Invalid URL!");
+					System.out.println("No response found for event: " + entry.getKey().getEventName());
 				}
 				
 			}

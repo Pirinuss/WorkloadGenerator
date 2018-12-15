@@ -1,12 +1,12 @@
 {
   "targets": [
          {"target1": {
-            "servername":"www.n-tv.de",
+            "servername":"www.httpbin.org",
             "port":"8080"
          }
          },
          {"target2": {
-            "servername":"www.stackoverflow.com",
+            "servername":"www.n-tv.de",
             "port":"8080"
          }
          }
@@ -14,33 +14,28 @@
   "requests": [
          {"request1": {
             "protocol":"HTTP",
-            "method":"GET",
-            "resourcePath":"panorama/",
-             "content":"ach was weiß ich denn"
+            "method":"POST",
+            "resourcePath":"post"
          }
          },
          {"request2": {
             "protocol":"HTTP",
             "method":"GET",
-            "resourcePath":"questions/1669885/what-happens-when-a-duplicate-key-is-put-into-a-hashmap",
-             "content":"ach was weiß ich denn"
+            "resourcePath":"sport/",
+            "content":"test"
          }
-         } 
+         }
   ],
   "schedule": {
         "frames": [
             { "frame1": {
                 "events": [
                     {"event1": {
-                      "target":"target1", "request":"request1", "time":1000
+                      "target":"target1", "request":"request1", "time":3000
                     }
                     },
                     {"event2": {
                       "target":"target2", "request":"request2", "time":2000
-                    }
-                    },
-                    {"event3": {
-                      "target":"target1", "request":"request1", "time":3000
                     }
                     }
                 ]
