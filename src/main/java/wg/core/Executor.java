@@ -22,13 +22,13 @@ public class Executor {
 
 	/**
 	 * Executes the workload: Extracts the frames of the workload, calls the execution
-	 * for each one and stores the responses in the ResponseStorage 
+	 * for each one and returns the result 
 	 * @param w The workload that gets executed
+	 * @return result The results of the workloads execution
 	 */
-	public void executeWorkload(Workload w) {
+	public Result executeWorkload(Workload w) {
 		this.w = w;
-		ResponseStorage responseStorage;
-		responseStorage = ResponseStorage.getInstance();
+		Result result = new Result();
 		Frame[] frames = w.getSchedule().getFrames();
 		//TODO ThreadPool nicht mit MagicNumber initialisieren
 		int threadPoolSize = 10;
@@ -38,10 +38,11 @@ public class Executor {
 			for (int j=0; j<responses.length; j++) {
 				EventDiscriptor event = executedEvents.get(j);
 				Response response = responses[j];
-				responseStorage.safeResponse(frames[i], event, response);
+				result.safeResponse(frames[i], event, response);
 			}
 		}
 		exeService.shutdown();
+		return result;
 	}
 	
 	/**

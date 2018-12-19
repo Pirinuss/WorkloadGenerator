@@ -14,14 +14,13 @@ public class Controller {
 	private static Workload workload;
 	private static Executor executor = new Executor();
 	private static WorkloadParser workloadParser = new WorkloadParser();
-	private static ResponseStorage responseStorage;
+	private static Result result;
 	
 	public static void main(String[] args) {
-		responseStorage = ResponseStorage.getInstance();
 		workload = parseCommands(args);
 		if (workload != null) {
-			executor.executeWorkload(workload);
-			responseStorage.printResponses();
+			result = executor.executeWorkload(workload);
+			result.printResponses();
 		}
 		System.exit(0);
 	}

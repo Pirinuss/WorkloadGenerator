@@ -4,6 +4,7 @@ import wg.requests.FtpRequest;
 import wg.requests.FtpMethodType;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
+import wg.requests.TcpUdpRequest;
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
 import wg.workload.ProtocolType;
@@ -157,11 +158,9 @@ public class WorkloadParser {
 		case FTP:
 			return request = createFtpRequest(requestContent);
 		case TCP:
-			//TODO Konstruieren und Rückgeben eines neuen TcpRequest 
-			return request;
+			return request = createTcpRequest(requestContent);
 		case UDP:
-			//TODO Konstruieren und Rückgeben eines neuen UdpRequest 
-			return request;
+			return request = createUdpRequest(requestContent);
 		default:
 			return request;
 				
@@ -218,4 +217,35 @@ public class WorkloadParser {
 		return ftpRequest;
 	}
 	
+	/**
+	 * Creates a new TCP request object, fills it with the values 
+	 * of the JSON document and returns it
+	 * @param requestContent The JSON object of the JSON document
+	 * which contains the parameters for the request object
+	 * @return tcpRequest The TCP request object, filled with the parameters
+	 * from the JSON object
+	 */
+	private Request createTcpRequest(JSONObject requestContent) {
+		TcpUdpRequest tcpRequest = new TcpUdpRequest();
+		tcpRequest.setProtocol(ProtocolType.TCP);
+		String content = (String) requestContent.get("content");
+		tcpRequest.setContent(content);
+		return tcpRequest;
+	}
+	
+	/**
+	 * Creates a new UDP request object, fills it with the values
+	 * of the JSON document and returns it
+	 * @param requestContent The JSON object of the JSON document
+	 * which contains the parameters for the request object
+	 * @return udpRequest The UDP request object, filled with the parameters
+	 * from the JSON object
+	 */
+	private Request createUdpRequest(JSONObject requestContent) {
+		TcpUdpRequest udpRequest = new TcpUdpRequest();
+		udpRequest.setProtocol(ProtocolType.UDP);
+		String content = (String) requestContent.get("content");
+		udpRequest.setContent(content);
+		return udpRequest;
+	}
 }

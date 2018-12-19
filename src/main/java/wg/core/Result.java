@@ -8,21 +8,9 @@ import wg.workload.Frame;
 import wg.workload.Request;
 import wg.workload.Target;
 
-public class ResponseStorage {
+public class Result {
 	
-	private static ResponseStorage instance;
 	HashMap<Frame, HashMap<EventDiscriptor,Response>> responses = new HashMap<Frame, HashMap<EventDiscriptor,Response>>();
-	
-	private ResponseStorage() {}
-
-	  public static ResponseStorage getInstance() {
-	    if (instance == null) {
-	      instance = new ResponseStorage();
-	      return instance;
-	    } else {
-	      return instance;
-	    }
-	  }
 	
 	public void safeResponse(Frame frame, EventDiscriptor event, Response response) {
 		for (Entry<Frame, HashMap<EventDiscriptor, Response>> entry : responses.entrySet()) {

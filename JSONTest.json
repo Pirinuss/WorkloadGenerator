@@ -9,6 +9,11 @@
             "servername":"www.n-tv.de",
             "port":"8080"
          }
+         },
+         {"target3": {
+             "servername":"localhost",
+             "port":"8080"
+         }
          }
   ],
   "requests": [
@@ -24,6 +29,11 @@
             "resourcePath":"sport/",
             "content":"test"
          }
+         },
+         {"request3": {
+            "protocol":"TCP",
+            "content":"Testnachricht"
+         }
          }
   ],
   "schedule": {
@@ -36,6 +46,10 @@
                     },
                     {"event2": {
                       "target":"target2", "request":"request2", "time":2000
+                    }
+                    },
+                    {"event3": {
+                      "target":"target1", "request":"request3", "time":1000
                     }
                     }
                 ]
