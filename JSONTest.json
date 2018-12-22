@@ -6,14 +6,19 @@
          }
          },
          {"target2": {
-            "servername":"www.n-tv.de",
+            "servername":"www.bridge2ppm.de",
             "port":"8080"
          }
          },
          {"target3": {
              "servername":"localhost",
-             "port":"8080"
+             "port":"4567"
          }
+         },
+         {"target4": {
+            "servername":"ftp.dlptest.com",
+             "port":"21"
+         } 
          }
   ],
   "requests": [
@@ -26,13 +31,22 @@
          {"request2": {
             "protocol":"HTTP",
             "method":"GET",
-            "resourcePath":"sport/",
+            "resourcePath":"",
             "content":"test"
          }
          },
          {"request3": {
             "protocol":"TCP",
             "content":"Testnachricht"
+         }
+         },
+         {"request4": {
+            "protocol":"FTP",
+            "method": "GET",
+            "localResource": "FTPTest",
+            "remoteResource": "wordpress/wp-admin/upload/upload.php?item=5843",
+             "username":"dlpuser@dlptest.com",
+             "password":"e73jzTRTNqCN9PYAAjjn"
          }
          }
   ],
@@ -41,15 +55,7 @@
             { "frame1": {
                 "events": [
                     {"event1": {
-                      "target":"target1", "request":"request1", "time":3000
-                    }
-                    },
-                    {"event2": {
-                      "target":"target2", "request":"request2", "time":2000
-                    }
-                    },
-                    {"event3": {
-                      "target":"target1", "request":"request3", "time":1000
+                      "target":"target4", "request":"request4", "time":1000
                     }
                     }
                 ]

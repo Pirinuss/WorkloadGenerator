@@ -7,10 +7,10 @@ public class Response {
 	
 	Target target;
 	Request request;
-	long eventStartTime;
-	long eventStopTime;
 	String responseInfos;
 	String responseContent;
+	long eventStartTime;
+	long eventStopTime;
 	
 	public Target getTarget() {
 		return target;
@@ -48,5 +48,5 @@ public class Response {
 	public void setResponseContent(String responseContent) {
 		this.responseContent = responseContent;
 	}
-
+	
 }

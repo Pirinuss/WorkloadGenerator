@@ -2,7 +2,6 @@ package wg.core;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
 import wg.workload.Request;
