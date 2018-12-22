@@ -16,6 +16,12 @@ public class Controller {
 	private static WorkloadParser workloadParser = new WorkloadParser();
 	private static Result result;
 	
+	/**
+	 * The main method. After calling the argument parser it calls the execution
+	 * of the workload if a workload got parsed. Afterwards it calls the printing
+	 * of the workloads execution results.
+	 * @param args The arguments of the console command
+	 */
 	public static void main(String[] args) {
 		workload = parseCommands(args);
 		if (workload != null) {

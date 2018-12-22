@@ -42,9 +42,9 @@
          },
          {"request4": {
             "protocol":"FTP",
-            "method": "GET",
-            "localResource": "FTPTest",
-            "remoteResource": "wordpress/wp-admin/upload/upload.php?item=5843",
+            "method": "PUT",
+            "localResource": "testNeu.txt",
+            "remoteResource": "testNeu.txt",
              "username":"dlpuser@dlptest.com",
              "password":"e73jzTRTNqCN9PYAAjjn"
          }

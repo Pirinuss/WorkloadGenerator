@@ -2,9 +2,9 @@ package wg.core;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ConnectException;
@@ -21,6 +21,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.net.ftp.FTPClient;
 
+import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
@@ -154,20 +155,34 @@ public class Event implements Callable<Response> {
 		int port = Integer.valueOf(target.getPort());
 		String username = ftpRequest.getUsername();
 		String password = ftpRequest.getPassword();
+		FtpMethodType method = ftpRequest.getMethod();
+		String localResource = ftpRequest.getLocalResource();
+		String remoteResource = ftpRequest.getRemoteResource();
 		FTPClient ftpClient = new FTPClient();
+		Timestamp startTime = new Timestamp(System.currentTimeMillis());
 		try {
 			ftpClient.connect(serverName, port);
-			System.out.println(ftpClient.getReplyString());
 			ftpClient.login(username, password);
-			System.out.println(ftpClient.getReplyString());
-			FileOutputStream fos = new FileOutputStream(ftpRequest.getLocalResource());
-			ftpClient.retrieveFile(ftpRequest.getRemoteResource(), fos);
-			response.setResponseInfos(String.valueOf(ftpClient.getReplyCode()));
+			if (method == FtpMethodType.GET) {
+				FileOutputStream fos = new FileOutputStream(localResource);
+				ftpClient.retrieveFile(remoteResource, fos);
+				response.setResponseInfos(String.valueOf(ftpClient.getReplyCode()));
+				fos.close();
+			} 
+			if (method == FtpMethodType.PUT) {
+				FileInputStream fis = new FileInputStream(localResource);
+				ftpClient.storeFile(remoteResource, fis);
+				response.setResponseInfos(String.valueOf(ftpClient.getReplyCode()));
+				fis.close();
+			}
 			ftpClient.logout();
 			ftpClient.disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 		
+		}
+		Timestamp endTime = new Timestamp(System.currentTimeMillis());
+		response.setEventStartTime(startTime.getTime());
+		response.setEventStopTime(endTime.getTime());
 		return response;
 	}
 	
