@@ -7,6 +7,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import wg.util.WorkloadValidator;
 import wg.workload.Workload;
 
 public class Controller {
@@ -14,6 +15,7 @@ public class Controller {
 	private static Workload workload;
 	private static Executor executor = new Executor();
 	private static WorkloadParser workloadParser = new WorkloadParser();
+	private static WorkloadValidator workloadValidator = new WorkloadValidator();
 	private static Result result;
 	
 	/**
@@ -24,7 +26,7 @@ public class Controller {
 	 */
 	public static void main(String[] args) {
 		workload = parseCommands(args);
-		if (workload != null) {
+		if (workloadValidator.validateWorkload(workload)) {
 			result = executor.executeWorkload(workload);
 			result.printResponses();
 		}

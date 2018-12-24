@@ -60,12 +60,16 @@ public class WorkloadParser {
 				JSONObject targetObj = (JSONObject) targets.get(i);
 				String targetName = ("target").concat(String.valueOf(i+1));
 				JSONObject targetContent = (JSONObject) targetObj.get(targetName);
-				String servername = (String) targetContent.get("servername");
-				String port = (String) targetContent.get("port");
-				newTarget.setTargetName(targetName);
-				newTarget.setServerName(servername);
-				newTarget.setPort(port);
-				targetMap.put(targetName, newTarget);
+				if (targetContent == null) {
+					targetMap.put(targetName, null);
+				} else {
+					String servername = (String) targetContent.get("servername");
+					String port = (String) targetContent.get("port");
+					newTarget.setTargetName(targetName);
+					newTarget.setServerName(servername);
+					newTarget.setPort(port);
+					targetMap.put(targetName, newTarget);
+				}
 			}
 			return targetMap;
 		}
@@ -87,9 +91,13 @@ public class WorkloadParser {
 				JSONObject requestObj = (JSONObject) requests.get(i);
 				String requestName = ("request").concat(String.valueOf(i+1));
 				JSONObject requestContent = (JSONObject) requestObj.get(requestName);
-				newRequest = getSpecificRequest(requestContent);
-				newRequest.setRequestName(requestName);
-				requestMap.put(requestName, newRequest);
+				if (requestContent == null) {
+					requestMap.put(requestName, null);
+				} else {
+					newRequest = getSpecificRequest(requestContent);
+					newRequest.setRequestName(requestName);
+					requestMap.put(requestName, newRequest);
+				}
 			}
 			return requestMap;
 		}
@@ -104,27 +112,53 @@ public class WorkloadParser {
 	private Schedule parseSchedule(JSONObject jo) {
 		Schedule schedule = new Schedule();
 		JSONObject scheduleObj = (JSONObject) jo.get("schedule");
+		if (scheduleObj == null) {
+			return null;
+		}
 		JSONArray framesObj = (JSONArray) scheduleObj.get("frames");
-		Frame[] frames = new Frame[framesObj.size()];
+		Frame[] frames = new Frame[0]; 
+		if (framesObj == null) {
+			schedule.setFrames(frames);
+			return schedule;
+		}
+		frames = new Frame[framesObj.size()];
 		for (int i=0; i<framesObj.size(); i++) {
 			Frame frame = new Frame();
 			JSONObject frameObj = (JSONObject) framesObj.get(i);
 			String frameName = ("frame").concat(String.valueOf(i+1));
 			frame.setFrameName(frameName);
 			JSONObject frameContent = (JSONObject) frameObj.get(frameName);
+			if (frameContent == null) {
+				frames[i] = null;
+				break;
+			}
 			JSONArray eventsObj = (JSONArray) frameContent.get("events");
-			EventDiscriptor[] events = new EventDiscriptor[eventsObj.size()];
+			EventDiscriptor[] events = new EventDiscriptor[0];
+			if (eventsObj == null) {
+				frame.setEvents(events);
+				frames[i] = frame;
+				break;
+			}
+			events = new EventDiscriptor[eventsObj.size()];
 			for (int j=0; j<eventsObj.size(); j++) {
 				EventDiscriptor event = new EventDiscriptor();
 				JSONObject eventObj = (JSONObject) eventsObj.get(j);
 				String eventName = ("event").concat(String.valueOf(j+1));
 				JSONObject eventContent = (JSONObject) eventObj.get(eventName);
 				event.setEventName(eventName);
+				if (eventContent == null) {
+					event = null;
+					events[j] = event;
+					break;
+				}
 				String targetName = (String) eventContent.get("target");
 				event.setTargetName(targetName);
 				String requestName = (String) eventContent.get("request");
 				event.setRequestName(requestName);
-				long time = (Long) eventContent.get("time");
+				long time = -1;
+				if (eventContent.get("time") != null) {
+					time = (Long) eventContent.get("time");
+				}
 				event.setTime(time);
 				events[j] = event; 
 			}
@@ -161,6 +195,8 @@ public class WorkloadParser {
 			return request = createTcpRequest(requestContent);
 		case UDP:
 			return request = createUdpRequest(requestContent);
+		case NONE:
+			return request;
 		default:
 			return request;
 				
@@ -179,8 +215,12 @@ public class WorkloadParser {
 		HttpRequest httpRequest = new HttpRequest();
 		httpRequest.setProtocol(ProtocolType.HTTP);
 		String methodTypeName = (String) requestContent.get("method");
-		HttpMethodType methodType = HttpMethodType.valueOf(methodTypeName);
-		httpRequest.setMethod(methodType);
+		if (methodTypeName != null) {
+			HttpMethodType methodType = HttpMethodType.valueOf(methodTypeName);
+			httpRequest.setMethod(methodType);
+		} else {
+			httpRequest.setMethod(HttpMethodType.NONE);
+		}
 		String resourcePath = (String) requestContent.get("resourcePath");
 		httpRequest.setResourcePath(resourcePath);
 		String content = (String) requestContent.get("content");

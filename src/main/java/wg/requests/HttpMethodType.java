@@ -2,7 +2,7 @@ package wg.requests;
 
 public enum HttpMethodType {
 	
-	GET, PUT, POST, DELETE;
+	GET, PUT, POST, DELETE, NONE;
 	
 	public static String parseToString(HttpMethodType methodType) {
 		switch (methodType) {
