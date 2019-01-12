@@ -38,7 +38,8 @@ public class Executor {
 			for (int j=0; j<responses.length; j++) {
 				EventDiscriptor event = executedEvents.get(j);
 				Response response = responses[j];
-				result.safeResponse(frames[i], event, response);
+				ResultObject resultObject = new ResultObject(frames[i], event, response, j);
+				result.safeResponse(resultObject);
 			}
 		}
 		exeService.shutdown();
@@ -56,20 +57,25 @@ public class Executor {
 		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(f.getEvents()));
 		EventDiscriptor currentEvent;
 		long exeTime;
-		Response[] responses = new Response[events.size()];
+		long repetitions;
+		long size = getTotalEventsNumber(events);
+		Response[] responses = new Response[(int) size];
 		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
 		executedEvents = new ArrayList<EventDiscriptor>();
 		Timestamp startTime = new Timestamp(System.currentTimeMillis());
 		while (events.size() > 0) {
 			for (int i=0; i<events.size(); i++) {
 				currentEvent = events.get(i);
+				repetitions = currentEvent.getRepetitions();
 				exeTime = currentEvent.getTime();
 				Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 				long dif = currentTime.getTime()-startTime.getTime();
 				if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
-					System.out.println("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
-					Future<Response> response = executeEvent(currentEvent);
-					futures.add(response);
+					for (int r=0; r<repetitions; r++) {
+						System.out.println("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
+						Future<Response> response = executeEvent(currentEvent);
+						futures.add(response);
+					}
 				}
 			}
 			for (int j=0; j<executedEvents.size(); j++) {
@@ -127,6 +133,21 @@ public class Executor {
 		HashMap<String, Request> requests = w.getRequests();
 		Request request = requests.get(requestName);
 		return request;
+	}
+	
+	/**
+	 * Returns the number (including repetitions) of events that have to 
+	 * be executed
+	 * @param events The list of events from the frame
+	 * @return The number of events for a frame
+	 */
+	private long getTotalEventsNumber(ArrayList<EventDiscriptor> events) {
+		long counter = 0;
+		for (int i=0; i<events.size(); i++) {
+			long reps = events.get(i).getRepetitions();
+			counter = counter + reps;
+		}
+		return counter;
 	}
 	
 }

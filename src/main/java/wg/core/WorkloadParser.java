@@ -7,6 +7,7 @@ import wg.requests.HttpRequest;
 import wg.requests.TcpUdpRequest;
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
+import wg.workload.FrameModeType;
 import wg.workload.ProtocolType;
 import wg.workload.Request;
 import wg.workload.Schedule;
@@ -132,6 +133,13 @@ public class WorkloadParser {
 				frames[i] = null;
 				break;
 			}
+			String frameMode = (String) frameContent.get("method");
+			if (frameMode != null) {
+				FrameModeType frameModeType = FrameModeType.valueOf(frameMode);
+				frame.setFrameMode(frameModeType);
+			} else {
+				frame.setFrameMode(FrameModeType.DEFINEDTIME);
+			}
 			JSONArray eventsObj = (JSONArray) frameContent.get("events");
 			EventDiscriptor[] events = new EventDiscriptor[0];
 			if (eventsObj == null) {
@@ -160,6 +168,11 @@ public class WorkloadParser {
 					time = (Long) eventContent.get("time");
 				}
 				event.setTime(time);
+				long repetitions = 1;
+				if (eventContent.get("repetitions") != null) {
+					repetitions = (Long) eventContent.get("repetitions");
+				}
+				event.setRepetitions(repetitions);
 				events[j] = event; 
 			}
 			frame.setEvents(events);

@@ -4,6 +4,7 @@ public class EventDiscriptor {
 	
 	String eventName;
 	long time;
+	long repetitions;
 	String targetName;
 	String requestName;
 	
@@ -18,6 +19,12 @@ public class EventDiscriptor {
 	}
 	public void setTime(long time) {
 		this.time = time;
+	}
+	public long getRepetitions() {
+		return repetitions;
+	}
+	public void setRepetitions(long repetitions) {
+		this.repetitions = repetitions;
 	}
 	public String getTargetName() {
 		return targetName;
