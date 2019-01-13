@@ -12,9 +12,11 @@ C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\requests\
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\util\Printer.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\requests\FtpMethodType.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\Controller.java
+C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\FrameModeType.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\util\WorkloadValidator.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\WorkloadParser.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Target.java
+C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\core\ResultObject.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\ProtocolType.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Request.java
 C:\Users\Marc\Documents\Uni\Eclipse\WorkloadGenerator\src\main\java\wg\workload\Workload.java
