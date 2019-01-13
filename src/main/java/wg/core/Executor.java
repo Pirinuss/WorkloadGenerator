@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
+import wg.workload.FrameModeType;
 import wg.workload.Request;
 import wg.workload.Target;
 import wg.workload.Workload;
@@ -47,18 +48,45 @@ public class Executor {
 	}
 	
 	/**
-	 * Executes a frame: Extracts the events from the frame, calls the execution for
-	 * each event by the right time and returns the responses
-	 * @param f The frame that gets executed
+	 * Parses the defined frame mode to the right execution method
+	 * @param frame The frame that gets executed
+ 	 * @return The array which contains all the responses of the
+	 * executed events of the frame
+	 */
+	private Response[] executeFrame(Frame frame) {
+		FrameModeType mode = frame.getFrameMode();
+		switch (mode) {
+		case DEFINEDTIME:
+			return executeFrameWithoutIncrease(frame, false);
+		case REPEAT:
+			return executeFrameWithoutIncrease(frame, true);
+		case INCREASEEXPO:
+			return executeFrameWithIncrease(frame, true);
+		case INCREASEFIB:
+			return executeFrameWithIncrease(frame, false);	
+		default:
+			return null;
+		}
+	}
+	
+	/**
+	 * Executes a frame without increase mode: Extracts the events from the frame, calls the execution for
+	 * each event by the right time and the right amount of repetitions. Returns the responses afterwards.
+	 * @param frame The frame that gets executed
 	 * @return responses The array which contains all the responses of the
 	 * executed events
 	 */
-	private Response[] executeFrame(Frame f) {
-		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(f.getEvents()));
+	private Response[] executeFrameWithoutIncrease(Frame frame, boolean withReps) {
+		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
 		EventDiscriptor currentEvent;
 		long exeTime;
 		long repetitions;
-		long size = getTotalEventsNumber(events);
+		long size;
+		if (withReps) {
+			size = getTotalEventsNumber(events, 1);
+		} else {
+			size = events.size();
+		}
 		Response[] responses = new Response[(int) size];
 		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
 		executedEvents = new ArrayList<EventDiscriptor>();
@@ -66,7 +94,11 @@ public class Executor {
 		while (events.size() > 0) {
 			for (int i=0; i<events.size(); i++) {
 				currentEvent = events.get(i);
-				repetitions = currentEvent.getRepetitions();
+				if (withReps) {
+					repetitions = currentEvent.getRepetitions();
+				} else {
+					repetitions = 1;
+				}
 				exeTime = currentEvent.getTime();
 				Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 				long dif = currentTime.getTime()-startTime.getTime();
@@ -78,14 +110,105 @@ public class Executor {
 					}
 				}
 			}
-			for (int j=0; j<executedEvents.size(); j++) {
-				for (int x =0; x<events.size(); x++) {
-					if (events.get(x).equals(executedEvents.get(j))) {
-						events.remove(events.get(x));
+			events = removeEvents(events, executedEvents);
+		}
+		return parseResponses(futures, responses);
+	}
+	
+	/**
+	 * Executes a frame with increase mode: Extracts the events from the frame, calls the execution for
+	 * each event by the right time and the right amount of repetitions. Repeats it for each steps while increasing 
+	 * the amount of repetitions for each event exponential or following the Fibonacci sequence. Returns the 
+	 * responses afterwards.
+	 * @param frame The frame that gets executed
+	 * @return responses The array which contains all the responses of the
+	 * executed events
+	 */
+	private Response[] executeFrameWithIncrease(Frame frame, boolean isExpo) {
+		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
+		EventDiscriptor currentEvent;
+		long exeTime;
+		long repetitions;
+		long steps = frame.getSteps();
+		long size;
+		if (isExpo) {
+			size = getTotalEventsNumber(events, steps);
+		} else {
+			size = getTotalEventsNumberFib(events, steps);
+		}
+		Response[] responses = new Response[(int) size];
+		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
+		executedEvents = new ArrayList<EventDiscriptor>();
+		for (int s=1; s<=steps; s++) {
+			events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
+			ArrayList<EventDiscriptor> executedEventsPerStep = new ArrayList<EventDiscriptor>();
+			Timestamp startTime = new Timestamp(System.currentTimeMillis());
+			while (events.size() > 0) {
+				for (int i=0; i<events.size(); i++) {
+					currentEvent = events.get(i);
+					if (isExpo) {
+						repetitions = currentEvent.getRepetitions();
+						repetitions = (long) Math.pow( repetitions, s);
+					} else {
+						repetitions = calculateFibNumber(s);
 					}
+					exeTime = currentEvent.getTime();
+					Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+					long dif = currentTime.getTime()-startTime.getTime();
+					if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
+						for (int r=0; r<repetitions; r++) {
+							System.out.println("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
+							Future<Response> response = executeEvent(currentEvent);
+							executedEventsPerStep.add(currentEvent);
+							futures.add(response);
+						}
+					}
+				}
+				events = removeEvents(events, executedEventsPerStep);
+			}
+		}
+		return parseResponses(futures, responses);
+	}
+	
+	/**
+	 * Calculates the right number of the Fibonacci sequence for the given position
+	 * @param position The position of the number in the Fibonacci sequence
+	 * @return The right number of the Fibonacci sequence
+	 */
+	private int calculateFibNumber(long position) {
+		if (position<=0) {
+			return 0;
+		} else if (position == 1) {
+			return 1;
+		} else {
+			return calculateFibNumber(position-2)+calculateFibNumber(position-1);
+		}
+	}
+	
+	/**
+	 * Removes the executed events from the event array.
+	 * @param events The array of all events
+	 * @param executedEvents The array of all executed events
+	 * @return Returns the array of all events that still have to executed
+	 */
+	private ArrayList<EventDiscriptor> removeEvents(ArrayList<EventDiscriptor> events, ArrayList<EventDiscriptor> executedEvents) {
+		for (int j=0; j<executedEvents.size(); j++) {
+			for (int x =0; x<events.size(); x++) {
+				if (events.get(x).equals(executedEvents.get(j))) {
+					events.remove(events.get(x));
 				}
 			}
 		}
+		return events;
+	}
+	
+	/**
+	 * Parses the future objects to responses that are added to the response array afterwards.
+	 * @param futures The future object which includes the response
+	 * @param responses The array of responses
+	 * @return The filled array of responses
+	 */
+	private Response[] parseResponses(ArrayList<Future<Response>> futures, Response[] responses) {
 		for (int i = 0; i<futures.size(); i++) {
 			Response response = null;
 			try {
@@ -114,7 +237,7 @@ public class Executor {
 	}
 	
 	/**
-	 * Returns the target object for a target name
+	 * Returns the target object for a target name.
 	 * @param targetName The namen of the target object
 	 * @return target The target object
 	 */
@@ -125,7 +248,7 @@ public class Executor {
 	}
 	
 	/**
-	 * Returns the request object for a request name
+	 * Returns the request object for a request name.
 	 * @param requesttName The namen of the request object
 	 * @return request The request object
 	 */
@@ -136,16 +259,34 @@ public class Executor {
 	}
 	
 	/**
-	 * Returns the number (including repetitions) of events that have to 
-	 * be executed
+	 * Returns the number (including repetitions and increase) of events that have to 
+	 * be executed.
 	 * @param events The list of events from the frame
 	 * @return The number of events for a frame
 	 */
-	private long getTotalEventsNumber(ArrayList<EventDiscriptor> events) {
+	private long getTotalEventsNumber(ArrayList<EventDiscriptor> events, long steps) {
 		long counter = 0;
+		long[] eventReps = new long[events.size()];
 		for (int i=0; i<events.size(); i++) {
 			long reps = events.get(i).getRepetitions();
+			eventReps[i] = reps;
 			counter = counter + reps;
+		}
+		for (int j=1; j<steps; j++) {
+			for (int k=0; k<eventReps.length; k++) {
+				long addValue = (long) Math.pow(eventReps[k], 2);
+				eventReps[k] = addValue;
+				counter = counter + addValue;
+			}
+		}
+		return counter;
+	}
+	
+	private long getTotalEventsNumberFib(ArrayList<EventDiscriptor> events, long steps) {
+		long counter = 0;
+		for (int i=0; i<steps; i++) {
+			long addValue = calculateFibNumber(i+1) * events.size();
+			counter = counter + addValue;
 		}
 		return counter;
 	}

@@ -3,12 +3,14 @@ package wg.util;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
 import wg.requests.TcpUdpRequest;
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
+import wg.workload.FrameModeType;
 import wg.workload.Request;
 import wg.workload.Schedule;
 import wg.workload.Target;
@@ -42,6 +44,8 @@ public class WorkloadValidator {
 				}
 			}
 		}
+		System.out.println();
+		System.out.println("Workload couldn´t be executed. Pls fix your configuration file.");
 		return false;
 	}
 
@@ -112,6 +116,22 @@ public class WorkloadValidator {
 				System.out.println("Frame" + i+1 + " was not found. Please check if the frames are in a correct order.");
 				return false;
 			}
+			if (frames[i].getFrameMode() == FrameModeType.INCREASEEXPO && frames[i].getSteps()<1) {
+				System.out.println("Frame" + i+1 + "has the mode increaseExpo but valid amount of steps is missing (steps has to be >0).");
+				return false;
+			}
+			if (frames[i].getFrameMode() == FrameModeType.INCREASEFIB && frames[i].getSteps()<1) {
+				System.out.println("Frame" + i+1 + "has the mode increaseFib but valid amount of steps is missing (steps has to be >0).");
+				return false;
+			}
+			if (frames[i].getFrameMode() == FrameModeType.REPEAT && frames[i].getSteps()!=-1) {
+				System.out.println("Frame" + i+1 + ": No steps needed for this mode");
+				return false;
+			}
+			if (frames[i].getFrameMode() == FrameModeType.DEFINEDTIME && frames[i].getSteps()!=-1) {
+				System.out.println("Frame" + i+1 + ": No steps needed for this mode");
+				return false;
+			}
 			EventDiscriptor[] events = frames[i].getEvents();
 			if (events.length == 0) {
 				System.out.println("No events found for " + frames[i].getFrameName());
@@ -148,7 +168,7 @@ public class WorkloadValidator {
 	}
 	
 	private boolean validateFtpRequest(FtpRequest request) {
-		if (request.getMethod() == null) {
+		if (request.getMethod() == FtpMethodType.NONE) {
 			System.out.println("FTP method not defined for request: " + request.getRequestName());
 			return false;
 		}

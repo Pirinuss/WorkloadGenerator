@@ -133,13 +133,18 @@ public class WorkloadParser {
 				frames[i] = null;
 				break;
 			}
-			String frameMode = (String) frameContent.get("method");
+			String frameMode = (String) frameContent.get("mode");
 			if (frameMode != null) {
-				FrameModeType frameModeType = FrameModeType.valueOf(frameMode);
+				FrameModeType frameModeType = FrameModeType.parseString(frameMode);
 				frame.setFrameMode(frameModeType);
 			} else {
 				frame.setFrameMode(FrameModeType.DEFINEDTIME);
 			}
+			long steps = -1;
+			if (frameContent.get("steps") != null) {
+				steps = (Long) frameContent.get("steps");
+			}
+			frame.setSteps(steps);
 			JSONArray eventsObj = (JSONArray) frameContent.get("events");
 			EventDiscriptor[] events = new EventDiscriptor[0];
 			if (eventsObj == null) {
@@ -257,8 +262,12 @@ public class WorkloadParser {
 		FtpRequest ftpRequest = new FtpRequest();
 		ftpRequest.setProtocol(ProtocolType.FTP);
 		String methodTypeName = (String) requestContent.get("method");
-		FtpMethodType methodType = FtpMethodType.valueOf(methodTypeName);
-		ftpRequest.setMethod(methodType);
+		if (methodTypeName != null) {
+			FtpMethodType methodType = FtpMethodType.valueOf(methodTypeName);
+			ftpRequest.setMethod(methodType);
+		} else {
+			ftpRequest.setMethod(FtpMethodType.NONE);
+		}
 		String localResource = (String) requestContent.get("localResource");
 		ftpRequest.setLocalResource(localResource);
 		String remoteResource = (String) requestContent.get("remoteResource");

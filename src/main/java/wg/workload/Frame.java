@@ -4,6 +4,7 @@ public class Frame {
 	
 	String frameName;
 	FrameModeType frameMode;
+	long steps;
 	EventDiscriptor[] events;
 	
 	public String getFrameName() {
@@ -20,6 +21,14 @@ public class Frame {
 
 	public void setFrameMode(FrameModeType frameMode) {
 		this.frameMode = frameMode;
+	}
+
+	public long getSteps() {
+		return steps;
+	}
+
+	public void setSteps(long steps) {
+		this.steps = steps;
 	}
 
 	public EventDiscriptor[] getEvents() {
