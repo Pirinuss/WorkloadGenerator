@@ -1,10 +1,16 @@
 package wg.core;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ConnectException;
@@ -17,10 +23,13 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.net.ftp.FTPClient;
 
+import bftsmart.tom.ServiceProxy;
+import wg.requests.BftsmartRequest;
 import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
 import wg.requests.HttpMethodType;
@@ -28,9 +37,11 @@ import wg.requests.HttpRequest;
 import wg.requests.TcpUdpRequest;
 import wg.workload.Request;
 import wg.workload.Target;
+import wg.workload.Workload;
 
 public class Event implements Callable<Response> {
 	
+	private Workload workload;
 	private Target target;
 	private Request request;
 	private Response response;
@@ -51,10 +62,11 @@ public class Event implements Callable<Response> {
 	public void setRequest(Request request) {
 		this.request = request;
 	}
-
-	public Event(Target target, Request request) {
+	
+	public Event(Target target, Request request, Workload workload) {
 		this.target = target;
 		this.request = request;
+		this.workload = workload;
 	}
 
 	public Response call() throws Exception {
@@ -72,6 +84,10 @@ public class Event implements Callable<Response> {
 			break;
 		case UDP:
 			response = executeUdpEvent();
+			break;
+		case BFTSMaRt:
+			response = executeBftsmartEvent();
+			break;
 		default:
 			response = null;
 		}
@@ -111,6 +127,7 @@ public class Event implements Callable<Response> {
 			httpCon.setRequestProperty("User-Agent", USER_AGENT);
 			httpCon.setRequestMethod(methodType);
 			httpCon.setConnectTimeout(3000);
+			//TODO SocketTimeoutException abfangen
 			httpCon.connect();
 			if (methodType.equals("PUT") || methodType.equals("POST")) {
 				OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
@@ -161,6 +178,7 @@ public class Event implements Callable<Response> {
 		FTPClient ftpClient = new FTPClient();
 		Timestamp startTime = new Timestamp(System.currentTimeMillis());
 		try {
+			//TODO FTPConnectionClosedException abfangen (passiert wenn FTP response = 421)
 			ftpClient.connect(serverName, port);
 			ftpClient.login(username, password);
 			if (method == FtpMethodType.GET) {
@@ -245,6 +263,52 @@ public class Event implements Callable<Response> {
 		response.setResponseContent(responseContent);
 		response.setEventStartTime(startTime.getTime());
 		response.setEventStopTime(endTime.getTime());
+		return response;
+	}
+	
+	private Response executeBftsmartEvent() {
+		BftsmartRequest bftRequest = (BftsmartRequest) request;
+		//Set hosts
+		ArrayList<Target> targetGroup = new ArrayList<Target>();
+		ArrayList<String> targetNamesGroup = bftRequest.getTargetGroup();
+		for (int i=0; i<targetNamesGroup.size(); i++) {
+			Target target;
+			target = workload.getTargetByName(targetNamesGroup.get(i));
+			targetGroup.add(target);
+		}
+		try {
+			FileWriter fw = new FileWriter("config/hosts.config");
+			BufferedWriter bw = new BufferedWriter(fw);
+			for (int j=0; j<targetGroup.size(); j++) {
+				int port = Integer.valueOf(targetGroup.get(j).getPort());
+				String serverName = target.getServerName();
+				InetAddress ip;
+				ip = InetAddress.getByName(serverName);
+				bw.write(j + " ");
+				bw.write(ip.getHostAddress()+ " ");
+				bw.write(String.valueOf(port));
+				bw.newLine();
+			}
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//BFTSMaRt Client
+		char id = target.getTargetName().charAt(target.getTargetName().length()-1);
+		byte [] command = bftRequest.getCommand().getBytes();
+		
+		byte[] reply = null;
+        try {
+        	ByteArrayOutputStream out = new ByteArrayOutputStream(4);
+			new DataOutputStream(out).writeInt(1);
+			ServiceProxy serviceProxy = new ServiceProxy(0 , "config");
+			reply = serviceProxy.invokeOrdered(out.toByteArray());
+			int newValue = new DataInputStream(new ByteArrayInputStream(reply)).readInt();
+            System.out.println(", returned value: " + newValue);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        response.setResponseContent(reply.toString());
 		return response;
 	}
 

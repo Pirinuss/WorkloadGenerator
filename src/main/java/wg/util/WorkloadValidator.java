@@ -10,7 +10,6 @@ import wg.requests.HttpRequest;
 import wg.requests.TcpUdpRequest;
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
-import wg.workload.FrameModeType;
 import wg.workload.Request;
 import wg.workload.Schedule;
 import wg.workload.Target;
@@ -114,22 +113,6 @@ public class WorkloadValidator {
 		for (int i=0; i<frames.length; i++) {
 			if (frames[i] == null) {
 				System.out.println("Frame" + i+1 + " was not found. Please check if the frames are in a correct order.");
-				return false;
-			}
-			if (frames[i].getFrameMode() == FrameModeType.INCREASEEXPO && frames[i].getSteps()<1) {
-				System.out.println("Frame" + i+1 + "has the mode increaseExpo but valid amount of steps is missing (steps has to be >0).");
-				return false;
-			}
-			if (frames[i].getFrameMode() == FrameModeType.INCREASEFIB && frames[i].getSteps()<1) {
-				System.out.println("Frame" + i+1 + "has the mode increaseFib but valid amount of steps is missing (steps has to be >0).");
-				return false;
-			}
-			if (frames[i].getFrameMode() == FrameModeType.REPEAT && frames[i].getSteps()!=-1) {
-				System.out.println("Frame" + i+1 + ": No steps needed for this mode");
-				return false;
-			}
-			if (frames[i].getFrameMode() == FrameModeType.DEFINEDTIME && frames[i].getSteps()!=-1) {
-				System.out.println("Frame" + i+1 + ": No steps needed for this mode");
 				return false;
 			}
 			EventDiscriptor[] events = frames[i].getEvents();

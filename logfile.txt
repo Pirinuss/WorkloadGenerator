@@ -1,0 +1,7 @@
+[2019-01-25 10:49:39] [wg.core.Controller] [INFO] - Start execution
+[2019-01-25 10:49:39] [wg.core.Controller] [FINE] - Start parsing commands
+[2019-01-25 10:49:39] [wg.core.Controller] [FINE] - Finished parsing commands
+[2019-01-25 10:49:39] [wg.core.WorkloadParser] [FINE] - Start parsing workload
+[2019-01-25 10:49:39] [wg.core.WorkloadParser] [SEVERE] - LinearGrowthFactor is missing
+[2019-01-25 10:49:39] [wg.core.WorkloadParser] [FINE] - Finished with parsing workload
+[2019-01-25 10:49:39] [wg.core.Controller] [INFO] - End execution

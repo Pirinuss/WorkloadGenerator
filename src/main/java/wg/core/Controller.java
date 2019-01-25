@@ -1,5 +1,11 @@
 package wg.core;
 
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -7,73 +13,91 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import wg.util.LogFormatter;
 import wg.util.WorkloadValidator;
 import wg.workload.Workload;
 
 public class Controller {
 
+	private static final Executor executor = new Executor();
+	private static final WorkloadParser workloadParser = new WorkloadParser();
+	private static final WorkloadValidator workloadValidator = new WorkloadValidator();
 	private static Workload workload;
-	private static Executor executor = new Executor();
-	private static WorkloadParser workloadParser = new WorkloadParser();
-	private static WorkloadValidator workloadValidator = new WorkloadValidator();
 	private static Result result;
-	
+	private static Logger log;
+	private static String path;
+
 	/**
-	 * The main method. After calling the argument parser it calls the execution
-	 * of the workload if a workload got parsed. Afterwards it calls the printing
-	 * of the workloads execution results.
-	 * @param args The arguments of the console command
+	 * The main method. After calling the argument parser it calls the execution of
+	 * the workload if a workload got parsed. Afterwards it calls the printing of
+	 * the workloads execution results.
+	 * 
+	 * @param args
+	 *            The arguments of the console command
 	 */
 	public static void main(String[] args) {
-		workload = parseCommands(args);
-		if (workloadValidator.validateWorkload(workload)) {
-			result = executor.executeWorkload(workload);
-			result.printResponses();
+		createLogger();
+		log.info("Start execution");
+		parseCommands(args);
+		if (path != null) {
+			workload = workloadParser.parseWorkload(path);
+			if (workloadValidator.validateWorkload(workload)) {
+				result = executor.executeWorkload(workload);
+				result.printResponses();
+			}
 		}
+		log.info("End execution");
 		System.exit(0);
 	}
-	
+
 	/**
-	 * Generates input options, parses the arguments to one of this options
-	 * and executes it.
-	 * @param args The arguments of the console command
-	 * @return workload The resulting workload of the JSON file parsing
+	 * Generates input options, parses the arguments to one of this options and
+	 * executes it.
+	 * 
+	 * @param args
+	 *            The arguments of the console command
 	 */
-	private static Workload parseCommands(String[] args) {
+	private static void parseCommands(String[] args) {
+		log.fine("Start parsing commands");
 		CommandLineParser parser = new DefaultParser();
 		Options options = new Options();
-	    Option packageOption = Option.builder("h").longOpt("help").hasArg(false).build();
-	    Option classOption = Option.builder("f").longOpt("file").hasArg(true).build();
-	    options.addOption(packageOption);
-	    options.addOption(classOption);
-	    try {
-	    	CommandLine cmd = parser.parse(options, args);
-	    	if (cmd.hasOption("f")) {
-	    		workload = workloadParser.parseWorkload(cmd.getOptionValue("f"));
-	    		return workload;
-	    	} else if (cmd.hasOption("h")) {
-	    		printToConsole("help");
-	    	} else {
-	    		printToConsole("noInput");
-	    	}
-	    } catch (ParseException e) {
-	    	System.err.println("Errror while parsing arguments");
-	    	e.printStackTrace();
-	    }
-		return null;
-	}
-	
-	/**
-	 * Prints a text to the console for a given option
-	 * @param text The option
-	 */
-	private static void printToConsole(String text) {
-		if (text.equals("help")) {
-			//TODO Hilfstext auf Konsole ausgeben
+		Option fileOption = Option.builder("f").longOpt("file").hasArg(true).build();
+		options.addOption(fileOption);
+		try {
+			CommandLine cmd = parser.parse(options, args);
+			if (cmd.hasOption("f")) {
+				path = cmd.getOptionValue("f");
+			} else {
+				System.out.println("Use -f [filepath] to insert a file!");
+			}
+		} catch (ParseException e) {
+			log.severe("Errror while parsing arguments");
+			e.printStackTrace();
 		}
-		if (text.equals("noInput")) {
-			System.out.println("Use -f [filepath] to insert a file!");
-		}
+		log.fine("Finished parsing commands");
 	}
-	
+
+	private static void createLogger() {
+		log = Logger.getLogger("logfile.txt");
+		log.setLevel(Level.ALL);
+		log.setUseParentHandlers(false);
+
+		FileHandler logFileHandler = null;
+		try {
+			logFileHandler = new FileHandler("logfile.txt");
+			logFileHandler.setLevel(Level.ALL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ConsoleHandler consoleHandler = new ConsoleHandler();
+		consoleHandler.setLevel(Level.ALL);
+
+		Formatter formatter = new LogFormatter();
+		logFileHandler.setFormatter(formatter);
+		consoleHandler.setFormatter(formatter);
+
+		log.addHandler(logFileHandler);
+		log.addHandler(consoleHandler);
+	}
+
 }

@@ -2,30 +2,29 @@ package wg.workload;
 
 public class Target {
 	
-	private String targetName;
-	private String serverName;
-	private String port;
+	private final String targetName;
+	private final String serverName;
+	private final String port;
 	
+	public Target(String targetName, String serverName, String port) {
+		this.targetName = targetName;
+		this.serverName = serverName;
+		this.port = port;
+	}
+
 	public String getTargetName() {
 		return targetName;
-	}
-	public void setTargetName(String targetName) {
-		this.targetName = targetName;
 	}
 	
 	public String getServerName() {
 		return serverName;
 	}
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
-	}
+	
 	public String getPort() {
 		return port;
 	}
-	public void setPort(String port) {
-		this.port = port;
-	}
 	
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(targetName);

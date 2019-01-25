@@ -1,45 +1,44 @@
 package wg.requests;
 
+import wg.workload.ProtocolType;
 import wg.workload.Request;
 
-public class FtpRequest extends Request{
+public class FtpRequest extends Request {
 
-	private FtpMethodType method;
-	private String localResource;
-	private String remoteResource;
-	private String username;
-	private String password;
-	
+	private final FtpMethodType method;
+	private final String localResource;
+	private final String remoteResource;
+	private final String username;
+	private final String password;
+
+	public FtpRequest(String requestName, ProtocolType protocol, FtpMethodType method, String localResource,
+			String remoteResource, String username, String password) {
+		super(requestName, protocol);
+		this.method = method;
+		this.localResource = localResource;
+		this.remoteResource = remoteResource;
+		this.username = username;
+		this.password = password;
+	}
+
 	public FtpMethodType getMethod() {
 		return method;
 	}
-	public void setMethod(FtpMethodType method) {
-		this.method = method;
-	}
+
 	public String getLocalResource() {
 		return localResource;
 	}
-	public void setLocalResource(String localResource) {
-		this.localResource = localResource;
-	}
+
 	public String getRemoteResource() {
 		return remoteResource;
 	}
-	public void setRemoteResource(String remoteResource) {
-		this.remoteResource = remoteResource;
-	}
+
 	public String getUsername() {
 		return username;
 	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
+
 	public String getPassword() {
 		return password;
 	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	
+
 }

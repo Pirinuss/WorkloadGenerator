@@ -5,27 +5,26 @@ import java.util.Map.Entry;
 
 public class Workload {
 
-	private HashMap<String, Target> targets;
-	private HashMap<String, Request> requests;
-	private Schedule schedule;
+	private final HashMap<String, Target> targets;
+	private final HashMap<String, Request> requests;
+	private final Schedule schedule;
 	
+	public Workload(HashMap<String, Target> targets, HashMap<String, Request> requests, Schedule schedule) {
+		this.targets = targets;
+		this.requests = requests;
+		this.schedule = schedule;
+	}
+
 	public HashMap<String, Target> getTargets() {
 		return targets;
 	}
-	public void setTargets(HashMap<String, Target> targets) {
-		this.targets = targets;
-	}
+	
 	public HashMap<String, Request> getRequests() {
 		return requests;
 	}
-	public void setRequests(HashMap<String, Request> requests) {
-		this.requests = requests;
-	}
+	
 	public Schedule getSchedule() {
 		return schedule;
-	}
-	public void setSchedule(Schedule schedule) {
-		this.schedule = schedule;
 	}
 	
 	public Target getTargetByName(String targetName) {

@@ -7,30 +7,34 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
-import wg.workload.FrameModeType;
+import wg.workload.GrowthType;
+import wg.workload.Options;
 import wg.workload.Request;
 import wg.workload.Target;
 import wg.workload.Workload;
 
 public class Executor {
 	
-	ExecutorService exeService;
-	Workload w;
-	ArrayList<EventDiscriptor> executedEvents;
+	private ExecutorService exeService;
+	private Workload workload;
+	private final ArrayList<EventDiscriptor> executedEvents = new ArrayList<EventDiscriptor>();
+	private static final Logger log = Logger.getLogger("logfile.txt");
+
 
 	/**
 	 * Executes the workload: Extracts the frames of the workload, calls the execution
 	 * for each one and returns the result 
-	 * @param w The workload that gets executed
+	 * @param workload The workload that gets executed
 	 * @return result The results of the workloads execution
 	 */
-	public Result executeWorkload(Workload w) {
-		this.w = w;
+	public Result executeWorkload(Workload workload) {
+		this.workload = workload;
 		Result result = new Result();
-		Frame[] frames = w.getSchedule().getFrames();
+		Frame[] frames = workload.getSchedule().getFrames();
 		//TODO ThreadPool nicht mit MagicNumber initialisieren
 		int threadPoolSize = 10;
 		exeService = Executors.newFixedThreadPool(threadPoolSize);
@@ -54,19 +58,19 @@ public class Executor {
 	 * executed events of the frame
 	 */
 	private Response[] executeFrame(Frame frame) {
-		FrameModeType mode = frame.getFrameMode();
-		switch (mode) {
-		case DEFINEDTIME:
-			return executeFrameWithoutIncrease(frame, false);
-		case REPEAT:
-			return executeFrameWithoutIncrease(frame, true);
+		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
+		GrowthType growthType = frame.getOptions().getEventGrowthType();
+		switch(growthType) {
 		case INCREASEEXPO:
-			return executeFrameWithIncrease(frame, true);
+			futures = executeFrameWithIncrease(frame, growthType);
 		case INCREASEFIB:
-			return executeFrameWithIncrease(frame, false);	
-		default:
-			return null;
+			futures = executeFrameWithIncrease(frame, growthType);
+		case LINEAR:
+			futures = executeFrameWithIncrease(frame, growthType);
+		case NONE:
+			futures = executeFrameWithoutIncrease(frame, false);
 		}
+		return parseResponses(futures);
 	}
 	
 	/**
@@ -76,7 +80,7 @@ public class Executor {
 	 * @return responses The array which contains all the responses of the
 	 * executed events
 	 */
-	private Response[] executeFrameWithoutIncrease(Frame frame, boolean withReps) {
+	private ArrayList<Future<Response>> executeFrameWithoutIncrease(Frame frame, boolean withReps) {
 		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
 		EventDiscriptor currentEvent;
 		long exeTime;
@@ -89,7 +93,6 @@ public class Executor {
 		}
 		Response[] responses = new Response[(int) size];
 		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
-		executedEvents = new ArrayList<EventDiscriptor>();
 		Timestamp startTime = new Timestamp(System.currentTimeMillis());
 		while (events.size() > 0) {
 			for (int i=0; i<events.size(); i++) {
@@ -104,7 +107,7 @@ public class Executor {
 				long dif = currentTime.getTime()-startTime.getTime();
 				if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
 					for (int r=0; r<repetitions; r++) {
-						System.out.println("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
+						log.info("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
 						Future<Response> response = executeEvent(currentEvent);
 						futures.add(response);
 					}
@@ -112,7 +115,7 @@ public class Executor {
 			}
 			events = removeEvents(events, executedEvents);
 		}
-		return parseResponses(futures, responses);
+		return futures;
 	}
 	
 	/**
@@ -124,40 +127,24 @@ public class Executor {
 	 * @return responses The array which contains all the responses of the
 	 * executed events
 	 */
-	private Response[] executeFrameWithIncrease(Frame frame, boolean isExpo) {
-		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
-		EventDiscriptor currentEvent;
-		long exeTime;
-		long repetitions;
-		long steps = frame.getSteps();
-		long size;
-		if (isExpo) {
-			size = getTotalEventsNumber(events, steps);
-		} else {
-			size = getTotalEventsNumberFib(events, steps);
-		}
-		Response[] responses = new Response[(int) size];
+	private ArrayList<Future<Response>> executeFrameWithIncrease(Frame frame, GrowthType growthType) {
 		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
-		executedEvents = new ArrayList<EventDiscriptor>();
+		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
+		long steps = getMaximalSteps(frame.getOptions());
 		for (int s=1; s<=steps; s++) {
 			events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
 			ArrayList<EventDiscriptor> executedEventsPerStep = new ArrayList<EventDiscriptor>();
 			Timestamp startTime = new Timestamp(System.currentTimeMillis());
 			while (events.size() > 0) {
 				for (int i=0; i<events.size(); i++) {
-					currentEvent = events.get(i);
-					if (isExpo) {
-						repetitions = currentEvent.getRepetitions();
-						repetitions = (long) Math.pow( repetitions, s);
-					} else {
-						repetitions = calculateFibNumber(s);
-					}
-					exeTime = currentEvent.getTime();
+					EventDiscriptor currentEvent = events.get(i);
+					long exeTime = currentEvent.getTime();
 					Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 					long dif = currentTime.getTime()-startTime.getTime();
 					if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
+						int repetitions = getRepetitions(frame.getOptions(), steps, s);
 						for (int r=0; r<repetitions; r++) {
-							System.out.println("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
+							log.info("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
 							Future<Response> response = executeEvent(currentEvent);
 							executedEventsPerStep.add(currentEvent);
 							futures.add(response);
@@ -167,7 +154,26 @@ public class Executor {
 				events = removeEvents(events, executedEventsPerStep);
 			}
 		}
-		return parseResponses(futures, responses);
+		return futures;
+	}
+	
+	private int getRepetitions(Options options, long steps, int currentStep) {
+		int repetitions = 0;
+		switch (options.getEventGrowthType()) {
+		case INCREASEEXPO:
+			//TODO Berechnung
+		case INCREASEFIB:
+			repetitions = calculateFibNumber(currentStep);
+		case LINEAR:
+			if (currentStep == 1) {
+				repetitions = 1;
+			} else {
+				repetitions = (int) ((currentStep-1) * options.getEventLinearGrowthFactor() + 1);
+			}
+		case NONE:
+			repetitions = 1;
+		}
+		return repetitions;
 	}
 	
 	/**
@@ -191,9 +197,10 @@ public class Executor {
 	 * @param executedEvents The array of all executed events
 	 * @return Returns the array of all events that still have to executed
 	 */
-	private ArrayList<EventDiscriptor> removeEvents(ArrayList<EventDiscriptor> events, ArrayList<EventDiscriptor> executedEvents) {
-		for (int j=0; j<executedEvents.size(); j++) {
-			for (int x =0; x<events.size(); x++) {
+	private ArrayList<EventDiscriptor> removeEvents(ArrayList<EventDiscriptor> events,
+			ArrayList<EventDiscriptor> executedEvents) {
+		for (int j = 0; j < executedEvents.size(); j++) {
+			for (int x = 0; x < events.size(); x++) {
 				if (events.get(x).equals(executedEvents.get(j))) {
 					events.remove(events.get(x));
 				}
@@ -208,7 +215,8 @@ public class Executor {
 	 * @param responses The array of responses
 	 * @return The filled array of responses
 	 */
-	private Response[] parseResponses(ArrayList<Future<Response>> futures, Response[] responses) {
+	private Response[] parseResponses(ArrayList<Future<Response>> futures) {
+		Response[] responses = new Response[futures.size()];
 		for (int i = 0; i<futures.size(); i++) {
 			Response response = null;
 			try {
@@ -221,6 +229,18 @@ public class Executor {
 		return responses;
 	}
 	
+	private long getMaximalSteps(Options options) {
+		long repeatEventsSteps = options.getEventNumberSteps();
+		long changeFrequencySteps = options.getFrequencySteps();
+		if (repeatEventsSteps == -1 && changeFrequencySteps == -1) {
+			return 1;
+		}
+		if (repeatEventsSteps >= changeFrequencySteps) {
+			return repeatEventsSteps;
+		} 
+		return changeFrequencySteps;
+	}
+	
 	/**
 	 * Maps the event discription to an event object and executes it.
 	 * Returns the response as a future object.
@@ -230,7 +250,7 @@ public class Executor {
 	private Future<Response> executeEvent(EventDiscriptor currentEvent) {
 		Target target = mapTarget(currentEvent.getTargetName());
 		Request request = mapRequest(currentEvent.getRequestName());
-		Event event = new Event(target, request);
+		Event event = new Event(target, request, workload);
 		Future<Response> response = exeService.submit(event);
 		executedEvents.add(currentEvent);
 		return response;
@@ -242,7 +262,7 @@ public class Executor {
 	 * @return target The target object
 	 */
 	private Target mapTarget(String targetName) {
-		HashMap<String, Target> targets = w.getTargets();
+		HashMap<String, Target> targets = workload.getTargets();
 		Target target = targets.get(targetName);
 		return target;
 	}
@@ -253,7 +273,7 @@ public class Executor {
 	 * @return request The request object
 	 */
 	private Request mapRequest(String requestName) {
-		HashMap<String, Request> requests = w.getRequests();
+		HashMap<String, Request> requests = workload.getRequests();
 		Request request = requests.get(requestName);
 		return request;
 	}

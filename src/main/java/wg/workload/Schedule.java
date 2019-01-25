@@ -2,16 +2,17 @@ package wg.workload;
 
 public class Schedule {
 
-	Frame[] frames;
+	private final Frame[] frames;
+
+	public Schedule(Frame[] frames) {
+		this.frames = frames;
+	}
 
 	public Frame[] getFrames() {
 		return frames;
 	}
-
-	public void setFrames(Frame[] frames) {
-		this.frames = frames;
-	}
 	
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("-----SCHEDULE-----");

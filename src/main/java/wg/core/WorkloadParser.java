@@ -1,162 +1,186 @@
 package wg.core;
 
-import wg.requests.FtpRequest;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Logger;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import wg.requests.BftsmartRequest;
 import wg.requests.FtpMethodType;
+import wg.requests.FtpRequest;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
 import wg.requests.TcpUdpRequest;
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
-import wg.workload.FrameModeType;
+import wg.workload.GrowthType;
+import wg.workload.Options;
 import wg.workload.ProtocolType;
 import wg.workload.Request;
 import wg.workload.Schedule;
 import wg.workload.Target;
+import wg.workload.TransmissionType;
 import wg.workload.Workload;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.HashMap;
-import org.json.simple.JSONArray; 
-import org.json.simple.JSONObject; 
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class WorkloadParser {
 
+	private static final Logger log = Logger.getLogger("logfile.txt");
+
+	/**
+	 * Parses the workload for the given document by calling the parsing methods for
+	 * the targets, requests and the schedule.
+	 * 
+	 * @param path
+	 *            The path of the document that gets parsed
+	 * @return The workload object
+	 */
 	public Workload parseWorkload(String path) {
-		Workload w = null;
+		log.fine("Start parsing workload");
+		Workload workload = null;
 		try {
 			Object obj = new JSONParser().parse(new FileReader(path));
-			JSONObject jo = (JSONObject) obj;
-			HashMap<String, Target> targets = parseTargets(jo);
-			HashMap<String, Request> requests = parseRequests(jo);
-			Schedule schedule = parseSchedule(jo);
-			w = new Workload();
-			w.setTargets(targets);
-			w.setRequests(requests);
-			w.setSchedule(schedule);
-		} catch (FileNotFoundException e ) {
-			System.out.println("File not found!");	
+			JSONObject jsonObject = (JSONObject) obj;
+			HashMap<String, Target> targets = parseTargets(jsonObject);
+			HashMap<String, Request> requests = parseRequests(jsonObject);
+			Schedule schedule = parseSchedule(jsonObject);
+			workload = new Workload(targets, requests, schedule);
+		} catch (FileNotFoundException e) {
+			log.severe("File not found");
 		} catch (ParseException e) {
-			System.out.println("Invalid JSON Document!");
+			log.severe("Invalid JSON document");
+		} catch (IllegalArgumentException e) {
+			log.severe(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return w;
+		log.fine("Finished with parsing workload");
+		return workload;
 	}
-	
+
 	/**
-	 * Liest die Targets aus dem JSON Dokument aus
-	 * @param jo Das JSON Dokument als JSONObject
-	 * @return targetMap Die HashMap mit den Targetnamen und 
-	 * 					 den ausgelesenen Targets 
+	 * Parses the targets.
+	 * 
+	 * @param jo
+	 *            The JSON document as JSONObject
+	 * @return targetMap A map with the target names and the targets
 	 */
 	private HashMap<String, Target> parseTargets(JSONObject jo) {
 		JSONArray targets = (JSONArray) jo.get("targets");
-		if (targets != null) {
+		if (targets == null) {
+			return null;
+		} else {
 			HashMap<String, Target> targetMap = new HashMap<String, Target>();
-			for (int i=0; i<targets.size(); i++) {
-				Target newTarget = new Target();
+			for (int i = 0; i < targets.size(); i++) {
 				JSONObject targetObj = (JSONObject) targets.get(i);
-				String targetName = ("target").concat(String.valueOf(i+1));
+				String targetName = ("target").concat(String.valueOf(i + 1));
 				JSONObject targetContent = (JSONObject) targetObj.get(targetName);
 				if (targetContent == null) {
 					targetMap.put(targetName, null);
 				} else {
 					String servername = (String) targetContent.get("servername");
 					String port = (String) targetContent.get("port");
-					newTarget.setTargetName(targetName);
-					newTarget.setServerName(servername);
-					newTarget.setPort(port);
+					Target newTarget = new Target(targetName, servername, port);
 					targetMap.put(targetName, newTarget);
 				}
 			}
 			return targetMap;
 		}
-		return null;
 	}
-	
+
 	/**
-	 * Liest die Requests aus dem JSON Dokument aus
-	 * @param jo Das JSON Dokument als JSONObject
-	 * @return requestMap Die HashMap mit den Requestnamen und 
-	 * 					 den ausgelesenen Requests 
+	 * Parses the requests by calling the specific parse method.
+	 * 
+	 * @param jo
+	 *            The JSON document as JSONObject
+	 * @return requestMap A map with the request names and the requests
 	 */
 	private HashMap<String, Request> parseRequests(JSONObject jo) {
 		JSONArray requests = (JSONArray) jo.get("requests");
-		if (requests != null) {
+		if (requests == null) {
+			return null;
+		} else {
 			HashMap<String, Request> requestMap = new HashMap<String, Request>();
-			for (int i=0; i<requests.size(); i++) {
-				Request newRequest;
+			for (int i = 0; i < requests.size(); i++) {
 				JSONObject requestObj = (JSONObject) requests.get(i);
-				String requestName = ("request").concat(String.valueOf(i+1));
+				String requestName = ("request").concat(String.valueOf(i + 1));
 				JSONObject requestContent = (JSONObject) requestObj.get(requestName);
 				if (requestContent == null) {
 					requestMap.put(requestName, null);
 				} else {
-					newRequest = getSpecificRequest(requestContent);
-					newRequest.setRequestName(requestName);
+					Request newRequest = getSpecificRequest(requestContent, requestName);
 					requestMap.put(requestName, newRequest);
 				}
 			}
 			return requestMap;
 		}
-		return null;
 	}
-	
+
 	/**
-	 * Liest den Schedule aus dem JSON Dokument aus
-	 * @param jo Das JSON Dokument als JSONObject
-	 * @return schedule Der Schedule mit allen Frames und allen Events 
+	 * Parses the schedule.
+	 * 
+	 * @param jo
+	 *            The JSON document as JSONObject
+	 * @return schedule The schedule object with all frames and events
 	 */
 	private Schedule parseSchedule(JSONObject jo) {
-		Schedule schedule = new Schedule();
 		JSONObject scheduleObj = (JSONObject) jo.get("schedule");
 		if (scheduleObj == null) {
 			return null;
 		}
 		JSONArray framesObj = (JSONArray) scheduleObj.get("frames");
-		Frame[] frames = new Frame[0]; 
+		Frame[] frames = new Frame[0];
 		if (framesObj == null) {
-			schedule.setFrames(frames);
-			return schedule;
-		}
-		frames = new Frame[framesObj.size()];
-		for (int i=0; i<framesObj.size(); i++) {
-			Frame frame = new Frame();
-			JSONObject frameObj = (JSONObject) framesObj.get(i);
-			String frameName = ("frame").concat(String.valueOf(i+1));
-			frame.setFrameName(frameName);
-			JSONObject frameContent = (JSONObject) frameObj.get(frameName);
-			if (frameContent == null) {
-				frames[i] = null;
-				break;
-			}
-			String frameMode = (String) frameContent.get("mode");
-			if (frameMode != null) {
-				FrameModeType frameModeType = FrameModeType.parseString(frameMode);
-				frame.setFrameMode(frameModeType);
-			} else {
-				frame.setFrameMode(FrameModeType.DEFINEDTIME);
-			}
-			long steps = -1;
-			if (frameContent.get("steps") != null) {
-				steps = (Long) frameContent.get("steps");
-			}
-			frame.setSteps(steps);
-			JSONArray eventsObj = (JSONArray) frameContent.get("events");
-			EventDiscriptor[] events = new EventDiscriptor[0];
-			if (eventsObj == null) {
-				frame.setEvents(events);
+			frames = null;
+		} else {
+			frames = new Frame[framesObj.size()];
+			for (int i = 0; i < framesObj.size(); i++) {
+				JSONObject frameObj = (JSONObject) framesObj.get(i);
+				Frame frame = parseFrame(frameObj, i);
 				frames[i] = frame;
-				break;
 			}
+		}
+		Schedule schedule = new Schedule(frames);
+		return schedule;
+	}
+
+	/**
+	 * Parses one frame object from the given JSON object and returns it
+	 * 
+	 * @param frameObj
+	 *            //TODO
+	 * @param nameIndex
+	 * @return
+	 */
+	private Frame parseFrame(JSONObject frameObj, int nameIndex) {
+		String frameName = ("frame").concat(String.valueOf(nameIndex + 1));
+		JSONObject frameContent = (JSONObject) frameObj.get(frameName);
+		if (frameContent == null) {
+			return null;
+		}
+		JSONArray eventsObj = (JSONArray) frameContent.get("events");
+		EventDiscriptor[] events = parseFrameEvents(eventsObj);
+		JSONObject optionsObj = (JSONObject) frameContent.get("options");
+		Options options = parseFrameOptions(optionsObj);
+		Frame frame = new Frame(frameName, events, options);
+		return frame;
+	}
+
+	private EventDiscriptor[] parseFrameEvents(JSONArray eventsObj) {
+		EventDiscriptor[] events;
+		if (eventsObj == null) {
+			events = null;
+		} else {
 			events = new EventDiscriptor[eventsObj.size()];
-			for (int j=0; j<eventsObj.size(); j++) {
+			for (int j = 0; j < eventsObj.size(); j++) {
 				EventDiscriptor event = new EventDiscriptor();
 				JSONObject eventObj = (JSONObject) eventsObj.get(j);
-				String eventName = ("event").concat(String.valueOf(j+1));
+				String eventName = ("event").concat(String.valueOf(j + 1));
 				JSONObject eventContent = (JSONObject) eventObj.get(eventName);
 				event.setEventName(eventName);
 				if (eventContent == null) {
@@ -178,24 +202,81 @@ public class WorkloadParser {
 					repetitions = (Long) eventContent.get("repetitions");
 				}
 				event.setRepetitions(repetitions);
-				events[j] = event; 
+				events[j] = event;
 			}
-			frame.setEvents(events);
-			frames[i] = frame;
 		}
-		schedule.setFrames(frames);
-		return schedule;
+		return events;
 	}
-	
+
+	private Options parseFrameOptions(JSONObject optionsObj) {
+		// RepeatEventsOption
+		long eventNumberSteps;
+		long eventLinearGrowthFactor;
+		GrowthType eventGrowthType;
+		JSONObject repeatEventsObj = (JSONObject) optionsObj.get("repeatEvents");
+		if (repeatEventsObj == null) {
+			eventNumberSteps = -1;
+			eventLinearGrowthFactor = -1;
+			eventGrowthType = GrowthType.NONE;
+		} else {
+			if (repeatEventsObj.get("steps") == null) {
+				eventNumberSteps = -1;
+			} else {
+				eventNumberSteps = (Long) repeatEventsObj.get("steps");
+			}
+			if (repeatEventsObj.get("eventLinearGrowthFactor") == null) {
+				eventLinearGrowthFactor = -1;
+			} else {
+				eventLinearGrowthFactor = (Long) repeatEventsObj.get("eventLinearGrowthFactor");
+			}
+			if (repeatEventsObj.get("growth") == null) {
+				eventGrowthType = GrowthType.NONE;
+			} else {
+				String growth = (String) repeatEventsObj.get("growth");
+				eventGrowthType = GrowthType.parseString(growth);
+			}
+		}
+		// FrequencyOption
+		long frequencySteps = -1;
+		long frequencyFactor = -1;
+		boolean frequencyIncrease = false;
+		boolean frequencyDecrease = false;
+		JSONObject increaseFrequencyObj = (JSONObject) optionsObj.get("increaseFrequency");
+		JSONObject decreaseFrequencyObj = (JSONObject) optionsObj.get("decreaseFrequency");
+		if (increaseFrequencyObj != null) {
+			frequencyIncrease = true;
+			frequencySteps = (Long) increaseFrequencyObj.get("steps");
+			frequencyFactor = (Long) increaseFrequencyObj.get("factor");
+		}
+		if (decreaseFrequencyObj != null) {
+			frequencyDecrease = true;
+			frequencySteps = (Long) increaseFrequencyObj.get("steps");
+			frequencyFactor = (Long) increaseFrequencyObj.get("factor");
+		}
+		// TransmissionOption
+		String transmissionName = (String) optionsObj.get("transmission");
+		TransmissionType transmissionType;
+		if (transmissionName == null) {
+			transmissionType = TransmissionType.parseString(transmissionName);
+		} else {
+			transmissionType = TransmissionType.NONE;
+		}
+		Options options = new Options(eventNumberSteps, eventLinearGrowthFactor, eventGrowthType, frequencySteps,
+				frequencyFactor, frequencyIncrease, frequencyDecrease, transmissionType);
+		return options;
+	}
+
 	/**
-	 * Mappt das Protokoll auf den spezifischen Request und lässt 
-	 * diesen erzeugen
-	 * @param requestContent Das JSON Objekt aus dem JSON Dokument mit den
-	 * 		  einzelnen Request Parametern
-	 * @return Das ensprechende Request Objekt
+	 * Maps the protocol to the specific request and calls the creation method for
+	 * this request.
+	 * 
+	 * @param requestContent
+	 *            The JSON object of the JSON document which contains the parameters
+	 *            for the request object
+	 * @return The request object
 	 */
-	private Request getSpecificRequest(JSONObject requestContent) {
-		Request request = new Request();
+	private Request getSpecificRequest(JSONObject requestContent, String requestName) {
+		Request request = null;
 		String protocol = (String) requestContent.get("protocol");
 		ProtocolType protocolType;
 		if (protocol != null) {
@@ -204,110 +285,104 @@ public class WorkloadParser {
 			protocolType = ProtocolType.NONE;
 		}
 		switch (protocolType) {
-			
+
 		case HTTP:
-			return request = createHttpRequest(requestContent);
+			return request = createHttpRequest(requestContent, requestName, protocolType);
 		case FTP:
-			return request = createFtpRequest(requestContent);
+			return request = createFtpRequest(requestContent, requestName, protocolType);
 		case TCP:
-			return request = createTcpRequest(requestContent);
+			return request = createTcpUdpRequest(requestContent, requestName, protocolType);
 		case UDP:
-			return request = createUdpRequest(requestContent);
+			return request = createTcpUdpRequest(requestContent, requestName, protocolType);
+		case BFTSMaRt:
+			return request = createBftsmartRequest(requestContent, requestName, protocolType);
 		case NONE:
 			return request;
 		default:
 			return request;
-				
 		}
 	}
-	
+
 	/**
-	 * Erzeugt einen neuen HTTP Request, füllt ihn mit den
-	 * Werten aus dem JSON Objekt und gibt ihn zurück
-	 * @param requestContent Das JSON Objekt aus dem JSON
-	 * Dokument welches die einzelnen Parameter des Requests
-	 * enthält
-	 * @return httpRequest Der erzeugte und befüllte Request
+	 * Creates a new HTTP request object, fills it with the values of the JSON
+	 * document and returns it.
+	 * 
+	 * @param requestContent
+	 *            The JSON object of the JSON document which contains the parameters
+	 *            for the request object
+	 * @return httpRequest The HTTP request object, filled with the parameters from
+	 *         the JSON object
 	 */
-	private Request createHttpRequest(JSONObject requestContent) {
-		HttpRequest httpRequest = new HttpRequest();
-		httpRequest.setProtocol(ProtocolType.HTTP);
+	private Request createHttpRequest(JSONObject requestContent, String requestName, ProtocolType protocolType) {
+		HttpMethodType methodType;
 		String methodTypeName = (String) requestContent.get("method");
 		if (methodTypeName != null) {
-			HttpMethodType methodType = HttpMethodType.valueOf(methodTypeName);
-			httpRequest.setMethod(methodType);
+			methodType = HttpMethodType.valueOf(methodTypeName);
 		} else {
-			httpRequest.setMethod(HttpMethodType.NONE);
+			methodType = HttpMethodType.NONE;
 		}
 		String resourcePath = (String) requestContent.get("resourcePath");
-		httpRequest.setResourcePath(resourcePath);
 		String content = (String) requestContent.get("content");
 		if (content == null) {
-			httpRequest.setContent("");
-		} else {
-			httpRequest.setContent(content);
+			content = "";
 		}
+		HttpRequest httpRequest = new HttpRequest(requestName, protocolType, methodType, resourcePath, content);
 		return httpRequest;
 	}
-	
+
 	/**
-	 * Erzeugt einen neuen FTP Request, füllt ihn mit den
-	 * Werten aus dem JSON Objekt und gibt ihn zurück
-	 * @param requestContent Das JSON Objekt aus dem JSON
-	 * Dokument welches die einzelnen Parameter des Requests
-	 * enthält
-	 * @return ftpRequest Der erzeugte und befüllte Request
+	 * Creates a new FTP request object, fills it with the values of the JSON
+	 * document and returns it.
+	 * 
+	 * @param requestContent
+	 *            The JSON object of the JSON document which contains the parameters
+	 *            for the request object
+	 * @return ftpRequest The FTP request object, filled with the parameters from
+	 *         the JSON object
 	 */
-	private Request createFtpRequest(JSONObject requestContent) {
-		FtpRequest ftpRequest = new FtpRequest();
-		ftpRequest.setProtocol(ProtocolType.FTP);
+	private Request createFtpRequest(JSONObject requestContent, String requestName, ProtocolType protocolType) {
 		String methodTypeName = (String) requestContent.get("method");
+		FtpMethodType methodType;
 		if (methodTypeName != null) {
-			FtpMethodType methodType = FtpMethodType.valueOf(methodTypeName);
-			ftpRequest.setMethod(methodType);
+			methodType = FtpMethodType.valueOf(methodTypeName);
 		} else {
-			ftpRequest.setMethod(FtpMethodType.NONE);
+			methodType = FtpMethodType.NONE;
 		}
 		String localResource = (String) requestContent.get("localResource");
-		ftpRequest.setLocalResource(localResource);
 		String remoteResource = (String) requestContent.get("remoteResource");
-		ftpRequest.setRemoteResource(remoteResource);
 		String username = (String) requestContent.get("username");
-		ftpRequest.setUsername(username);
 		String password = (String) requestContent.get("password");
-		ftpRequest.setPassword(password);
+		FtpRequest ftpRequest = new FtpRequest(requestName, protocolType, methodType, localResource, remoteResource,
+				username, password);
 		return ftpRequest;
 	}
-	
+
 	/**
-	 * Creates a new TCP request object, fills it with the values 
-	 * of the JSON document and returns it
-	 * @param requestContent The JSON object of the JSON document
-	 * which contains the parameters for the request object
-	 * @return tcpRequest The TCP request object, filled with the parameters
-	 * from the JSON object
+	 * Creates a new TCP request object, fills it with the values of the JSON
+	 * document and returns it.
+	 * 
+	 * @param requestContent
+	 *            The JSON object of the JSON document which contains the parameters
+	 *            for the request object
+	 * @return tcpRequest The TCP request object, filled with the parameters from
+	 *         the JSON object
 	 */
-	private Request createTcpRequest(JSONObject requestContent) {
-		TcpUdpRequest tcpRequest = new TcpUdpRequest();
-		tcpRequest.setProtocol(ProtocolType.TCP);
+	private Request createTcpUdpRequest(JSONObject requestContent, String requestName, ProtocolType protocolType) {
 		String content = (String) requestContent.get("content");
-		tcpRequest.setContent(content);
-		return tcpRequest;
+		TcpUdpRequest tcpUdpRequest = new TcpUdpRequest(requestName, protocolType, content);
+		return tcpUdpRequest;
 	}
-	
-	/**
-	 * Creates a new UDP request object, fills it with the values
-	 * of the JSON document and returns it
-	 * @param requestContent The JSON object of the JSON document
-	 * which contains the parameters for the request object
-	 * @return udpRequest The UDP request object, filled with the parameters
-	 * from the JSON object
-	 */
-	private Request createUdpRequest(JSONObject requestContent) {
-		TcpUdpRequest udpRequest = new TcpUdpRequest();
-		udpRequest.setProtocol(ProtocolType.UDP);
-		String content = (String) requestContent.get("content");
-		udpRequest.setContent(content);
-		return udpRequest;
+
+	private Request createBftsmartRequest(JSONObject requestContent, String requestName, ProtocolType protocolType) {
+		String command = (String) requestContent.get("command");
+		String type = (String) requestContent.get("type");
+		JSONArray targetGroupObj = (JSONArray) requestContent.get("targetGroup");
+		ArrayList<String> targetGroup = new ArrayList<String>();
+		for (int i = 0; i < targetGroupObj.size(); i++) {
+			targetGroup.add((String) targetGroupObj.get(i));
+		}
+		BftsmartRequest bftsmartRequest = new BftsmartRequest(requestName, protocolType, command, type, targetGroup);
+		return bftsmartRequest;
 	}
+
 }

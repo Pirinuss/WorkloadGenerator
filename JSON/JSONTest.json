@@ -46,13 +46,14 @@
             "localResource": "testNeu.txt",
             "remoteResource": "testNeu.txt",
              "username":"dlpuser@dlptest.com",
-             "password":"e73jzTRTNqCN9PYAAjjn"
+             "password":"e73jzTRTNqCN9PYAAjjn" 
          }
          }
   ],
   "schedule": {
         "frames": [
             { "frame1": {
+                "mode": "repeat",
                 "events": [
                     {"event1": {
                       "target":"target4", "request":"request4", "time":1000

@@ -6,6 +6,7 @@ public enum ProtocolType {
 	FTP, 
 	TCP, 
 	UDP,
+	BFTSMaRt,
 	NONE;
 	
 }
