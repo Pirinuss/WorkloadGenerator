@@ -1,7 +1,9 @@
-[2019-01-25 10:49:39] [wg.core.Controller] [INFO] - Start execution
-[2019-01-25 10:49:39] [wg.core.Controller] [FINE] - Start parsing commands
-[2019-01-25 10:49:39] [wg.core.Controller] [FINE] - Finished parsing commands
-[2019-01-25 10:49:39] [wg.core.WorkloadParser] [FINE] - Start parsing workload
-[2019-01-25 10:49:39] [wg.core.WorkloadParser] [SEVERE] - LinearGrowthFactor is missing
-[2019-01-25 10:49:39] [wg.core.WorkloadParser] [FINE] - Finished with parsing workload
-[2019-01-25 10:49:39] [wg.core.Controller] [INFO] - End execution
+[2019-01-25 14:59:15] [wg.core.Controller] [INFO] - Start execution
+[2019-01-25 14:59:15] [wg.core.Controller] [FINE] - Start parsing commands
+[2019-01-25 14:59:15] [wg.core.Controller] [FINE] - Finished parsing commands
+[2019-01-25 14:59:15] [wg.core.WorkloadParser] [FINE] - Start parsing workload
+[2019-01-25 14:59:15] [wg.core.WorkloadParser] [FINE] - Finished with parsing workload
+[2019-01-25 14:59:17] [wg.core.Executor] [INFO] - Event: event1 ausgeführt um: 2000
+[2019-01-25 14:59:19] [wg.core.Executor] [INFO] - Event: event2 ausgeführt um: 4000
+[2019-01-25 14:59:21] [wg.core.Executor] [INFO] - Event: event3 ausgeführt um: 6000
+[2019-01-25 14:59:23] [wg.core.Executor] [INFO] - Event: event4 ausgeführt um: 8000

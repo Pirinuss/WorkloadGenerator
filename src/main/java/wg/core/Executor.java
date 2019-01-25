@@ -63,59 +63,18 @@ public class Executor {
 		switch(growthType) {
 		case INCREASEEXPO:
 			futures = executeFrameWithIncrease(frame, growthType);
+			break;
 		case INCREASEFIB:
 			futures = executeFrameWithIncrease(frame, growthType);
+			break;
 		case LINEAR:
 			futures = executeFrameWithIncrease(frame, growthType);
+			break;
 		case NONE:
-			futures = executeFrameWithoutIncrease(frame, false);
+			//futures = executeFrameWithoutIncrease(frame, false);
+			break;
 		}
 		return parseResponses(futures);
-	}
-	
-	/**
-	 * Executes a frame without increase mode: Extracts the events from the frame, calls the execution for
-	 * each event by the right time and the right amount of repetitions. Returns the responses afterwards.
-	 * @param frame The frame that gets executed
-	 * @return responses The array which contains all the responses of the
-	 * executed events
-	 */
-	private ArrayList<Future<Response>> executeFrameWithoutIncrease(Frame frame, boolean withReps) {
-		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
-		EventDiscriptor currentEvent;
-		long exeTime;
-		long repetitions;
-		long size;
-		if (withReps) {
-			size = getTotalEventsNumber(events, 1);
-		} else {
-			size = events.size();
-		}
-		Response[] responses = new Response[(int) size];
-		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
-		Timestamp startTime = new Timestamp(System.currentTimeMillis());
-		while (events.size() > 0) {
-			for (int i=0; i<events.size(); i++) {
-				currentEvent = events.get(i);
-				if (withReps) {
-					repetitions = currentEvent.getRepetitions();
-				} else {
-					repetitions = 1;
-				}
-				exeTime = currentEvent.getTime();
-				Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-				long dif = currentTime.getTime()-startTime.getTime();
-				if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
-					for (int r=0; r<repetitions; r++) {
-						log.info("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
-						Future<Response> response = executeEvent(currentEvent);
-						futures.add(response);
-					}
-				}
-			}
-			events = removeEvents(events, executedEvents);
-		}
-		return futures;
 	}
 	
 	/**
@@ -138,16 +97,16 @@ public class Executor {
 			while (events.size() > 0) {
 				for (int i=0; i<events.size(); i++) {
 					EventDiscriptor currentEvent = events.get(i);
-					long exeTime = currentEvent.getTime();
+					long exeTime = getExeTime(frame.getOptions(), currentEvent.getTime(), s);
 					Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 					long dif = currentTime.getTime()-startTime.getTime();
 					if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
 						int repetitions = getRepetitions(frame.getOptions(), steps, s);
 						for (int r=0; r<repetitions; r++) {
 							log.info("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
-							Future<Response> response = executeEvent(currentEvent);
+							//Future<Response> response = executeEvent(currentEvent);
 							executedEventsPerStep.add(currentEvent);
-							futures.add(response);
+							//futures.add(response);
 						}
 					}
 				}
@@ -157,21 +116,41 @@ public class Executor {
 		return futures;
 	}
 	
+	private long getExeTime(Options options, long initExeTime, int currentStep) {
+		long exeTime = initExeTime;
+		long factor = options.getFrequencyFactor();
+		if (options.isFrequencyIncrease()) {
+			for (int i=0; i<currentStep; i++) {
+				exeTime = exeTime/factor;
+			}
+		}
+		if (options.isFrequencyDecrease()) {
+			for (int i=0; i<currentStep; i++) {
+				exeTime = exeTime*factor;
+			}
+		}
+		return exeTime;
+	}
+	
 	private int getRepetitions(Options options, long steps, int currentStep) {
 		int repetitions = 0;
 		switch (options.getEventGrowthType()) {
 		case INCREASEEXPO:
 			//TODO Berechnung
+			break;
 		case INCREASEFIB:
 			repetitions = calculateFibNumber(currentStep);
+			break;
 		case LINEAR:
 			if (currentStep == 1) {
 				repetitions = 1;
 			} else {
 				repetitions = (int) ((currentStep-1) * options.getEventLinearGrowthFactor() + 1);
 			}
+			break;
 		case NONE:
 			repetitions = 1;
+			break;
 		}
 		return repetitions;
 	}
@@ -276,39 +255,6 @@ public class Executor {
 		HashMap<String, Request> requests = workload.getRequests();
 		Request request = requests.get(requestName);
 		return request;
-	}
-	
-	/**
-	 * Returns the number (including repetitions and increase) of events that have to 
-	 * be executed.
-	 * @param events The list of events from the frame
-	 * @return The number of events for a frame
-	 */
-	private long getTotalEventsNumber(ArrayList<EventDiscriptor> events, long steps) {
-		long counter = 0;
-		long[] eventReps = new long[events.size()];
-		for (int i=0; i<events.size(); i++) {
-			long reps = events.get(i).getRepetitions();
-			eventReps[i] = reps;
-			counter = counter + reps;
-		}
-		for (int j=1; j<steps; j++) {
-			for (int k=0; k<eventReps.length; k++) {
-				long addValue = (long) Math.pow(eventReps[k], 2);
-				eventReps[k] = addValue;
-				counter = counter + addValue;
-			}
-		}
-		return counter;
-	}
-	
-	private long getTotalEventsNumberFib(ArrayList<EventDiscriptor> events, long steps) {
-		long counter = 0;
-		for (int i=0; i<steps; i++) {
-			long addValue = calculateFibNumber(i+1) * events.size();
-			counter = counter + addValue;
-		}
-		return counter;
 	}
 	
 }

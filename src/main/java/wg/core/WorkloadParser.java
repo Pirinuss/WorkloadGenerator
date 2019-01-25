@@ -153,7 +153,6 @@ public class WorkloadParser {
 	 * Parses one frame object from the given JSON object and returns it
 	 * 
 	 * @param frameObj
-	 *            //TODO
 	 * @param nameIndex
 	 * @return
 	 */
@@ -224,10 +223,10 @@ public class WorkloadParser {
 			} else {
 				eventNumberSteps = (Long) repeatEventsObj.get("steps");
 			}
-			if (repeatEventsObj.get("eventLinearGrowthFactor") == null) {
+			if (repeatEventsObj.get("linearGrowthFactor") == null) {
 				eventLinearGrowthFactor = -1;
 			} else {
-				eventLinearGrowthFactor = (Long) repeatEventsObj.get("eventLinearGrowthFactor");
+				eventLinearGrowthFactor = (Long) repeatEventsObj.get("linearGrowthFactor");
 			}
 			if (repeatEventsObj.get("growth") == null) {
 				eventGrowthType = GrowthType.NONE;
@@ -250,8 +249,8 @@ public class WorkloadParser {
 		}
 		if (decreaseFrequencyObj != null) {
 			frequencyDecrease = true;
-			frequencySteps = (Long) increaseFrequencyObj.get("steps");
-			frequencyFactor = (Long) increaseFrequencyObj.get("factor");
+			frequencySteps = (Long) decreaseFrequencyObj.get("steps");
+			frequencyFactor = (Long) decreaseFrequencyObj.get("factor");
 		}
 		// TransmissionOption
 		String transmissionName = (String) optionsObj.get("transmission");
