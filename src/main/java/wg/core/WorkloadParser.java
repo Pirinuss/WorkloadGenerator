@@ -74,23 +74,23 @@ public class WorkloadParser {
 		JSONArray targets = (JSONArray) jo.get("targets");
 		if (targets == null) {
 			return null;
-		} else {
-			HashMap<String, Target> targetMap = new HashMap<String, Target>();
-			for (int i = 0; i < targets.size(); i++) {
-				JSONObject targetObj = (JSONObject) targets.get(i);
-				String targetName = ("target").concat(String.valueOf(i + 1));
-				JSONObject targetContent = (JSONObject) targetObj.get(targetName);
-				if (targetContent == null) {
-					targetMap.put(targetName, null);
-				} else {
-					String servername = (String) targetContent.get("servername");
-					String port = (String) targetContent.get("port");
-					Target newTarget = new Target(targetName, servername, port);
-					targetMap.put(targetName, newTarget);
-				}
-			}
-			return targetMap;
 		}
+		HashMap<String, Target> targetMap = new HashMap<String, Target>();
+		for (int i = 0; i < targets.size(); i++) {
+			JSONObject targetObj = (JSONObject) targets.get(i);
+			String targetName = ("target").concat(String.valueOf(i + 1));
+			JSONObject targetContent = (JSONObject) targetObj.get(targetName);
+			if (targetContent == null) {
+				targetMap.put(targetName, null);
+			} else {
+				String servername = (String) targetContent.get("servername");
+				String port = (String) targetContent.get("port");
+				Target newTarget = new Target(targetName, servername, port);
+				targetMap.put(targetName, newTarget);
+			}
+		}
+		return targetMap;
+
 	}
 
 	/**
@@ -104,21 +104,20 @@ public class WorkloadParser {
 		JSONArray requests = (JSONArray) jo.get("requests");
 		if (requests == null) {
 			return null;
-		} else {
-			HashMap<String, Request> requestMap = new HashMap<String, Request>();
-			for (int i = 0; i < requests.size(); i++) {
-				JSONObject requestObj = (JSONObject) requests.get(i);
-				String requestName = ("request").concat(String.valueOf(i + 1));
-				JSONObject requestContent = (JSONObject) requestObj.get(requestName);
-				if (requestContent == null) {
-					requestMap.put(requestName, null);
-				} else {
-					Request newRequest = getSpecificRequest(requestContent, requestName);
-					requestMap.put(requestName, newRequest);
-				}
-			}
-			return requestMap;
 		}
+		HashMap<String, Request> requestMap = new HashMap<String, Request>();
+		for (int i = 0; i < requests.size(); i++) {
+			JSONObject requestObj = (JSONObject) requests.get(i);
+			String requestName = ("request").concat(String.valueOf(i + 1));
+			JSONObject requestContent = (JSONObject) requestObj.get(requestName);
+			if (requestContent == null) {
+				requestMap.put(requestName, null);
+			} else {
+				Request newRequest = getSpecificRequest(requestContent, requestName);
+				requestMap.put(requestName, newRequest);
+			}
+		}
+		return requestMap;
 	}
 
 	/**
@@ -134,7 +133,7 @@ public class WorkloadParser {
 			return null;
 		}
 		JSONArray framesObj = (JSONArray) scheduleObj.get("frames");
-		Frame[] frames = new Frame[0];
+		Frame[] frames;
 		if (framesObj == null) {
 			frames = null;
 		} else {
@@ -171,43 +170,34 @@ public class WorkloadParser {
 	}
 
 	private EventDiscriptor[] parseFrameEvents(JSONArray eventsObj) {
-		EventDiscriptor[] events;
 		if (eventsObj == null) {
-			events = null;
-		} else {
-			events = new EventDiscriptor[eventsObj.size()];
-			for (int j = 0; j < eventsObj.size(); j++) {
-				EventDiscriptor event = new EventDiscriptor();
-				JSONObject eventObj = (JSONObject) eventsObj.get(j);
-				String eventName = ("event").concat(String.valueOf(j + 1));
-				JSONObject eventContent = (JSONObject) eventObj.get(eventName);
-				event.setEventName(eventName);
-				if (eventContent == null) {
-					event = null;
-					events[j] = event;
-					break;
-				}
-				String targetName = (String) eventContent.get("target");
-				event.setTargetName(targetName);
-				String requestName = (String) eventContent.get("request");
-				event.setRequestName(requestName);
-				long time = -1;
-				if (eventContent.get("time") != null) {
-					time = (Long) eventContent.get("time");
-				}
-				event.setTime(time);
-				long repetitions = 1;
-				if (eventContent.get("repetitions") != null) {
-					repetitions = (Long) eventContent.get("repetitions");
-				}
-				event.setRepetitions(repetitions);
-				events[j] = event;
+			return null;
+		}
+		EventDiscriptor[] events = new EventDiscriptor[eventsObj.size()];
+		for (int j = 0; j < eventsObj.size(); j++) {
+			JSONObject eventObj = (JSONObject) eventsObj.get(j);
+			String eventName = ("event").concat(String.valueOf(j + 1));
+			JSONObject eventContent = (JSONObject) eventObj.get(eventName);
+			if (eventContent == null) {
+				events[j] = null;
+				break;
 			}
+			String targetName = (String) eventContent.get("target");
+			String requestName = (String) eventContent.get("request");
+			long time = -1;
+			if (eventContent.get("time") != null) {
+				time = (Long) eventContent.get("time");
+			}
+			events[j] = new EventDiscriptor(eventName, time, targetName, requestName);
 		}
 		return events;
 	}
 
 	private Options parseFrameOptions(JSONObject optionsObj) {
+		if (optionsObj == null) {
+			Options options = new Options(-1, -1, GrowthType.NONE, -1, -1, false, false, TransmissionType.NONE);
+			return options;
+		}
 		// RepeatEventsOption
 		long eventNumberSteps;
 		long eventLinearGrowthFactor;
@@ -244,13 +234,29 @@ public class WorkloadParser {
 		JSONObject decreaseFrequencyObj = (JSONObject) optionsObj.get("decreaseFrequency");
 		if (increaseFrequencyObj != null) {
 			frequencyIncrease = true;
-			frequencySteps = (Long) increaseFrequencyObj.get("steps");
-			frequencyFactor = (Long) increaseFrequencyObj.get("factor");
+			if (increaseFrequencyObj.get("steps") == null) {
+				frequencySteps = -1;
+			} else {
+				frequencySteps = (Long) increaseFrequencyObj.get("steps");
+			}
+			if (increaseFrequencyObj.get("factor") == null) {
+				frequencyFactor = -1;
+			} else {
+				frequencyFactor = (Long) increaseFrequencyObj.get("factor");
+			}
 		}
 		if (decreaseFrequencyObj != null) {
 			frequencyDecrease = true;
-			frequencySteps = (Long) decreaseFrequencyObj.get("steps");
-			frequencyFactor = (Long) decreaseFrequencyObj.get("factor");
+			if (decreaseFrequencyObj.get("steps") == null) {
+				frequencySteps = -1;
+			} else {
+				frequencySteps = (Long) decreaseFrequencyObj.get("steps");
+			}
+			if (decreaseFrequencyObj.get("factor") == null) {
+				frequencyFactor = -1;
+			} else {
+				frequencyFactor = (Long) decreaseFrequencyObj.get("factor");
+			}
 		}
 		// TransmissionOption
 		String transmissionName = (String) optionsObj.get("transmission");

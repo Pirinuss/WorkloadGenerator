@@ -85,12 +85,11 @@
                 ],
                 "options": {
                     "repeatEvents": {
-                        "growth": "increaseFib",
-                        "linearGrowthFactor": 5,
-                        "steps": 3
+                        "growth": "linear",
+                        "linearGrowthFactor": 2,
+                        "steps": 5
                     },
                     "decreaseFrequency": {
-                        "factor": 2,
                         "steps": 3
                     },
                     "transmission":"parallel"

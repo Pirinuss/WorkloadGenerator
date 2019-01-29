@@ -37,7 +37,6 @@ public class Controller {
 	 */
 	public static void main(String[] args) {
 		createLogger();
-		log.info("Start execution");
 		parseCommands(args);
 		if (path != null) {
 			workload = workloadParser.parseWorkload(path);
@@ -46,7 +45,6 @@ public class Controller {
 				result.printResponses();
 			}
 		}
-		log.info("End execution");
 		System.exit(0);
 	}
 

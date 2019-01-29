@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import wg.workload.EventDiscriptor;
 import wg.workload.Frame;
-import wg.workload.GrowthType;
 import wg.workload.Options;
 import wg.workload.Request;
 import wg.workload.Target;
@@ -52,32 +51,6 @@ public class Executor {
 	}
 	
 	/**
-	 * Parses the defined frame mode to the right execution method
-	 * @param frame The frame that gets executed
- 	 * @return The array which contains all the responses of the
-	 * executed events of the frame
-	 */
-	private Response[] executeFrame(Frame frame) {
-		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
-		GrowthType growthType = frame.getOptions().getEventGrowthType();
-		switch(growthType) {
-		case INCREASEEXPO:
-			futures = executeFrameWithIncrease(frame, growthType);
-			break;
-		case INCREASEFIB:
-			futures = executeFrameWithIncrease(frame, growthType);
-			break;
-		case LINEAR:
-			futures = executeFrameWithIncrease(frame, growthType);
-			break;
-		case NONE:
-			//futures = executeFrameWithoutIncrease(frame, false);
-			break;
-		}
-		return parseResponses(futures);
-	}
-	
-	/**
 	 * Executes a frame with increase mode: Extracts the events from the frame, calls the execution for
 	 * each event by the right time and the right amount of repetitions. Repeats it for each steps while increasing 
 	 * the amount of repetitions for each event exponential or following the Fibonacci sequence. Returns the 
@@ -86,7 +59,7 @@ public class Executor {
 	 * @return responses The array which contains all the responses of the
 	 * executed events
 	 */
-	private ArrayList<Future<Response>> executeFrameWithIncrease(Frame frame, GrowthType growthType) {
+	private Response[] executeFrame(Frame frame) {
 		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
 		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));
 		long steps = getMaximalSteps(frame.getOptions());
@@ -97,11 +70,11 @@ public class Executor {
 			while (events.size() > 0) {
 				for (int i=0; i<events.size(); i++) {
 					EventDiscriptor currentEvent = events.get(i);
-					long exeTime = getExeTime(frame.getOptions(), currentEvent.getTime(), s);
+					long exeTime = calculateExeTime(frame.getOptions(), currentEvent.getTime(), s);
 					Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 					long dif = currentTime.getTime()-startTime.getTime();
 					if (currentTime.getTime()-exeTime >=startTime.getTime() ) {
-						int repetitions = getRepetitions(frame.getOptions(), steps, s);
+						int repetitions = getRepetitions(frame.getOptions(), s);
 						for (int r=0; r<repetitions; r++) {
 							log.info("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
 							//Future<Response> response = executeEvent(currentEvent);
@@ -113,10 +86,10 @@ public class Executor {
 				events = removeEvents(events, executedEventsPerStep);
 			}
 		}
-		return futures;
+		return parseResponses(futures);
 	}
 	
-	private long getExeTime(Options options, long initExeTime, int currentStep) {
+	private long calculateExeTime(Options options, long initExeTime, int currentStep) {
 		long exeTime = initExeTime;
 		long factor = options.getFrequencyFactor();
 		if (options.isFrequencyIncrease()) {
@@ -132,21 +105,17 @@ public class Executor {
 		return exeTime;
 	}
 	
-	private int getRepetitions(Options options, long steps, int currentStep) {
+	private int getRepetitions(Options options, int currentStep) {
 		int repetitions = 0;
 		switch (options.getEventGrowthType()) {
 		case INCREASEEXPO:
-			//TODO Berechnung
+			repetitions = (int) Math.pow(2, currentStep);
 			break;
 		case INCREASEFIB:
-			repetitions = calculateFibNumber(currentStep);
+			repetitions = calculateFibRepetitions(currentStep);
 			break;
 		case LINEAR:
-			if (currentStep == 1) {
-				repetitions = 1;
-			} else {
-				repetitions = (int) ((currentStep-1) * options.getEventLinearGrowthFactor() + 1);
-			}
+			repetitions = (int) ((currentStep) * options.getEventLinearGrowthFactor());
 			break;
 		case NONE:
 			repetitions = 1;
@@ -160,13 +129,13 @@ public class Executor {
 	 * @param position The position of the number in the Fibonacci sequence
 	 * @return The right number of the Fibonacci sequence
 	 */
-	private int calculateFibNumber(long position) {
+	private int calculateFibRepetitions(long position) {
 		if (position<=0) {
 			return 0;
 		} else if (position == 1) {
 			return 1;
 		} else {
-			return calculateFibNumber(position-2)+calculateFibNumber(position-1);
+			return calculateFibRepetitions(position-2)+calculateFibRepetitions(position-1);
 		}
 	}
 	
@@ -227,7 +196,12 @@ public class Executor {
 	 * @return response The response of the event as a future object
 	 */
 	private Future<Response> executeEvent(EventDiscriptor currentEvent) {
-		Target target = mapTarget(currentEvent.getTargetName());
+		Target target;
+		if (currentEvent.getTargetName() == null) {
+			target = null;
+		} else {
+			target = mapTarget(currentEvent.getTargetName());
+		}
 		Request request = mapRequest(currentEvent.getRequestName());
 		Event event = new Event(target, request, workload);
 		Future<Response> response = exeService.submit(event);

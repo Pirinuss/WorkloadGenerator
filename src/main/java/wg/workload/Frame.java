@@ -1,16 +1,23 @@
 package wg.workload;
 
 public class Frame {
-	
+
 	private final String frameName;
 	private final EventDiscriptor[] events;
 	private final Options options;
-	
+
 	public Frame(String frameName, EventDiscriptor[] events, Options options) {
-		super();
 		this.frameName = frameName;
 		this.events = events;
 		this.options = options;
+		if (events == null) {
+			throw new IllegalArgumentException("No events found for " + frameName);
+		}
+		for (int i = 0; i < events.length; i++) {
+			if (events[i] == null) {
+				throw new IllegalArgumentException("Event " + i + 1 + " not found");
+			}
+		}
 	}
 
 	public String getFrameName() {
@@ -24,6 +31,5 @@ public class Frame {
 	public Options getOptions() {
 		return options;
 	}
-	
 
 }

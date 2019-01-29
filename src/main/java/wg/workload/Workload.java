@@ -8,25 +8,44 @@ public class Workload {
 	private final HashMap<String, Target> targets;
 	private final HashMap<String, Request> requests;
 	private final Schedule schedule;
-	
+
 	public Workload(HashMap<String, Target> targets, HashMap<String, Request> requests, Schedule schedule) {
 		this.targets = targets;
 		this.requests = requests;
 		this.schedule = schedule;
+		if (targets == null) {
+			throw new IllegalArgumentException("No targets found");
+		}
+		if (requests == null) {
+			throw new IllegalArgumentException("No requests found");
+		}
+		if (schedule == null) {
+			throw new IllegalArgumentException("No schedule found");
+		}
+		for (Entry<String, Target> entry : targets.entrySet()) {
+			if (entry.getValue() == null) {
+				throw new IllegalArgumentException(entry.getKey() + " not found");
+			}
+		}
+		for (Entry<String, Request> entry : requests.entrySet()) {
+			if (entry.getValue() == null) {
+				throw new IllegalArgumentException(entry.getKey() + " not found");
+			}
+		}
 	}
 
 	public HashMap<String, Target> getTargets() {
 		return targets;
 	}
-	
+
 	public HashMap<String, Request> getRequests() {
 		return requests;
 	}
-	
+
 	public Schedule getSchedule() {
 		return schedule;
 	}
-	
+
 	public Target getTargetByName(String targetName) {
 		for (Entry<String, Target> e : targets.entrySet()) {
 			if (e.getKey().equals(targetName)) {
@@ -36,5 +55,5 @@ public class Workload {
 		}
 		return null;
 	}
-	
+
 }

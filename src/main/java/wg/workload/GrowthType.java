@@ -8,13 +8,27 @@ public enum GrowthType {
 		switch (mode) {
 		case "linear":
 			return LINEAR;
-		case "increaseExpo":
+		case "exponentially":
 			return INCREASEEXPO;
-		case "increaseFib":
+		case "fibonacci":
 			return INCREASEFIB;
 		default:
 			return NONE;
 		}
+	}
+	
+	public static String parseGrowthType(GrowthType type) {
+		switch (type) {
+		case INCREASEEXPO:
+			return "exponentially";
+		case INCREASEFIB:
+			return "fibonacci";
+		case LINEAR:
+			return "linear";
+		case NONE:
+			return null;
+		}
+		return null;
 	}
 
 }

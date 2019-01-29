@@ -41,32 +41,24 @@ import wg.workload.Workload;
 
 public class Event implements Callable<Response> {
 	
-	private Workload workload;
-	private Target target;
-	private Request request;
+	private final Workload workload;
+	private final Target target;
+	private final Request request;
 	private Response response;
-	final String USER_AGENT = "Mozilla/5.0";
-	
-	public Target getTarget() {
-		return target;
-	}
-
-	public void setTarget(Target target) {
-		this.target = target;
-	}
-
-	public Request getRequest() {
-		return request;
-	}
-
-	public void setRequest(Request request) {
-		this.request = request;
-	}
+	private final String USER_AGENT = "Mozilla/5.0";
 	
 	public Event(Target target, Request request, Workload workload) {
 		this.target = target;
 		this.request = request;
 		this.workload = workload;
+	}
+	
+	public Target getTarget() {
+		return target;
+	}
+
+	public Request getRequest() {
+		return request;
 	}
 
 	public Response call() throws Exception {
