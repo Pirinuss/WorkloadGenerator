@@ -13,8 +13,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import wg.WorkloadGeneratorException;
 import wg.util.LogFormatter;
 import wg.workload.Workload;
+import wg.workload.parser.WorkloadParser;
 
 public class Controller {
 
@@ -26,14 +28,14 @@ public class Controller {
 	private static String path;
 
 	/**
-	 * The main method. After calling the argument parser it calls the execution of
-	 * the workload if a workload got parsed. Afterwards it calls the printing of
-	 * the workloads execution results.
+	 * The main method. After calling the argument parser it calls the execution
+	 * of the workload if a workload got parsed. Afterwards it calls the
+	 * printing of the workloads execution results.
 	 * 
 	 * @param args
 	 *            The arguments of the console command
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws WorkloadGeneratorException {
 		createLogger();
 		parseCommands(args);
 		if (path != null) {
@@ -55,7 +57,8 @@ public class Controller {
 		log.fine("Start parsing commands");
 		CommandLineParser parser = new DefaultParser();
 		Options options = new Options();
-		Option fileOption = Option.builder("f").longOpt("file").hasArg(true).build();
+		Option fileOption = Option.builder("f").longOpt("file").hasArg(true)
+				.build();
 		options.addOption(fileOption);
 		try {
 			CommandLine cmd = parser.parse(options, args);

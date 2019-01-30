@@ -4,14 +4,17 @@ public class Target {
 
 	private final String targetName;
 	private final String serverName;
-	private final String port;
+	private final int port;
 
-	public Target(String targetName, String serverName, String port) {
+	public Target(String targetName, String serverName, int port) {
+		if (targetName == null) {
+			throw new IllegalArgumentException("Id must not be null!");
+		}
 		this.targetName = targetName;
 		this.serverName = serverName;
 		this.port = port;
 		if (serverName == null) {
-			throw new IllegalArgumentException("No servername found for " + targetName);
+			throw new IllegalArgumentException("No servername found for ");
 		}
 	}
 
@@ -23,7 +26,7 @@ public class Target {
 		return serverName;
 	}
 
-	public String getPort() {
+	public int getPort() {
 		return port;
 	}
 

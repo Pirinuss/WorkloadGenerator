@@ -1,16 +1,16 @@
 package wg.core;
 
-import wg.workload.EventDiscriptor;
+import wg.workload.EventDescriptor;
 import wg.workload.Frame;
 
 public class ResultObject {
 	
 	Frame frame;
-	EventDiscriptor event;
+	EventDescriptor event;
 	Response response;
 	int id;
 	
-	public ResultObject(Frame frame, EventDiscriptor event, Response response, int id) {
+	public ResultObject(Frame frame, EventDescriptor event, Response response, int id) {
 		this.frame = frame;
 		this.event = event;
 		this.response = response;
@@ -21,7 +21,7 @@ public class ResultObject {
 		return frame;
 	}
 
-	public EventDiscriptor getEvent() {
+	public EventDescriptor getEvent() {
 		return event;
 	}
 

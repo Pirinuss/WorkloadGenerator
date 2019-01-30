@@ -29,7 +29,7 @@ public class Schedule {
 		for (int i = 0; i < frames.length; i++) {
 			sb.append("---" + frames[i].getFrameName() + "---");
 			sb.append(System.getProperty("line.separator"));
-			EventDiscriptor[] events = frames[i].getEvents();
+			EventDescriptor[] events = frames[i].getEvents();
 			for (int j = 0; j < events.length; j++) {
 				sb.append("   " + events[j].getEventName());
 				sb.append(System.getProperty("line.separator"));

@@ -1,13 +1,14 @@
 package wg.workload;
 
-public class EventDiscriptor {
+public class EventDescriptor implements Comparable<EventDescriptor> {
 
 	private final String eventName;
 	private final String targetName;
 	private final String requestName;
 	private final long time;
 
-	public EventDiscriptor(String eventName, long time, String targetName, String requestName) {
+	public EventDescriptor(String eventName, long time, String targetName,
+			String requestName) {
 		this.eventName = eventName;
 		this.time = time;
 		this.targetName = targetName;
@@ -28,6 +29,12 @@ public class EventDiscriptor {
 
 	public String getRequestName() {
 		return requestName;
+	}
+
+	@Override
+	public int compareTo(EventDescriptor o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

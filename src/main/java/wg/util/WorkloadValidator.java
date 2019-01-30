@@ -8,7 +8,7 @@ import wg.requests.FtpRequest;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
 import wg.requests.TcpUdpRequest;
-import wg.workload.EventDiscriptor;
+import wg.workload.EventDescriptor;
 import wg.workload.Frame;
 import wg.workload.Request;
 import wg.workload.Schedule;
@@ -44,7 +44,7 @@ public class WorkloadValidator {
 			}
 		}
 		System.out.println();
-		System.out.println("Workload couldn´t be executed. Pls fix your configuration file.");
+		System.out.println("Workload couldnï¿½t be executed. Pls fix your configuration file.");
 		return false;
 	}
 
@@ -115,7 +115,7 @@ public class WorkloadValidator {
 				System.out.println("Frame" + i+1 + " was not found. Please check if the frames are in a correct order.");
 				return false;
 			}
-			EventDiscriptor[] events = frames[i].getEvents();
+			EventDescriptor[] events = frames[i].getEvents();
 			if (events.length == 0) {
 				System.out.println("No events found for " + frames[i].getFrameName());
 				return false;

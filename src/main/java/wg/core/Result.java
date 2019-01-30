@@ -2,7 +2,7 @@ package wg.core;
 
 import java.util.ArrayList;
 
-import wg.workload.EventDiscriptor;
+import wg.workload.EventDescriptor;
 import wg.workload.Request;
 import wg.workload.Target;
 
@@ -24,11 +24,11 @@ public class Result {
 	public void printResponses() {
 		for (int i=0; i<framesNumber; i++) {
 			String frameName = "frame" + framesNumber;
-			System.out.println("---Ergebnisse für Frame " + framesNumber + " ---");
+			System.out.println("---Ergebnisse fï¿½r Frame " + framesNumber + " ---");
 			System.out.println();
 			for (int j=0; j<results.size(); j++) {
 				if (results.get(j).getFrame().getFrameName().equals(frameName)) {
-					EventDiscriptor eventDis = results.get(j).getEvent();
+					EventDescriptor eventDis = results.get(j).getEvent();
 					Response response = results.get(j).getResponse();
 					if (response != null) {
 						long exeTime = response.getEventStopTime() - response.getEventStartTime();

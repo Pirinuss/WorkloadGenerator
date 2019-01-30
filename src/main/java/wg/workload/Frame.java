@@ -3,10 +3,10 @@ package wg.workload;
 public class Frame {
 
 	private final String frameName;
-	private final EventDiscriptor[] events;
+	private final EventDescriptor[] events;
 	private final Options options;
 
-	public Frame(String frameName, EventDiscriptor[] events, Options options) {
+	public Frame(String frameName, EventDescriptor[] events, Options options) {
 		this.frameName = frameName;
 		this.events = events;
 		this.options = options;
@@ -24,7 +24,7 @@ public class Frame {
 		return frameName;
 	}
 
-	public EventDiscriptor[] getEvents() {
+	public EventDescriptor[] getEvents() {
 		return events;
 	}
 
