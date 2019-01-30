@@ -90,6 +90,7 @@
                         "steps": 5
                     },
                     "decreaseFrequency": {
+                        "factor": 2,
                         "steps": 3
                     },
                     "transmission":"parallel"

@@ -50,15 +50,6 @@ public class Executor {
 		return result;
 	}
 	
-	/**
-	 * Executes a frame with increase mode: Extracts the events from the frame, calls the execution for
-	 * each event by the right time and the right amount of repetitions. Repeats it for each steps while increasing 
-	 * the amount of repetitions for each event exponential or following the Fibonacci sequence. Returns the 
-	 * responses afterwards.
-	 * @param frame The frame that gets executed
-	 * @return responses The array which contains all the responses of the
-	 * executed events
-	 */
 	private Response[] executeFrame(Frame frame) {
 		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
 		ArrayList<EventDiscriptor> events = new ArrayList<EventDiscriptor>(Arrays.asList(frame.getEvents()));

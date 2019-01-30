@@ -14,14 +14,12 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import wg.util.LogFormatter;
-import wg.util.WorkloadValidator;
 import wg.workload.Workload;
 
 public class Controller {
 
 	private static final Executor executor = new Executor();
 	private static final WorkloadParser workloadParser = new WorkloadParser();
-	private static final WorkloadValidator workloadValidator = new WorkloadValidator();
 	private static Workload workload;
 	private static Result result;
 	private static Logger log;
@@ -40,10 +38,8 @@ public class Controller {
 		parseCommands(args);
 		if (path != null) {
 			workload = workloadParser.parseWorkload(path);
-			if (workloadValidator.validateWorkload(workload)) {
-				result = executor.executeWorkload(workload);
-				result.printResponses();
-			}
+			result = executor.executeWorkload(workload);
+			result.printResponses();
 		}
 		System.exit(0);
 	}

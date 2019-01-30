@@ -295,8 +295,8 @@ public class Event implements Callable<Response> {
 		byte[] reply = null;
         try {
         	ByteArrayOutputStream out = new ByteArrayOutputStream(4);
-			new DataOutputStream(out).write(command);
-			ServiceProxy serviceProxy = new ServiceProxy(0 , "config");
+			new DataOutputStream(out).writeInt(1);
+			ServiceProxy serviceProxy = new ServiceProxy(1001 , "config");
 			if (bftRequest.getType().equals("ordered")) {
 				reply = serviceProxy.invokeOrdered(out.toByteArray());
 			} else {
@@ -305,7 +305,6 @@ public class Event implements Callable<Response> {
 			if (reply != null) {
 				int newValue = new DataInputStream(new ByteArrayInputStream(reply)).readInt();
 				log.info("Returned value: " + newValue);
-	            System.out.println("Returned value: " + newValue);
 	            response.setResponseContent(reply.toString());
 			} else {
 				log.severe("Error while executing BFTSMaRt request");
@@ -314,7 +313,6 @@ public class Event implements Callable<Response> {
 			if (e.getMessage().equals("Impossible to connect to servers!")) {
 				log.severe("Error while executing BFTSMaRt request. Impossible to connect to servers.");
 			} else {
-				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 		}

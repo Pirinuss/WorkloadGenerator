@@ -32,14 +32,6 @@ public class WorkloadParser {
 
 	private static final Logger log = Logger.getLogger("logfile.txt");
 
-	/**
-	 * Parses the workload for the given document by calling the parsing methods for
-	 * the targets, requests and the schedule.
-	 * 
-	 * @param path
-	 *            The path of the document that gets parsed
-	 * @return The workload object
-	 */
 	public Workload parseWorkload(String path) {
 		Workload workload = null;
 		try {
@@ -63,13 +55,6 @@ public class WorkloadParser {
 		return workload;
 	}
 
-	/**
-	 * Parses the targets.
-	 * 
-	 * @param jo
-	 *            The JSON document as JSONObject
-	 * @return targetMap A map with the target names and the targets
-	 */
 	private HashMap<String, Target> parseTargets(JSONObject jo) {
 		JSONArray targets = (JSONArray) jo.get("targets");
 		if (targets == null) {
@@ -93,13 +78,6 @@ public class WorkloadParser {
 
 	}
 
-	/**
-	 * Parses the requests by calling the specific parse method.
-	 * 
-	 * @param jo
-	 *            The JSON document as JSONObject
-	 * @return requestMap A map with the request names and the requests
-	 */
 	private HashMap<String, Request> parseRequests(JSONObject jo) {
 		JSONArray requests = (JSONArray) jo.get("requests");
 		if (requests == null) {
@@ -120,13 +98,6 @@ public class WorkloadParser {
 		return requestMap;
 	}
 
-	/**
-	 * Parses the schedule.
-	 * 
-	 * @param jo
-	 *            The JSON document as JSONObject
-	 * @return schedule The schedule object with all frames and events
-	 */
 	private Schedule parseSchedule(JSONObject jo) {
 		JSONObject scheduleObj = (JSONObject) jo.get("schedule");
 		if (scheduleObj == null) {
@@ -148,13 +119,6 @@ public class WorkloadParser {
 		return schedule;
 	}
 
-	/**
-	 * Parses one frame object from the given JSON object and returns it
-	 * 
-	 * @param frameObj
-	 * @param nameIndex
-	 * @return
-	 */
 	private Frame parseFrame(JSONObject frameObj, int nameIndex) {
 		String frameName = ("frame").concat(String.valueOf(nameIndex + 1));
 		JSONObject frameContent = (JSONObject) frameObj.get(frameName);
@@ -271,15 +235,6 @@ public class WorkloadParser {
 		return options;
 	}
 
-	/**
-	 * Maps the protocol to the specific request and calls the creation method for
-	 * this request.
-	 * 
-	 * @param requestContent
-	 *            The JSON object of the JSON document which contains the parameters
-	 *            for the request object
-	 * @return The request object
-	 */
 	private Request getSpecificRequest(JSONObject requestContent, String requestName) {
 		Request request = null;
 		String protocol = (String) requestContent.get("protocol");
@@ -308,16 +263,6 @@ public class WorkloadParser {
 		}
 	}
 
-	/**
-	 * Creates a new HTTP request object, fills it with the values of the JSON
-	 * document and returns it.
-	 * 
-	 * @param requestContent
-	 *            The JSON object of the JSON document which contains the parameters
-	 *            for the request object
-	 * @return httpRequest The HTTP request object, filled with the parameters from
-	 *         the JSON object
-	 */
 	private Request createHttpRequest(JSONObject requestContent, String requestName, ProtocolType protocolType) {
 		HttpMethodType methodType;
 		String methodTypeName = (String) requestContent.get("method");
@@ -335,16 +280,6 @@ public class WorkloadParser {
 		return httpRequest;
 	}
 
-	/**
-	 * Creates a new FTP request object, fills it with the values of the JSON
-	 * document and returns it.
-	 * 
-	 * @param requestContent
-	 *            The JSON object of the JSON document which contains the parameters
-	 *            for the request object
-	 * @return ftpRequest The FTP request object, filled with the parameters from
-	 *         the JSON object
-	 */
 	private Request createFtpRequest(JSONObject requestContent, String requestName, ProtocolType protocolType) {
 		String methodTypeName = (String) requestContent.get("method");
 		FtpMethodType methodType;
@@ -362,16 +297,6 @@ public class WorkloadParser {
 		return ftpRequest;
 	}
 
-	/**
-	 * Creates a new TCP request object, fills it with the values of the JSON
-	 * document and returns it.
-	 * 
-	 * @param requestContent
-	 *            The JSON object of the JSON document which contains the parameters
-	 *            for the request object
-	 * @return tcpRequest The TCP request object, filled with the parameters from
-	 *         the JSON object
-	 */
 	private Request createTcpUdpRequest(JSONObject requestContent, String requestName, ProtocolType protocolType) {
 		String content = (String) requestContent.get("content");
 		TcpUdpRequest tcpUdpRequest = new TcpUdpRequest(requestName, protocolType, content);
