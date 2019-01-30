@@ -25,6 +25,7 @@ import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -40,6 +41,8 @@ import wg.workload.Target;
 import wg.workload.Workload;
 
 public class Event implements Callable<Response> {
+	
+	private static final Logger log = Logger.getLogger("logfile.txt");
 	
 	private final Workload workload;
 	private final Target target;
@@ -292,15 +295,29 @@ public class Event implements Callable<Response> {
 		byte[] reply = null;
         try {
         	ByteArrayOutputStream out = new ByteArrayOutputStream(4);
-			new DataOutputStream(out).writeInt(1);
+			new DataOutputStream(out).write(command);
 			ServiceProxy serviceProxy = new ServiceProxy(0 , "config");
-			reply = serviceProxy.invokeOrdered(out.toByteArray());
-			int newValue = new DataInputStream(new ByteArrayInputStream(reply)).readInt();
-            System.out.println(", returned value: " + newValue);
-		} catch (IOException e) {
-			e.printStackTrace();
+			if (bftRequest.getType().equals("ordered")) {
+				reply = serviceProxy.invokeOrdered(out.toByteArray());
+			} else {
+				reply = serviceProxy.invokeUnordered(out.toByteArray());
+			}
+			if (reply != null) {
+				int newValue = new DataInputStream(new ByteArrayInputStream(reply)).readInt();
+				log.info("Returned value: " + newValue);
+	            System.out.println("Returned value: " + newValue);
+	            response.setResponseContent(reply.toString());
+			} else {
+				log.severe("Error while executing BFTSMaRt request");
+			}
+		} catch (Exception e) {
+			if (e.getMessage().equals("Impossible to connect to servers!")) {
+				log.severe("Error while executing BFTSMaRt request. Impossible to connect to servers.");
+			} else {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-        response.setResponseContent(reply.toString());
 		return response;
 	}
 

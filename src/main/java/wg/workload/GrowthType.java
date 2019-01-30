@@ -16,7 +16,7 @@ public enum GrowthType {
 			return NONE;
 		}
 	}
-	
+
 	public static String parseGrowthType(GrowthType type) {
 		switch (type) {
 		case INCREASEEXPO:

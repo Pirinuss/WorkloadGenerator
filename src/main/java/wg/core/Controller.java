@@ -72,7 +72,6 @@ public class Controller {
 			log.severe("Errror while parsing arguments");
 			e.printStackTrace();
 		}
-		log.fine("Finished parsing commands");
 	}
 
 	private static void createLogger() {

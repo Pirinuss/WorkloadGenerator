@@ -1,5 +1,4 @@
-[2019-01-29 16:06:37] [wg.core.Controller] [FINE] - Start parsing commands
-[2019-01-29 16:06:37] [wg.core.Controller] [FINE] - Finished parsing commands
-[2019-01-29 16:06:37] [wg.core.WorkloadParser] [FINE] - Start parsing workload
-[2019-01-29 16:06:37] [wg.core.WorkloadParser] [SEVERE] - "factor" is missing
-[2019-01-29 16:06:37] [wg.core.WorkloadParser] [FINE] - Finished with parsing workload
+[2019-01-30 11:08:15] [wg.core.Controller] [FINE] - Start parsing commands
+[2019-01-30 11:08:15] [wg.core.WorkloadParser] [FINE] - Finished with parsing workload
+[2019-01-30 11:08:16] [wg.core.Executor] [INFO] - Event: event1 ausgeführt um: 1015
+[2019-01-30 11:08:59] [wg.core.Event] [SEVERE] - Error while executing BFTSMaRt request

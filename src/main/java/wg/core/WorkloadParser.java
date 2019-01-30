@@ -41,7 +41,6 @@ public class WorkloadParser {
 	 * @return The workload object
 	 */
 	public Workload parseWorkload(String path) {
-		log.fine("Start parsing workload");
 		Workload workload = null;
 		try {
 			Object obj = new JSONParser().parse(new FileReader(path));
@@ -57,6 +56,7 @@ public class WorkloadParser {
 		} catch (IllegalArgumentException e) {
 			log.severe(e.getMessage());
 		} catch (Exception e) {
+			log.severe(e.getMessage());
 			e.printStackTrace();
 		}
 		log.fine("Finished with parsing workload");

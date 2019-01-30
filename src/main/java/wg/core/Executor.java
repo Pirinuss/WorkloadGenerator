@@ -77,9 +77,9 @@ public class Executor {
 						int repetitions = getRepetitions(frame.getOptions(), s);
 						for (int r=0; r<repetitions; r++) {
 							log.info("Event: " + currentEvent.getEventName() +  " ausgeführt um: " + dif);
-							//Future<Response> response = executeEvent(currentEvent);
+							Future<Response> response = executeEvent(currentEvent);
 							executedEventsPerStep.add(currentEvent);
-							//futures.add(response);
+							futures.add(response);
 						}
 					}
 				}

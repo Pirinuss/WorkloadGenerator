@@ -24,8 +24,8 @@
   "requests": [
          {"request1": {
             "protocol":"BFTSMaRt",
-            "command":"test",
-            "type":"ordered",
+            "command":"1",
+            "type":"unordered",
             "targetGroup": [
                 "target1",
                 "target2",
