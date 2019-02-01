@@ -40,8 +40,8 @@ public class Controller {
 		parseCommands(args);
 		if (path != null) {
 			workload = workloadParser.parseWorkload(path);
-			result = executor.executeWorkload(workload);
-			result.printResponses();
+			//result = executor.executeWorkload(workload);
+			//result.printResponses();
 		}
 		System.exit(0);
 	}

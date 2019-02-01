@@ -94,7 +94,7 @@ public class Executor {
 
 				int repetitions = getRepetitions(frame.getOptions(), s);
 				for (int r = 0; r < repetitions; r++) {
-					log.info("Event: " + nextEvent.getEventName()
+					log.info("Event: " + nextEvent.getEventID()
 							+ " ausgefürt um: " + System.currentTimeMillis());
 
 					Future<Response> response = executeEvent(nextEvent);

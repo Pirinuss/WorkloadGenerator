@@ -11,12 +11,29 @@ public class FtpRequest extends Request {
 	private final String username;
 	private final String password;
 
-	public FtpRequest(String requestName, ProtocolType protocol, FtpMethodType method, String localResource,
-			String remoteResource, String username, String password) {
+	public FtpRequest(String requestName, ProtocolType protocol,
+			FtpMethodType method, String localResource, String remoteResource,
+			String username, String password) {
+
 		super(requestName, protocol);
+
+		if (method == null) {
+			throw new IllegalArgumentException("Method must not be null!");
+		}
 		this.method = method;
+
+		if (localResource == null) {
+			throw new IllegalArgumentException(
+					"Local resource must not be null");
+		}
 		this.localResource = localResource;
+
+		if (remoteResource == null) {
+			throw new IllegalArgumentException(
+					"Remote resource must not be null");
+		}
 		this.remoteResource = remoteResource;
+
 		this.username = username;
 		this.password = password;
 	}

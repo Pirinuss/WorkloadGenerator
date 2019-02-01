@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,8 +30,6 @@ import wg.workload.Workload;
 
 public class WorkloadParser {
 
-	private static final Logger log = Logger.getLogger("logfile.txt");
-
 	public Workload parseWorkload(String path) throws WorkloadParserException {
 		Workload workload = null;
 		try {
@@ -43,131 +40,154 @@ public class WorkloadParser {
 			Schedule schedule = parseSchedule(jsonObject);
 			workload = new Workload(targets, requests, schedule);
 		} catch (FileNotFoundException cause) {
-			log.severe("File not found");
+			throw new WorkloadParserException("File not found!", cause);
 		} catch (ParseException cause) {
-			log.severe("Invalid JSON document");
-		} catch (IllegalArgumentException cause) {
-			log.severe(cause.getMessage());
+			throw new WorkloadParserException("Invalid JSON document!", cause);
 		} catch (IOException cause) {
 			throw new WorkloadParserException("Could not read from file!",
 					cause);
 		}
-		log.fine("Finished with parsing workload");
 		return workload;
 	}
 
 	private HashMap<String, Target> parseTargets(JSONObject jo)
 			throws WorkloadParserException {
 		JSONArray targets = (JSONArray) jo.get("targets");
-
-		if (targets == null) {
+		if (targets == null || targets.size() == 0) {
 			throw new WorkloadParserException(
 					"Targets not found in JSON input!");
 		}
 
 		HashMap<String, Target> targetMap = new HashMap<String, Target>();
-
 		for (int i = 0; i < targets.size(); i++) {
 			JSONObject targetObj = (JSONObject) targets.get(i);
 
-			targetMap.put((String) targetObj.get("id"),
-					new Target((String) targetObj.get("id"),
-							(String) targetObj.get("server"),
-							(int) targetObj.get("port")));
-		}
-		return targetMap;
+			String id = (String) targetObj.get("id");
+			String server = (String) targetObj.get("server");
+			long port = -1;
+			if (targetObj.get("port") != null) {
+				port = (long) targetObj.get("port");
+			}
 
+			try {
+				Target target = new Target(id, server, port);
+				targetMap.put(id, target);
+			} catch (IllegalArgumentException e) {
+				throw new WorkloadParserException(
+						"Error while parsing target: \"" + id + "\"!", e);
+			}
+		}
+
+		return targetMap;
 	}
 
-	private HashMap<String, Request> parseRequests(JSONObject jo) {
+	private HashMap<String, Request> parseRequests(JSONObject jo)
+			throws WorkloadParserException {
+
 		JSONArray requests = (JSONArray) jo.get("requests");
-		if (requests == null) {
-			return null;
+		if (requests == null || requests.size() == 0) {
+			throw new WorkloadParserException(
+					"Requests not found in JSON input!");
 		}
+
 		HashMap<String, Request> requestMap = new HashMap<String, Request>();
 		for (int i = 0; i < requests.size(); i++) {
 			JSONObject requestObj = (JSONObject) requests.get(i);
-			requestObj.
-			String requestName = ("request").concat(String.valueOf(i + 1));
-			JSONObject requestContent = (JSONObject) requestObj
-					.get(requestName);
-			if (requestContent == null) {
-				requestMap.put(requestName, null);
-			} else {
-				Request newRequest = getSpecificRequest(requestContent,
-						requestName);
-				requestMap.put(requestName, newRequest);
+			String id = (String) requestObj.get("id");
+
+			try {
+				Request newRequest = getSpecificRequest(requestObj, id);
+				requestMap.put(id, newRequest);
+			} catch (IllegalArgumentException e) {
+				String s = "Error while parsing requests!";
+				if (id != null) {
+					s = "Error while parsing request: \"" + id + "\"!";
+				}
+				throw new WorkloadParserException(s, e);
 			}
 		}
+
 		return requestMap;
 	}
 
-	private Schedule parseSchedule(JSONObject jo) {
+	private Schedule parseSchedule(JSONObject jo)
+			throws WorkloadParserException {
 		JSONObject scheduleObj = (JSONObject) jo.get("schedule");
 		if (scheduleObj == null) {
-			return null;
+			throw new WorkloadParserException(
+					"Schedule not found in JSON input!");
 		}
+
 		JSONArray framesObj = (JSONArray) scheduleObj.get("frames");
-		Frame[] frames;
-		if (framesObj == null) {
-			frames = null;
-		} else {
-			frames = new Frame[framesObj.size()];
+		if (framesObj == null || framesObj.size() == 0) {
+			throw new WorkloadParserException("No frames found in JSON input!");
+		}
+
+		Frame[] frames = new Frame[framesObj.size()];
+		try {
 			for (int i = 0; i < framesObj.size(); i++) {
 				JSONObject frameObj = (JSONObject) framesObj.get(i);
 				Frame frame = parseFrame(frameObj, i);
 				frames[i] = frame;
 			}
+
+			return new Schedule(frames);
+		} catch (IllegalArgumentException e) {
+			throw new WorkloadParserException("Error while parsing schedule!",
+					e);
 		}
-		Schedule schedule = new Schedule(frames);
-		return schedule;
 	}
 
-	private Frame parseFrame(JSONObject frameObj, int nameIndex) {
-		String frameName = ("frame").concat(String.valueOf(nameIndex + 1));
-		JSONObject frameContent = (JSONObject) frameObj.get(frameName);
-		if (frameContent == null) {
-			return null;
-		}
-		JSONArray eventsObj = (JSONArray) frameContent.get("events");
+	private Frame parseFrame(JSONObject frameObj, int nameIndex)
+			throws WorkloadParserException {
+		String id = (String) frameObj.get("id");
+
+		JSONArray eventsObj = (JSONArray) frameObj.get("events");
 		EventDescriptor[] events = parseFrameEvents(eventsObj);
-		JSONObject optionsObj = (JSONObject) frameContent.get("options");
+
+		JSONObject optionsObj = (JSONObject) frameObj.get("options");
 		Options options = parseFrameOptions(optionsObj);
-		Frame frame = new Frame(frameName, events, options);
+
+		Frame frame = new Frame(id, events, options);
 		return frame;
 	}
 
-	private EventDescriptor[] parseFrameEvents(JSONArray eventsObj) {
-		if (eventsObj == null) {
-			return null;
+	private EventDescriptor[] parseFrameEvents(JSONArray eventsObj)
+			throws WorkloadParserException {
+
+		if (eventsObj == null || eventsObj.size() == 0) {
+			throw new IllegalArgumentException(
+					"No events found in JSON input!");
 		}
+
 		EventDescriptor[] events = new EventDescriptor[eventsObj.size()];
 		for (int j = 0; j < eventsObj.size(); j++) {
 			JSONObject eventObj = (JSONObject) eventsObj.get(j);
-			String eventName = ("event").concat(String.valueOf(j + 1));
-			JSONObject eventContent = (JSONObject) eventObj.get(eventName);
-			if (eventContent == null) {
-				events[j] = null;
-				break;
-			}
-			String targetName = (String) eventContent.get("target");
-			String requestName = (String) eventContent.get("request");
+
+			String id = (String) eventObj.get("id");
+			String targetName = (String) eventObj.get("target");
+			String requestName = (String) eventObj.get("request");
+
 			long time = -1;
-			if (eventContent.get("time") != null) {
-				time = (Long) eventContent.get("time");
+			if (eventObj.get("time") != null) {
+				time = (long) eventObj.get("time");
 			}
-			events[j] = new EventDescriptor(eventName, time, targetName,
-					requestName);
+
+			events[j] = new EventDescriptor(id, time, targetName, requestName);
 		}
+
 		return events;
 	}
 
 	private Options parseFrameOptions(JSONObject optionsObj) {
+		// TODO Überarbeiten: Optionen sollen nicht in einzelnes großes Objekt
+		// gesteckt werden sondern in mehrere kleine aufgeteilt werden
 		if (optionsObj == null) {
 			Options options = new Options(-1, -1, GrowthType.NONE, -1, -1,
 					false, false, TransmissionType.NONE);
 			return options;
 		}
+
 		// RepeatEventsOption
 		long eventNumberSteps;
 		long eventLinearGrowthFactor;
@@ -247,97 +267,103 @@ public class WorkloadParser {
 	}
 
 	private Request getSpecificRequest(JSONObject requestContent,
-			String requestName) {
-		Request request = null;
+			String requestName) throws WorkloadParserException {
+
 		String protocol = (String) requestContent.get("protocol");
-		ProtocolType protocolType;
-		if (protocol != null) {
-			protocolType = ProtocolType.valueOf(protocol);
-		} else {
-			protocolType = ProtocolType.NONE;
+		if (protocol == null) {
+			throw new IllegalArgumentException(
+					"Protocol not found in JSON input!");
 		}
+
+		ProtocolType protocolType = ProtocolType.fromString(protocol);
 		switch (protocolType) {
 
 		case HTTP:
-			return request = createHttpRequest(requestContent, requestName,
-					protocolType);
+			return createHttpRequest(requestContent, requestName, protocolType);
 		case FTP:
-			return request = createFtpRequest(requestContent, requestName,
-					protocolType);
+			return createFtpRequest(requestContent, requestName, protocolType);
 		case TCP:
-			return request = createTcpUdpRequest(requestContent, requestName,
+			return createTcpUdpRequest(requestContent, requestName,
 					protocolType);
 		case UDP:
-			return request = createTcpUdpRequest(requestContent, requestName,
+			return createTcpUdpRequest(requestContent, requestName,
 					protocolType);
 		case BFTSMaRt:
-			return request = createBftsmartRequest(requestContent, requestName,
+			return createBftsmartRequest(requestContent, requestName,
 					protocolType);
-		case NONE:
-			return request;
 		default:
-			return request;
+			return null;
 		}
+
 	}
 
 	private Request createHttpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType) {
-		HttpMethodType methodType;
-		String methodTypeName = (String) requestContent.get("method");
-		if (methodTypeName != null) {
-			methodType = HttpMethodType.valueOf(methodTypeName);
-		} else {
-			methodType = HttpMethodType.NONE;
-		}
+			String requestName, ProtocolType protocolType)
+			throws WorkloadParserException {
+
 		String resourcePath = (String) requestContent.get("resourcePath");
 		String content = (String) requestContent.get("content");
-		if (content == null) {
-			content = "";
+
+		String methodTypeName = (String) requestContent.get("method");
+		if (methodTypeName == null) {
+			throw new IllegalArgumentException(
+					"Method not found in JSON input!");
 		}
-		HttpRequest httpRequest = new HttpRequest(requestName, protocolType,
-				methodType, resourcePath, content);
-		return httpRequest;
+		HttpMethodType methodType = HttpMethodType.fromString(methodTypeName);
+
+		return new HttpRequest(requestName, protocolType, methodType,
+				resourcePath, content);
 	}
 
 	private Request createFtpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType) {
-		String methodTypeName = (String) requestContent.get("method");
-		FtpMethodType methodType;
-		if (methodTypeName != null) {
-			methodType = FtpMethodType.valueOf(methodTypeName);
-		} else {
-			methodType = FtpMethodType.NONE;
-		}
+			String requestName, ProtocolType protocolType)
+			throws WorkloadParserException {
+
 		String localResource = (String) requestContent.get("localResource");
 		String remoteResource = (String) requestContent.get("remoteResource");
 		String username = (String) requestContent.get("username");
 		String password = (String) requestContent.get("password");
-		FtpRequest ftpRequest = new FtpRequest(requestName, protocolType,
-				methodType, localResource, remoteResource, username, password);
-		return ftpRequest;
+
+		String methodTypeName = (String) requestContent.get("method");
+		if (methodTypeName == null) {
+			throw new IllegalArgumentException(
+					"Method not found in JSON input!");
+		}
+		FtpMethodType methodType = FtpMethodType.fromString(methodTypeName);
+
+		return new FtpRequest(requestName, protocolType, methodType,
+				localResource, remoteResource, username, password);
 	}
 
 	private Request createTcpUdpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType) {
+			String requestName, ProtocolType protocolType)
+			throws WorkloadParserException {
+
 		String content = (String) requestContent.get("content");
-		TcpUdpRequest tcpUdpRequest = new TcpUdpRequest(requestName,
-				protocolType, content);
-		return tcpUdpRequest;
+
+		return new TcpUdpRequest(requestName, protocolType, content);
 	}
 
 	private Request createBftsmartRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType) {
+			String requestName, ProtocolType protocolType)
+			throws WorkloadParserException {
+
 		String command = (String) requestContent.get("command");
 		String type = (String) requestContent.get("type");
+
 		JSONArray targetGroupObj = (JSONArray) requestContent
 				.get("targetGroup");
+		if (targetGroupObj == null || targetGroupObj.size() == 0) {
+			throw new IllegalArgumentException(
+					"No target group found in JSON input!");
+		}
 		ArrayList<String> targetGroup = new ArrayList<String>();
 		for (int i = 0; i < targetGroupObj.size(); i++) {
 			targetGroup.add((String) targetGroupObj.get(i));
 		}
-		BftsmartRequest bftsmartRequest = new BftsmartRequest(requestName,
-				protocolType, command, type, targetGroup);
-		return bftsmartRequest;
+
+		return new BftsmartRequest(requestName, protocolType, command, type,
+				targetGroup);
 	}
 
 }

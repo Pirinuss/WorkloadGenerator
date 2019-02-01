@@ -2,21 +2,37 @@ package wg.workload;
 
 public class EventDescriptor implements Comparable<EventDescriptor> {
 
-	private final String eventName;
+	private final String eventID;
 	private final String targetName;
 	private final String requestName;
 	private final long time;
 
-	public EventDescriptor(String eventName, long time, String targetName,
+	public EventDescriptor(String eventID, long time, String targetName,
 			String requestName) {
-		this.eventName = eventName;
-		this.time = time;
+		if (eventID == null) {
+			throw new IllegalArgumentException("Event id must not be null!");
+		}
+		this.eventID = eventID;
+
+		if (targetName == null) {
+			throw new IllegalArgumentException("Target name must not be null!");
+		}
 		this.targetName = targetName;
+
+		if (requestName == null) {
+			throw new IllegalArgumentException(
+					"Request name must not be null!");
+		}
 		this.requestName = requestName;
+
+		if (time < 0) {
+			throw new IllegalArgumentException("Invalid time value!");
+		}
+		this.time = time;
 	}
 
-	public String getEventName() {
-		return eventName;
+	public String getEventID() {
+		return eventID;
 	}
 
 	public long getTime() {

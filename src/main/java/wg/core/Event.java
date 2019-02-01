@@ -316,8 +316,8 @@ public class Event implements Callable<Response> {
 			e.printStackTrace();
 		}
 		// BFTSMaRt Client
-		char id = target.getTargetName()
-				.charAt(target.getTargetName().length() - 1);
+		char id = target.getTargetID()
+				.charAt(target.getTargetID().length() - 1);
 		byte[] command = bftRequest.getCommand().getBytes();
 
 		byte[] reply = null;
