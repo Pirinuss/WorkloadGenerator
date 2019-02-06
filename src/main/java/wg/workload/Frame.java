@@ -1,5 +1,7 @@
 package wg.workload;
 
+import wg.workload.options.Options;
+
 public class Frame {
 
 	private final String frameID;

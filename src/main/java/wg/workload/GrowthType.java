@@ -2,10 +2,10 @@ package wg.workload;
 
 public enum GrowthType {
 
-	NONE, LINEAR, INCREASEEXPO, INCREASEFIB;
+	LINEAR, INCREASEEXPO, INCREASEFIB;
 
-	public static GrowthType parseString(String mode) {
-		switch (mode) {
+	public static GrowthType parseString(String identifier) {
+		switch (identifier) {
 		case "linear":
 			return LINEAR;
 		case "exponentially":
@@ -13,7 +13,8 @@ public enum GrowthType {
 		case "fibonacci":
 			return INCREASEFIB;
 		default:
-			return NONE;
+			throw new IllegalArgumentException(
+					"Invalid identifier!" + identifier);
 		}
 	}
 
@@ -25,8 +26,6 @@ public enum GrowthType {
 			return "fibonacci";
 		case LINEAR:
 			return "linear";
-		case NONE:
-			return null;
 		}
 		return null;
 	}

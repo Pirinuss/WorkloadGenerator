@@ -3,27 +3,28 @@ package wg.workload;
 public class EventDescriptor implements Comparable<EventDescriptor> {
 
 	private final String eventID;
-	private final String targetName;
-	private final String requestName;
+	private final Target target;
+	private Request request;
 	private final long time;
 
-	public EventDescriptor(String eventID, long time, String targetName,
-			String requestName) {
+	public EventDescriptor(String eventID, long time, Target target,
+			Request request) {
 		if (eventID == null) {
 			throw new IllegalArgumentException("Event id must not be null!");
 		}
 		this.eventID = eventID;
 
-		if (targetName == null) {
-			throw new IllegalArgumentException("Target name must not be null!");
+		if (target == null) {
+			if (request.getProtocol() != ProtocolType.BFTSMaRt) {
+				throw new IllegalArgumentException("Target must not be null!");
+			}
 		}
-		this.targetName = targetName;
+		this.target = target;
 
-		if (requestName == null) {
-			throw new IllegalArgumentException(
-					"Request name must not be null!");
+		if (request == null) {
+			throw new IllegalArgumentException("Request must not be null!");
 		}
-		this.requestName = requestName;
+		this.request = request;
 
 		if (time < 0) {
 			throw new IllegalArgumentException("Invalid time value!");
@@ -39,18 +40,21 @@ public class EventDescriptor implements Comparable<EventDescriptor> {
 		return time;
 	}
 
-	public String getTargetName() {
-		return targetName;
+	public Target getTarget() {
+		return target;
 	}
 
-	public String getRequestName() {
-		return requestName;
+	public Request getRequest() {
+		return request;
+	}
+	
+	public void setRequest(Request request) {
+		this.request = request;
 	}
 
 	@Override
 	public int compareTo(EventDescriptor o) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (Integer) Long.compare(time, o.getTime());
 	}
 
 }

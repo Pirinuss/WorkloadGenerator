@@ -1,5 +1,7 @@
 package wg.requests;
 
+import org.apache.commons.net.ftp.FTPClient;
+
 import wg.workload.ProtocolType;
 import wg.workload.Request;
 
@@ -10,6 +12,7 @@ public class FtpRequest extends Request {
 	private final String remoteResource;
 	private final String username;
 	private final String password;
+	private FTPClient client;
 
 	public FtpRequest(String requestName, ProtocolType protocol,
 			FtpMethodType method, String localResource, String remoteResource,
@@ -56,6 +59,14 @@ public class FtpRequest extends Request {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public FTPClient getClient() {
+		return client;
+	}
+
+	public void setClient(FTPClient client) {
+		this.client = client;
 	}
 
 }

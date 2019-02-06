@@ -14,8 +14,8 @@ public class Result {
 	public void safeResponse(ResultObject resultObject) {
 		results.add(resultObject);
 		for (int i=0; i<results.size(); i++) {
-			String frameName = results.get(i).getFrame().getFrameName();
-			if (!resultObject.getFrame().getFrameName().equals(frameName)) {
+			String frameName = results.get(i).getFrame().getFrameID();
+			if (!resultObject.getFrame().getFrameID().equals(frameName)) {
 				framesNumber++;
 			}
 		}
@@ -27,18 +27,18 @@ public class Result {
 			System.out.println("---Ergebnisse f�r Frame " + framesNumber + " ---");
 			System.out.println();
 			for (int j=0; j<results.size(); j++) {
-				if (results.get(j).getFrame().getFrameName().equals(frameName)) {
+				if (results.get(j).getFrame().getFrameID().equals(frameName)) {
 					EventDescriptor eventDis = results.get(j).getEvent();
 					Response response = results.get(j).getResponse();
 					if (response != null) {
 						long exeTime = response.getEventStopTime() - response.getEventStartTime();
 						Target target = response.getTarget();
-						String port = null;
-						if (target.getPort() != null) {
+						int port = 0;
+						if (target.getPort() != -1) {
 							port = target.getPort();
 						}
 						Request request = response.getRequest();
-						System.out.println("   Event: " + eventDis.getEventName());
+						System.out.println("   Event: " + eventDis.getEventID());
 						System.out.println("     Target: " + target.getServerName() + ", "+ port );
 						System.out.println("     Request: " + request.getProtocol() );
 						System.out.println("     Execution time: " + exeTime );
@@ -49,7 +49,7 @@ public class Result {
 							System.out.println("     Response length: 0");
 						}
 					} else {
-						System.out.println("No response found for event: " + results.get(j).getEvent().getEventName());
+						System.out.println("No response found for event: " + results.get(j).getEvent().getEventID());
 					}
 				}
 			}

@@ -28,6 +28,7 @@ public class HttpRequest extends Request {
 			content = "";
 		}
 		this.content = content;
+
 	}
 
 	public HttpMethodType getMethod() {

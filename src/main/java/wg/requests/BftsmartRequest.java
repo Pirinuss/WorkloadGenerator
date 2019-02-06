@@ -1,18 +1,19 @@
 package wg.requests;
 
-import java.util.ArrayList;
-
+import bftsmart.tom.ServiceProxy;
 import wg.workload.ProtocolType;
 import wg.workload.Request;
+import wg.workload.Target;
 
 public class BftsmartRequest extends Request {
 
 	private final String command;
 	private final String type;
-	private final ArrayList<String> targetGroup;
+	private final Target[] targetGroup;
+	private ServiceProxy client;
 
 	public BftsmartRequest(String requestName, ProtocolType protocol,
-			String command, String type, ArrayList<String> targetGroup) {
+			String command, String type, Target[] targetGroup) {
 
 		super(requestName, protocol);
 
@@ -41,12 +42,16 @@ public class BftsmartRequest extends Request {
 		return type;
 	}
 
-	public ArrayList<String> getTargetGroup() {
+	public Target[] getTargetGroup() {
 		return targetGroup;
 	}
 
-	public void addTarget(String target) {
-		targetGroup.add(target);
+	public ServiceProxy getClient() {
+		return client;
+	}
+
+	public void setClient(ServiceProxy client) {
+		this.client = client;
 	}
 
 }

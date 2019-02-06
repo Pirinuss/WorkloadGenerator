@@ -23,7 +23,6 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
@@ -35,25 +34,40 @@ import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
-import wg.requests.TcpUdpRequest;
+import wg.requests.TcpRequest;
+import wg.requests.UdpRequest;
 import wg.workload.Request;
 import wg.workload.Target;
-import wg.workload.Workload;
+import wg.workload.options.Clients;
 
 public class Event implements Callable<Response> {
 
 	private static final Logger log = Logger.getLogger("logfile.txt");
 
-	private final Workload workload;
 	private final Target target;
+	private final Target[] targetGroup;
 	private final Request request;
+	private final Clients clients;
+	private final int clientIndex;
 	private Response response;
 	private final String USER_AGENT = "Mozilla/5.0";
 
-	public Event(Target target, Request request, Workload workload) {
+	public Event(Target target, Request request, Clients clients,
+			int clientIndex) {
 		this.target = target;
 		this.request = request;
-		this.workload = workload;
+		this.clients = clients;
+		this.clientIndex = clientIndex;
+		this.targetGroup = null;
+	}
+
+	public Event(Target[] targetGroup, Request request, Clients clients,
+			int clientIndex) {
+		this.targetGroup = targetGroup;
+		this.request = request;
+		this.clients = clients;
+		this.clientIndex = clientIndex;
+		this.target = null;
 	}
 
 	public Target getTarget() {
@@ -169,30 +183,33 @@ public class Event implements Callable<Response> {
 
 	private Response executeFtpEvent() {
 		FtpRequest ftpRequest = (FtpRequest) request;
-		String serverName = target.getServerName();
-		int port = Integer.valueOf(target.getPort());
-		String username = ftpRequest.getUsername();
-		String password = ftpRequest.getPassword();
-		FtpMethodType method = ftpRequest.getMethod();
-		String localResource = ftpRequest.getLocalResource();
-		String remoteResource = ftpRequest.getRemoteResource();
-		FTPClient ftpClient = new FTPClient();
+
+		FTPClient ftpClient;
+		if (clients.getFtpClients()[clientIndex] == null) {
+			ftpClient = new FTPClient();
+			clients.getFtpClients()[clientIndex] = ftpClient;
+		} else {
+			ftpClient = clients.getFtpClients()[clientIndex];
+		}
+
 		Timestamp startTime = new Timestamp(System.currentTimeMillis());
 		try {
 			// TODO FTPConnectionClosedException abfangen (passiert wenn FTP
 			// response = 421)
 			ftpClient.connect(target.getServerName(), target.getPort());
-			ftpClient.login(username, password);
-			if (method == FtpMethodType.GET) {
-				FileOutputStream fos = new FileOutputStream(localResource);
-				ftpClient.retrieveFile(remoteResource, fos);
+			ftpClient.login(ftpRequest.getUsername(), ftpRequest.getPassword());
+			if (ftpRequest.getMethod() == FtpMethodType.GET) {
+				FileOutputStream fos = new FileOutputStream(
+						ftpRequest.getLocalResource());
+				ftpClient.retrieveFile(ftpRequest.getRemoteResource(), fos);
 				response.setResponseInfos(
 						String.valueOf(ftpClient.getReplyCode()));
 				fos.close();
 			}
-			if (method == FtpMethodType.PUT) {
-				FileInputStream fis = new FileInputStream(localResource);
-				ftpClient.storeFile(remoteResource, fis);
+			if (ftpRequest.getMethod() == FtpMethodType.PUT) {
+				FileInputStream fis = new FileInputStream(
+						ftpRequest.getLocalResource());
+				ftpClient.storeFile(ftpRequest.getRemoteResource(), fis);
 				response.setResponseInfos(
 						String.valueOf(ftpClient.getReplyCode()));
 				fis.close();
@@ -209,13 +226,18 @@ public class Event implements Callable<Response> {
 	}
 
 	private Response executeTcpEvent() {
-		TcpUdpRequest tcpRequest = (TcpUdpRequest) request;
-		String serverName = target.getServerName();
-		int port = Integer.valueOf(target.getPort());
+		TcpRequest tcpRequest = (TcpRequest) request;
 		String responseContent = null;
 		Timestamp startTime = new Timestamp(System.currentTimeMillis());
 		try {
-			Socket socket = new Socket(serverName, port);
+			Socket socket;
+			if (clients.getTcpClients()[clientIndex] == null) {
+				socket = new Socket(target.getServerName(), target.getPort());
+				clients.getTcpClients()[clientIndex] = socket;
+			} else {
+				socket = clients.getTcpClients()[clientIndex];
+			}
+
 			socket.setSoTimeout(5000);
 			DataOutputStream outToServer = new DataOutputStream(
 					socket.getOutputStream());
@@ -241,22 +263,28 @@ public class Event implements Callable<Response> {
 	}
 
 	private Response executeUdpEvent() {
-		TcpUdpRequest udpRequest = (TcpUdpRequest) request;
-		String serverName = target.getServerName();
-		int port = Integer.valueOf(target.getPort());
+		UdpRequest udpRequest = (UdpRequest) request;
 		String responseContent = null;
 		Timestamp startTime = null;
 		Timestamp endTime = null;
 		try {
-			DatagramSocket clientSocket = new DatagramSocket();
+			DatagramSocket clientSocket;
+			if (clients.getUdpClients()[clientIndex] == null) {
+				clientSocket = new DatagramSocket();
+				clients.getUdpClients()[clientIndex] = clientSocket;
+			} else {
+				clientSocket = clients.getUdpClients()[clientIndex];
+			}
+			
 			clientSocket.setSoTimeout(30000);
-			InetAddress IPAddress = InetAddress.getByName(serverName);
+			InetAddress IPAddress = InetAddress
+					.getByName(target.getServerName());
 			byte[] sendData = new byte[1024];
 			byte[] receiveData = new byte[1024];
 			String sentence = udpRequest.getContent();
 			sendData = sentence.getBytes();
 			DatagramPacket sendPacket = new DatagramPacket(sendData,
-					sendData.length, IPAddress, port);
+					sendData.length, IPAddress, target.getPort());
 			startTime = new Timestamp(System.currentTimeMillis());
 			clientSocket.send(sendPacket);
 			DatagramPacket receivePacket = new DatagramPacket(receiveData,
@@ -291,18 +319,11 @@ public class Event implements Callable<Response> {
 
 		BftsmartRequest bftRequest = (BftsmartRequest) request;
 		// Set hosts
-		ArrayList<Target> targetGroup = new ArrayList<Target>();
-		ArrayList<String> targetNamesGroup = bftRequest.getTargetGroup();
-		for (int i = 0; i < targetNamesGroup.size(); i++) {
-			Target target;
-			target = workload.getTargetByName(targetNamesGroup.get(i));
-			targetGroup.add(target);
-		}
 		try {
 			FileWriter fw = new FileWriter("config/hosts.config");
 			BufferedWriter bw = new BufferedWriter(fw);
-			for (int j = 0; j < targetGroup.size(); j++) {
-				int port = Integer.valueOf(targetGroup.get(j).getPort());
+			for (int j = 0; j < targetGroup.length; j++) {
+				int port = Integer.valueOf(targetGroup[j].getPort());
 				String serverName = target.getServerName();
 				InetAddress ip;
 				ip = InetAddress.getByName(serverName);
@@ -322,9 +343,15 @@ public class Event implements Callable<Response> {
 
 		byte[] reply = null;
 		try {
+			ServiceProxy serviceProxy;
+			if (clients.getBftsmartClients()[clientIndex] == null) {
+				serviceProxy = new ServiceProxy(id);
+				clients.getBftsmartClients()[clientIndex] = serviceProxy;
+			} else {
+				serviceProxy = clients.getBftsmartClients()[clientIndex];
+			}
 			ByteArrayOutputStream out = new ByteArrayOutputStream(4);
 			new DataOutputStream(out).writeInt(1);
-			ServiceProxy serviceProxy = new ServiceProxy(1001, "config");
 			if (bftRequest.getType().equals("ordered")) {
 				reply = serviceProxy.invokeOrdered(command);
 			} else {

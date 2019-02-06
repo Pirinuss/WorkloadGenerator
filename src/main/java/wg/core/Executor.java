@@ -2,28 +2,39 @@ package wg.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
+import wg.requests.BftsmartRequest;
 import wg.workload.EventDescriptor;
 import wg.workload.Frame;
-import wg.workload.Options;
+import wg.workload.ProtocolType;
 import wg.workload.Request;
 import wg.workload.Target;
 import wg.workload.Workload;
+import wg.workload.options.Clients;
+import wg.workload.options.FrequencyMode;
+import wg.workload.options.FrequencyOption;
+import wg.workload.options.Options;
+import wg.workload.options.RequestsOption;
 
 public class Executor {
 
 	private static final int CORE_MULTIPLICATOR = 2;
 	/** Specifies the request execution frequency in milliseconds. */
-	private static final int EXECUTION_FREQUENCY = 20;
+	private static final int EXECUTION_FREQUENCY = 1;
 
 	private ExecutorService exeService;
 	private final ArrayList<EventDescriptor> executedEvents = new ArrayList<EventDescriptor>();
 	private static final Logger log = Logger.getLogger("logfile.txt");
+
+	public Executor() {
+		int threadPoolSize = Runtime.getRuntime().availableProcessors()
+				* CORE_MULTIPLICATOR;
+		exeService = Executors.newFixedThreadPool(threadPoolSize);
+	}
 
 	/**
 	 * Executes the workload: Extracts the frames of the workload, calls the
@@ -36,11 +47,6 @@ public class Executor {
 	public Result executeWorkload(Workload workload) {
 		Result result = new Result();
 		Frame[] frames = workload.getSchedule().getFrames();
-
-		// TODO im Contstructor
-		int threadPoolSize = Runtime.getRuntime().availableProcessors()
-				* CORE_MULTIPLICATOR;
-		exeService = Executors.newFixedThreadPool(threadPoolSize);
 
 		for (int i = 0; i < frames.length; i++) {
 			Response[] responses = executeFrame(frames[i]);
@@ -65,14 +71,14 @@ public class Executor {
 
 		long steps = getMaximalSteps(frame.getOptions());
 
-		for (int s = 1; s <= steps; s++) {
+		for (int s = 0; s <= steps; s++) {
 			events = new ArrayList<EventDescriptor>(
 					Arrays.asList(frame.getEvents()));
 
 			long startTime = System.currentTimeMillis();
 
-			// TODO sort the events
 			EventDescriptor[] sortedEvents = frame.getEvents();
+			Arrays.sort(sortedEvents);
 
 			if (sortedEvents.length < 1) {
 				return new Response[0];
@@ -82,9 +88,11 @@ public class Executor {
 
 			while (index < events.size()) {
 				EventDescriptor nextEvent = sortedEvents[index];
-				long eventExecution = startTime + nextEvent.getTime();
 
-				while (eventExecution < System.currentTimeMillis()) {
+				long eventExecution = startTime + calculateExeTime(
+						frame.getOptions().getFrequencyOption(),
+						nextEvent.getTime(), s);
+				while (eventExecution > System.currentTimeMillis()) {
 					try {
 						Thread.sleep(EXECUTION_FREQUENCY);
 					} catch (InterruptedException ignore) {
@@ -92,15 +100,24 @@ public class Executor {
 					}
 				}
 
-				int repetitions = getRepetitions(frame.getOptions(), s);
-				for (int r = 0; r < repetitions; r++) {
-					log.info("Event: " + nextEvent.getEventID()
-							+ " ausgefÃ¼rt um: " + System.currentTimeMillis());
+				int clientsNumber = frame.getOptions().getClients()
+						.getClientsNumber(nextEvent.getRequest().getProtocol());
+				frame.getOptions().getClients();
+				for (int i = 0; i < clientsNumber; i++) {
 
-					Future<Response> response = executeEvent(nextEvent);
-					futures.add(response);
+					int repetitions = getRepetitions(
+							frame.getOptions().getRequestsOption(), s);
+					for (int r = 0; r < repetitions; r++) {
+						long dif = System.currentTimeMillis() - startTime;
+						log.info("Event: " + nextEvent.getEventID()
+								+ " ausgeführt durch Client " + i + " um: "
+								+ dif);
+
+						// Future<Response> response = executeEvent(nextEvent,
+						// frame.getOptions().getClients(), i);
+						// futures.add(response);
+					}
 				}
-
 				index++;
 			}
 		}
@@ -108,21 +125,61 @@ public class Executor {
 		return parseResponses(futures);
 	}
 
-	private int getRepetitions(Options options, int currentStep) {
+	private Future<Response> executeEvent(EventDescriptor currentEvent,
+			Clients clients, int clientIndex) {
+
+		Event event;
+		Request request = currentEvent.getRequest();
+
+		if (request.getProtocol() == ProtocolType.BFTSMaRt) {
+			BftsmartRequest bftRequest = (BftsmartRequest) request;
+			Target[] targetGroup = bftRequest.getTargetGroup();
+			event = new Event(targetGroup, request, clients, clientIndex);
+		} else {
+			Target target = currentEvent.getTarget();
+			event = new Event(target, request, clients, clientIndex);
+		}
+
+		Future<Response> response = exeService.submit(event);
+
+		return response;
+	}
+
+	private long calculateExeTime(FrequencyOption option, long initExeTime,
+			int currentStep) {
+		if (currentStep == 0) {
+			return initExeTime;
+		}
+		long exeTime = initExeTime;
+		long factor = option.getFactor();
+		if (option.getMode() == FrequencyMode.INCREASE) {
+			for (int i = 0; i < currentStep; i++) {
+				exeTime = exeTime / factor;
+			}
+		}
+		if (option.getMode() == FrequencyMode.DECREASE) {
+			for (int i = 0; i < currentStep; i++) {
+				exeTime = exeTime * factor;
+			}
+		}
+		return exeTime;
+	}
+
+	private int getRepetitions(RequestsOption option, int currentStep) {
+		if (currentStep == 0) {
+			return 1;
+		}
 		int repetitions = 0;
-		switch (options.getEventGrowthType()) {
+		switch (option.getGrowthType()) {
 		case INCREASEEXPO:
 			repetitions = (int) Math.pow(2, currentStep);
 			break;
 		case INCREASEFIB:
-			repetitions = calculateFibRepetitions(currentStep);
+			repetitions = calculateFibRepetitions(currentStep + 1);
 			break;
 		case LINEAR:
 			repetitions = (int) ((currentStep)
-					* options.getEventLinearGrowthFactor());
-			break;
-		case NONE:
-			repetitions = 1;
+					* option.getLinearGrowthFactor());
 			break;
 		}
 		return repetitions;
@@ -172,8 +229,8 @@ public class Executor {
 	}
 
 	private long getMaximalSteps(Options options) {
-		long repeatEventsSteps = options.getEventNumberSteps();
-		long changeFrequencySteps = options.getFrequencySteps();
+		long repeatEventsSteps = options.getRequestsOption().getSteps();
+		long changeFrequencySteps = options.getFrequencyOption().getSteps();
 		if (repeatEventsSteps == -1 && changeFrequencySteps == -1) {
 			return 1;
 		}
@@ -181,58 +238,6 @@ public class Executor {
 			return repeatEventsSteps;
 		}
 		return changeFrequencySteps;
-	}
-
-	/**
-	 * Maps the event discription to an event object and executes it. Returns
-	 * the response as a future object.
-	 * 
-	 * @param currentEvent
-	 *            The event that gets mapped
-	 * @return response The response of the event as a future object
-	 */
-	private Future<Response> executeEvent(EventDescriptor currentEvent) {
-		Target target;
-		if (currentEvent.getTargetName() == null) {
-			target = null;
-		} else {
-			target = mapTarget(currentEvent.getTargetName());
-		}
-
-		Request request = mapRequest(currentEvent.getRequestName());
-		Event event = new Event(target, request, workload);
-
-		Future<Response> response = exeService.submit(event);
-
-		executedEvents.add(currentEvent);
-
-		return response;
-	}
-
-	/**
-	 * Returns the target object for a target name.
-	 * 
-	 * @param targetName
-	 *            The namen of the target object
-	 * @return target The target object
-	 */
-	private Target mapTarget(String targetName) {
-		HashMap<String, Target> targets = workload.getTargets();
-		Target target = targets.get(targetName);
-		return target;
-	}
-
-	/**
-	 * Returns the request object for a request name.
-	 * 
-	 * @param requesttName
-	 *            The namen of the request object
-	 * @return request The request object
-	 */
-	private Request mapRequest(String requestName) {
-		HashMap<String, Request> requests = workload.getRequests();
-		Request request = requests.get(requestName);
-		return request;
 	}
 
 }

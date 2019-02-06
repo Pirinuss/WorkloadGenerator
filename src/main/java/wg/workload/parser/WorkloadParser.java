@@ -3,7 +3,6 @@ package wg.workload.parser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.simple.JSONArray;
@@ -16,17 +15,22 @@ import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
 import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
-import wg.requests.TcpUdpRequest;
+import wg.requests.TcpRequest;
+import wg.requests.UdpRequest;
 import wg.workload.EventDescriptor;
 import wg.workload.Frame;
 import wg.workload.GrowthType;
-import wg.workload.Options;
 import wg.workload.ProtocolType;
 import wg.workload.Request;
 import wg.workload.Schedule;
 import wg.workload.Target;
-import wg.workload.TransmissionType;
 import wg.workload.Workload;
+import wg.workload.options.Clients;
+import wg.workload.options.FrequencyMode;
+import wg.workload.options.FrequencyOption;
+import wg.workload.options.Options;
+import wg.workload.options.RequestsOption;
+import wg.workload.options.TransmissionType;
 
 public class WorkloadParser {
 
@@ -36,8 +40,9 @@ public class WorkloadParser {
 			Object obj = new JSONParser().parse(new FileReader(path));
 			JSONObject jsonObject = (JSONObject) obj;
 			HashMap<String, Target> targets = parseTargets(jsonObject);
-			HashMap<String, Request> requests = parseRequests(jsonObject);
-			Schedule schedule = parseSchedule(jsonObject);
+			HashMap<String, Request> requests = parseRequests(jsonObject,
+					targets);
+			Schedule schedule = parseSchedule(jsonObject, targets, requests);
 			workload = new Workload(targets, requests, schedule);
 		} catch (FileNotFoundException cause) {
 			throw new WorkloadParserException("File not found!", cause);
@@ -81,8 +86,8 @@ public class WorkloadParser {
 		return targetMap;
 	}
 
-	private HashMap<String, Request> parseRequests(JSONObject jo)
-			throws WorkloadParserException {
+	private HashMap<String, Request> parseRequests(JSONObject jo,
+			HashMap<String, Target> targets) throws WorkloadParserException {
 
 		JSONArray requests = (JSONArray) jo.get("requests");
 		if (requests == null || requests.size() == 0) {
@@ -96,7 +101,8 @@ public class WorkloadParser {
 			String id = (String) requestObj.get("id");
 
 			try {
-				Request newRequest = getSpecificRequest(requestObj, id);
+				Request newRequest = getSpecificRequest(requestObj, id,
+						targets);
 				requestMap.put(id, newRequest);
 			} catch (IllegalArgumentException e) {
 				String s = "Error while parsing requests!";
@@ -110,7 +116,8 @@ public class WorkloadParser {
 		return requestMap;
 	}
 
-	private Schedule parseSchedule(JSONObject jo)
+	private Schedule parseSchedule(JSONObject jo,
+			HashMap<String, Target> targets, HashMap<String, Request> requests)
 			throws WorkloadParserException {
 		JSONObject scheduleObj = (JSONObject) jo.get("schedule");
 		if (scheduleObj == null) {
@@ -127,7 +134,7 @@ public class WorkloadParser {
 		try {
 			for (int i = 0; i < framesObj.size(); i++) {
 				JSONObject frameObj = (JSONObject) framesObj.get(i);
-				Frame frame = parseFrame(frameObj, i);
+				Frame frame = parseFrame(frameObj, targets, requests);
 				frames[i] = frame;
 			}
 
@@ -138,12 +145,14 @@ public class WorkloadParser {
 		}
 	}
 
-	private Frame parseFrame(JSONObject frameObj, int nameIndex)
+	private Frame parseFrame(JSONObject frameObj,
+			HashMap<String, Target> targets, HashMap<String, Request> requests)
 			throws WorkloadParserException {
 		String id = (String) frameObj.get("id");
 
 		JSONArray eventsObj = (JSONArray) frameObj.get("events");
-		EventDescriptor[] events = parseFrameEvents(eventsObj);
+		EventDescriptor[] events = parseFrameEvents(eventsObj, targets,
+				requests);
 
 		JSONObject optionsObj = (JSONObject) frameObj.get("options");
 		Options options = parseFrameOptions(optionsObj);
@@ -152,7 +161,8 @@ public class WorkloadParser {
 		return frame;
 	}
 
-	private EventDescriptor[] parseFrameEvents(JSONArray eventsObj)
+	private EventDescriptor[] parseFrameEvents(JSONArray eventsObj,
+			HashMap<String, Target> targets, HashMap<String, Request> requests)
 			throws WorkloadParserException {
 
 		if (eventsObj == null || eventsObj.size() == 0) {
@@ -165,109 +175,181 @@ public class WorkloadParser {
 			JSONObject eventObj = (JSONObject) eventsObj.get(j);
 
 			String id = (String) eventObj.get("id");
+
 			String targetName = (String) eventObj.get("target");
+			Target target;
+			if (targets.containsKey(targetName)) {
+				target = targets.get(targetName);
+			} else {
+				target = null;
+			}
+
 			String requestName = (String) eventObj.get("request");
+			Request request;
+			if (requests.containsKey(requestName)) {
+				request = requests.get(requestName);
+			} else {
+				throw new IllegalArgumentException("Request \"" + requestName
+						+ "\" not found in requests!");
+			}
 
 			long time = -1;
 			if (eventObj.get("time") != null) {
 				time = (long) eventObj.get("time");
 			}
 
-			events[j] = new EventDescriptor(id, time, targetName, requestName);
+			events[j] = new EventDescriptor(id, time, target, request);
 		}
 
 		return events;
 	}
 
 	private Options parseFrameOptions(JSONObject optionsObj) {
-		// TODO ‹berarbeiten: Optionen sollen nicht in einzelnes groﬂes Objekt
-		// gesteckt werden sondern in mehrere kleine aufgeteilt werden
+
 		if (optionsObj == null) {
-			Options options = new Options(-1, -1, GrowthType.NONE, -1, -1,
-					false, false, TransmissionType.NONE);
-			return options;
+			throw new IllegalArgumentException(
+					"No options fround in JSON input!");
 		}
 
-		// RepeatEventsOption
-		long eventNumberSteps;
-		long eventLinearGrowthFactor;
-		GrowthType eventGrowthType;
-		JSONObject repeatEventsObj = (JSONObject) optionsObj
-				.get("repeatEvents");
-		if (repeatEventsObj == null) {
-			eventNumberSteps = -1;
-			eventLinearGrowthFactor = -1;
-			eventGrowthType = GrowthType.NONE;
-		} else {
-			if (repeatEventsObj.get("steps") == null) {
-				eventNumberSteps = -1;
-			} else {
-				eventNumberSteps = (Long) repeatEventsObj.get("steps");
-			}
-			if (repeatEventsObj.get("linearGrowthFactor") == null) {
-				eventLinearGrowthFactor = -1;
-			} else {
-				eventLinearGrowthFactor = (Long) repeatEventsObj
-						.get("linearGrowthFactor");
-			}
-			if (repeatEventsObj.get("growth") == null) {
-				eventGrowthType = GrowthType.NONE;
-			} else {
-				String growth = (String) repeatEventsObj.get("growth");
-				eventGrowthType = GrowthType.parseString(growth);
-			}
-		}
-		// FrequencyOption
-		long frequencySteps = -1;
-		long frequencyFactor = -1;
-		boolean frequencyIncrease = false;
-		boolean frequencyDecrease = false;
-		JSONObject increaseFrequencyObj = (JSONObject) optionsObj
-				.get("increaseFrequency");
-		JSONObject decreaseFrequencyObj = (JSONObject) optionsObj
-				.get("decreaseFrequency");
-		if (increaseFrequencyObj != null) {
-			frequencyIncrease = true;
-			if (increaseFrequencyObj.get("steps") == null) {
-				frequencySteps = -1;
-			} else {
-				frequencySteps = (Long) increaseFrequencyObj.get("steps");
-			}
-			if (increaseFrequencyObj.get("factor") == null) {
-				frequencyFactor = -1;
-			} else {
-				frequencyFactor = (Long) increaseFrequencyObj.get("factor");
-			}
-		}
-		if (decreaseFrequencyObj != null) {
-			frequencyDecrease = true;
-			if (decreaseFrequencyObj.get("steps") == null) {
-				frequencySteps = -1;
-			} else {
-				frequencySteps = (Long) decreaseFrequencyObj.get("steps");
-			}
-			if (decreaseFrequencyObj.get("factor") == null) {
-				frequencyFactor = -1;
-			} else {
-				frequencyFactor = (Long) decreaseFrequencyObj.get("factor");
-			}
-		}
-		// TransmissionOption
-		String transmissionName = (String) optionsObj.get("transmission");
+		TransmissionType transmissionType = parseTransmissionOption(optionsObj);
+
+		JSONObject clientOptionObj = (JSONObject) optionsObj
+				.get("clientsNumber");
+		Clients clientsOption = parseClientsOption(clientOptionObj);
+
+		JSONObject requestOptionObj = (JSONObject) optionsObj
+				.get("requestsNumber");
+		RequestsOption requestsOption = parseRequestsOption(requestOptionObj);
+
+		JSONObject frequencyOptionObj = (JSONObject) optionsObj
+				.get("frequency");
+		FrequencyOption frequencyOption = parseFrequencyOption(
+				frequencyOptionObj);
+
+		return new Options(transmissionType, clientsOption, requestsOption,
+				frequencyOption);
+	}
+
+	private TransmissionType parseTransmissionOption(JSONObject optionsObj) {
+
 		TransmissionType transmissionType;
-		if (transmissionName == null) {
+		String transmissionName = (String) optionsObj.get("transmissionType");
+
+		if (transmissionName != null) {
 			transmissionType = TransmissionType.parseString(transmissionName);
 		} else {
-			transmissionType = TransmissionType.NONE;
+			transmissionType = TransmissionType.PARALLEL;
 		}
-		Options options = new Options(eventNumberSteps, eventLinearGrowthFactor,
-				eventGrowthType, frequencySteps, frequencyFactor,
-				frequencyIncrease, frequencyDecrease, transmissionType);
-		return options;
+
+		return transmissionType;
+	}
+
+	private Clients parseClientsOption(JSONObject clientOptionObj) {
+
+		Clients clients;
+		long bftsmartClients = 1;
+		long httpClients = 1;
+		long ftpClients = 1;
+		long udpClients = 1;
+		long tcpClients = 1;
+
+		if (clientOptionObj == null) {
+			clients = new Clients(bftsmartClients, httpClients, ftpClients,
+					udpClients, tcpClients);
+		} else {
+			if (clientOptionObj.get("BFTSMaRt") != null) {
+				bftsmartClients = (long) clientOptionObj.get("BFTSMaRt");
+			}
+
+			if (clientOptionObj.get("HTTP") != null) {
+				httpClients = (long) clientOptionObj.get("HTTP");
+			}
+
+			if (clientOptionObj.get("FTP") != null) {
+				ftpClients = (long) clientOptionObj.get("FTP");
+			}
+
+			if (clientOptionObj.get("UDP") != null) {
+				udpClients = (long) clientOptionObj.get("UDP");
+			}
+
+			if (clientOptionObj.get("TCP") != null) {
+				tcpClients = (long) clientOptionObj.get("TCP");
+			}
+
+			clients = new Clients(bftsmartClients, httpClients, ftpClients,
+					udpClients, tcpClients);
+		}
+
+		return clients;
+	}
+
+	private RequestsOption parseRequestsOption(JSONObject requestOptionObj) {
+
+		RequestsOption requestsOption;
+		GrowthType growthType = null;
+		long linearGrowthFactor = -1;
+		long steps = -1;
+
+		if (requestOptionObj == null) {
+			requestsOption = new RequestsOption(GrowthType.LINEAR, 1, 1);
+		} else {
+			String mode = (String) requestOptionObj.get("growth");
+			if (mode != null) {
+				growthType = GrowthType.parseString(mode);
+			}
+
+			if (requestOptionObj.get("linearGrowthFactor") != null) {
+				linearGrowthFactor = (long) requestOptionObj
+						.get("linearGrowthFactor");
+			}
+
+			if (requestOptionObj.get("steps") != null) {
+				steps = (long) requestOptionObj.get("steps");
+			}
+
+			requestsOption = new RequestsOption(growthType, linearGrowthFactor,
+					steps);
+		}
+
+		return requestsOption;
+	}
+
+	private FrequencyOption parseFrequencyOption(
+			JSONObject frequencyOptionObj) {
+
+		FrequencyOption frequencyOption;
+		long steps = -1;
+		long factor = -1;
+		FrequencyMode mode;
+
+		if (frequencyOptionObj == null) {
+			frequencyOption = new FrequencyOption(FrequencyMode.INCREASE, 1, 1);
+		} else {
+			String modeName = (String) frequencyOptionObj.get("mode");
+			if (modeName != null) {
+				mode = FrequencyMode.parseString(modeName);
+			} else {
+				mode = FrequencyMode.INCREASE;
+			}
+
+			if (frequencyOptionObj.get("factor") != null) {
+				factor = (long) frequencyOptionObj.get("factor");
+			}
+
+			if (frequencyOptionObj.get("steps") != null) {
+				steps = (long) frequencyOptionObj.get("steps");
+			}
+
+			frequencyOption = new FrequencyOption(mode, factor, steps);
+		}
+
+		return frequencyOption;
 	}
 
 	private Request getSpecificRequest(JSONObject requestContent,
-			String requestName) throws WorkloadParserException {
+			String requestName, HashMap<String, Target> targets)
+			throws WorkloadParserException {
 
 		String protocol = (String) requestContent.get("protocol");
 		if (protocol == null) {
@@ -283,14 +365,12 @@ public class WorkloadParser {
 		case FTP:
 			return createFtpRequest(requestContent, requestName, protocolType);
 		case TCP:
-			return createTcpUdpRequest(requestContent, requestName,
-					protocolType);
+			return createTcpRequest(requestContent, requestName, protocolType);
 		case UDP:
-			return createTcpUdpRequest(requestContent, requestName,
-					protocolType);
+			return createUdpRequest(requestContent, requestName, protocolType);
 		case BFTSMaRt:
 			return createBftsmartRequest(requestContent, requestName,
-					protocolType);
+					protocolType, targets);
 		default:
 			return null;
 		}
@@ -335,18 +415,23 @@ public class WorkloadParser {
 				localResource, remoteResource, username, password);
 	}
 
-	private Request createTcpUdpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType)
-			throws WorkloadParserException {
+	private Request createTcpRequest(JSONObject requestContent,
+			String requestName, ProtocolType protocolType) {
 
 		String content = (String) requestContent.get("content");
+		return new TcpRequest(requestName, protocolType, content);
+	}
 
-		return new TcpUdpRequest(requestName, protocolType, content);
+	private Request createUdpRequest(JSONObject requestContent,
+			String requestName, ProtocolType protocolType) {
+
+		String content = (String) requestContent.get("content");
+		return new UdpRequest(requestName, protocolType, content);
 	}
 
 	private Request createBftsmartRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType)
-			throws WorkloadParserException {
+			String requestName, ProtocolType protocolType,
+			HashMap<String, Target> targets) throws WorkloadParserException {
 
 		String command = (String) requestContent.get("command");
 		String type = (String) requestContent.get("type");
@@ -357,9 +442,15 @@ public class WorkloadParser {
 			throw new IllegalArgumentException(
 					"No target group found in JSON input!");
 		}
-		ArrayList<String> targetGroup = new ArrayList<String>();
+		Target[] targetGroup = new Target[targetGroupObj.size()];
 		for (int i = 0; i < targetGroupObj.size(); i++) {
-			targetGroup.add((String) targetGroupObj.get(i));
+			String targetName = (String) targetGroupObj.get(i);
+			if (targets.containsKey(targetName)) {
+				targetGroup[i] = targets.get(targetName);
+			} else {
+				throw new IllegalArgumentException(
+						"Target \"" + targetName + "\" not found in targets!");
+			}
 		}
 
 		return new BftsmartRequest(requestName, protocolType, command, type,

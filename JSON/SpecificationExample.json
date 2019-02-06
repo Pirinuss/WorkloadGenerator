@@ -51,16 +51,10 @@
                   {"id":"event4", "target":"target2", "request":"request2", "time":4000}
               ],
               "options": {
-                  "repeatEvents": {
-                      "growth": "linear",
-                      "linearGrowthFactor": 2,
-                      "steps": 5
-                  },
-                  "decreaseFrequency": {
-                      "factor": 2,
-                      "steps": 3
-                  },
-                  "transmission":"parallel"
+                  "transmissionType":"parallel",
+                  "clientsNumber": {"BFTSMaRt":2, "HTTP":1, "FTP":1},
+                  "requestsNumber": {"growth": "fibonacci", "steps": 4},
+                  "frequency": {"mode":"increase", "factor": 1,"steps": 2}
               }
             }
         ]
