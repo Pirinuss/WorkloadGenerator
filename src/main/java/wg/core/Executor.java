@@ -71,7 +71,7 @@ public class Executor {
 
 		long steps = getMaximalSteps(frame.getOptions());
 
-		for (int s = 0; s <= steps; s++) {
+		for (int s = 0; s < steps; s++) {
 			events = new ArrayList<EventDescriptor>(
 					Arrays.asList(frame.getEvents()));
 
@@ -113,9 +113,9 @@ public class Executor {
 								+ " ausgeführt durch Client " + i + " um: "
 								+ dif);
 
-						// Future<Response> response = executeEvent(nextEvent,
-						// frame.getOptions().getClients(), i);
-						// futures.add(response);
+						Future<Response> response = executeEvent(nextEvent,
+								frame.getOptions().getClients(), i);
+						futures.add(response);
 					}
 				}
 				index++;
@@ -139,7 +139,7 @@ public class Executor {
 			Target target = currentEvent.getTarget();
 			event = new Event(target, request, clients, clientIndex);
 		}
-
+		executedEvents.add(currentEvent);
 		Future<Response> response = exeService.submit(event);
 
 		return response;

@@ -7,35 +7,44 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.sql.Timestamp;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
 
 import bftsmart.tom.ServiceProxy;
 import wg.requests.BftsmartRequest;
 import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
-import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
 import wg.requests.TcpRequest;
 import wg.requests.UdpRequest;
+import wg.responses.BftsmartResponse;
+import wg.responses.FtpResponse;
+import wg.responses.HttpResponseObject;
+import wg.responses.TcpUdpResponse;
 import wg.workload.Request;
 import wg.workload.Target;
 import wg.workload.options.Clients;
@@ -49,7 +58,6 @@ public class Event implements Callable<Response> {
 	private final Request request;
 	private final Clients clients;
 	private final int clientIndex;
-	private Response response;
 	private final String USER_AGENT = "Mozilla/5.0";
 
 	public Event(Target target, Request request, Clients clients,
@@ -70,120 +78,96 @@ public class Event implements Callable<Response> {
 		this.target = null;
 	}
 
-	public Target getTarget() {
-		return target;
-	}
-
-	public Request getRequest() {
-		return request;
-	}
-
 	public Response call() throws Exception {
-		response = new Response();
 		switch (request.getProtocol()) {
 
 		case HTTP:
-			response = executeHttpEvent();
-			break;
+			return executeHttpEvent();
 		case FTP:
-			response = executeFtpEvent();
-			break;
+			return executeFtpEvent();
 		case TCP:
-			response = executeTcpEvent();
-			break;
+			return executeTcpEvent();
 		case UDP:
-			response = executeUdpEvent();
-			break;
+			return executeUdpEvent();
 		case BFTSMaRt:
-			response = executeBftsmartEvent();
-			break;
+			return executeBftsmartEvent();
 		default:
-			response = null;
+			return null;
 		}
 
-		response.setTarget(target);
-		response.setRequest(request);
-		return response;
 	}
 
-	private Response executeHttpEvent() {
+	private Response executeHttpEvent() throws WorkloadExecutionException {
+
 		HttpRequest httpRequest = (HttpRequest) request;
-		String serverName = "http://" + target.getServerName() + "/";
-		String path = httpRequest.getResourcePath();
-		String url;
-		if (path == null) {
-			url = serverName;
+
+		// Get Client
+		HttpClient httpclient;
+		if (clients.getHttpClients()[clientIndex] == null) {
+			httpclient = HttpClients.createDefault();
+			clients.getHttpClients()[clientIndex] = httpclient;
 		} else {
-			url = serverName.concat(path);
+			httpclient = clients.getHttpClients()[clientIndex];
 		}
-		String methodType = HttpMethodType
-				.parseToString(httpRequest.getMethod());
-		String content = httpRequest.getContent();
-		Timestamp startTime = new Timestamp(System.currentTimeMillis());
-		response = executeHttpRequest(url, methodType, content);
-		Timestamp endTime = new Timestamp(System.currentTimeMillis());
-		response.setEventStartTime(startTime.getTime());
-		response.setEventStopTime(endTime.getTime());
-		return response;
-	}
 
-	private Response executeHttpRequest(String url, String methodType,
-			String content) {
-		HttpURLConnection httpCon = null;
+		// Build URI
+		URI uri;
 		try {
-			URL urlObj = new URL(url);
-			httpCon = (HttpURLConnection) urlObj.openConnection();
-			httpCon.setDoOutput(true);
-			httpCon.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded");
-			httpCon.setRequestProperty("User-Agent", USER_AGENT);
-			httpCon.setRequestMethod(methodType);
-			httpCon.setConnectTimeout(3000);
-			// TODO SocketTimeoutException abfangen
-			httpCon.connect();
-			if (methodType.equals("PUT") || methodType.equals("POST")) {
-				OutputStreamWriter out = new OutputStreamWriter(
-						httpCon.getOutputStream());
-				out.write(content);
-				out.flush();
-				out.close();
-			}
-			String redirect = httpCon.getHeaderField("Location");
-			if (redirect != null) {
-				httpCon = (HttpURLConnection) new URL(redirect)
-						.openConnection();
-			}
-			int responseCode = httpCon.getResponseCode();
-			if (responseCode == 200) {
-				BufferedReader in = new BufferedReader(
-						new InputStreamReader(httpCon.getInputStream()));
-				String inputLine;
-				StringBuffer responseContent = new StringBuffer();
-				while ((inputLine = in.readLine()) != null) {
-					responseContent.append(inputLine);
-				}
-				in.close();
-				response.setResponseContent(responseContent.toString());
-			}
-			response.setResponseInfos(String.valueOf(responseCode));
-		} catch (FileNotFoundException e) {
-			response.setResponseInfos(String.valueOf(404));
-			System.out.println("Invalid path: " + url);
-		} catch (UnknownHostException e) {
-			response.setResponseInfos(String.valueOf(404));
-			System.out.println("Invalid server name: " + url);
-		} catch (Exception e) {
-			System.out.println("Error at executeHttpGet");
-			e.printStackTrace();
-		} finally {
-			httpCon.disconnect();
+			uri = new URIBuilder().setScheme("http")
+					.setHost(target.getServerName())
+					.setPath("/" + httpRequest.getResourcePath()).build();
+		} catch (URISyntaxException e) {
+			throw new WorkloadExecutionException("Invalid URL!", e);
 		}
-		return response;
+
+		// Execute Request
+		HttpResponse response = null;
+		StringEntity content;
+		try {
+			content = new StringEntity(httpRequest.getContent());
+		} catch (UnsupportedEncodingException e) {
+			throw new WorkloadExecutionException("Invalid content!", e);
+		}
+		long startTime = System.currentTimeMillis();
+		try {
+			switch (httpRequest.getMethod()) {
+			case DELETE:
+				HttpDelete httpDelete = new HttpDelete(uri);
+				httpDelete.setHeader("User-Agent", USER_AGENT);
+				response = httpclient.execute(httpDelete);
+				break;
+			case GET:
+				HttpGet httpGet = new HttpGet(uri);
+				httpGet.setHeader("User-Agent", USER_AGENT);
+				response = httpclient.execute(httpGet);
+				break;
+			case POST:
+				HttpPost httpPost = new HttpPost(uri);
+				httpPost.setHeader("User-Agent", USER_AGENT);
+				httpPost.setEntity(content);
+				response = httpclient.execute(httpPost);
+				break;
+			case PUT:
+				HttpPut httpPut = new HttpPut(uri);
+				httpPut.setHeader("User-Agent", USER_AGENT);
+				httpPut.setEntity(content);
+				response = httpclient.execute(httpPut);
+				break;
+			}
+		} catch (IOException e) {
+			throw new WorkloadExecutionException(
+					"Error while executing HTTP request!", e);
+		}
+		long endTime = System.currentTimeMillis();
+		return new HttpResponseObject(startTime, endTime, target, response);
+
 	}
 
-	private Response executeFtpEvent() {
+	private Response executeFtpEvent() throws WorkloadExecutionException {
+
 		FtpRequest ftpRequest = (FtpRequest) request;
 
+		// Get Client
 		FTPClient ftpClient;
 		if (clients.getFtpClients()[clientIndex] == null) {
 			ftpClient = new FTPClient();
@@ -192,7 +176,9 @@ public class Event implements Callable<Response> {
 			ftpClient = clients.getFtpClients()[clientIndex];
 		}
 
-		Timestamp startTime = new Timestamp(System.currentTimeMillis());
+		// Execute Request
+		long startTime = System.currentTimeMillis();
+		int replyCode = 0;
 		try {
 			// TODO FTPConnectionClosedException abfangen (passiert wenn FTP
 			// response = 421)
@@ -202,33 +188,30 @@ public class Event implements Callable<Response> {
 				FileOutputStream fos = new FileOutputStream(
 						ftpRequest.getLocalResource());
 				ftpClient.retrieveFile(ftpRequest.getRemoteResource(), fos);
-				response.setResponseInfos(
-						String.valueOf(ftpClient.getReplyCode()));
+				replyCode = ftpClient.getReplyCode();
 				fos.close();
 			}
 			if (ftpRequest.getMethod() == FtpMethodType.PUT) {
 				FileInputStream fis = new FileInputStream(
 						ftpRequest.getLocalResource());
 				ftpClient.storeFile(ftpRequest.getRemoteResource(), fis);
-				response.setResponseInfos(
-						String.valueOf(ftpClient.getReplyCode()));
+				replyCode = ftpClient.getReplyCode();
 				fis.close();
 			}
 			ftpClient.logout();
 			ftpClient.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new WorkloadExecutionException(
+					"Error while executing FTP request!", e);
 		}
-		Timestamp endTime = new Timestamp(System.currentTimeMillis());
-		response.setEventStartTime(startTime.getTime());
-		response.setEventStopTime(endTime.getTime());
-		return response;
+		long endTime = System.currentTimeMillis();
+		return new FtpResponse(startTime, endTime, target, replyCode);
 	}
 
-	private Response executeTcpEvent() {
+	private Response executeTcpEvent() throws WorkloadExecutionException {
 		TcpRequest tcpRequest = (TcpRequest) request;
 		String responseContent = null;
-		Timestamp startTime = new Timestamp(System.currentTimeMillis());
+		long startTime = System.currentTimeMillis();
 		try {
 			Socket socket;
 			if (clients.getTcpClients()[clientIndex] == null) {
@@ -247,26 +230,24 @@ public class Event implements Callable<Response> {
 			responseContent = inFromServer.readLine();
 			socket.close();
 		} catch (SocketTimeoutException e) {
-			System.out.println(
-					"TCP Verbindung kann nicht aufgebaut werden. Grund: Verbindung ist getimeouted.");
+			throw new WorkloadExecutionException("TCP connection timed out!",
+					e);
 		} catch (ConnectException e) {
-			System.out.println(
-					"TCP Verbindung kann nicht aufgebaut werden. Grund: Verbindung konnte nicht aufgebaut werden.");
-		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WorkloadExecutionException(
+					"Could not estabilish TCP connection!", e);
+		} catch (IOException e) {
+			throw new WorkloadExecutionException(
+					"Error while executing TCP request!", e);
 		}
-		Timestamp endTime = new Timestamp(System.currentTimeMillis());
-		response.setEventStartTime(startTime.getTime());
-		response.setEventStopTime(endTime.getTime());
-		response.setResponseContent(responseContent);
-		return response;
+		long endTime = System.currentTimeMillis();
+		return new TcpUdpResponse(startTime, endTime, target, responseContent);
 	}
 
-	private Response executeUdpEvent() {
+	private Response executeUdpEvent() throws WorkloadExecutionException {
 		UdpRequest udpRequest = (UdpRequest) request;
 		String responseContent = null;
-		Timestamp startTime = null;
-		Timestamp endTime = null;
+		long startTime = 0;
+		long endTime = 0;
 		try {
 			DatagramSocket clientSocket;
 			if (clients.getUdpClients()[clientIndex] == null) {
@@ -275,7 +256,7 @@ public class Event implements Callable<Response> {
 			} else {
 				clientSocket = clients.getUdpClients()[clientIndex];
 			}
-			
+
 			clientSocket.setSoTimeout(30000);
 			InetAddress IPAddress = InetAddress
 					.getByName(target.getServerName());
@@ -285,27 +266,25 @@ public class Event implements Callable<Response> {
 			sendData = sentence.getBytes();
 			DatagramPacket sendPacket = new DatagramPacket(sendData,
 					sendData.length, IPAddress, target.getPort());
-			startTime = new Timestamp(System.currentTimeMillis());
+			startTime = System.currentTimeMillis();
 			clientSocket.send(sendPacket);
 			DatagramPacket receivePacket = new DatagramPacket(receiveData,
 					receiveData.length);
 			clientSocket.receive(receivePacket);
-			endTime = new Timestamp(System.currentTimeMillis());
+			endTime = System.currentTimeMillis();
 			responseContent = new String(receivePacket.getData());
 			clientSocket.close();
 		} catch (SocketTimeoutException e) {
 			System.out.println(
 					"UDP Verbindung kann nicht aufgebaut werden. Grund: Verbindung ist getimeouted.");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new WorkloadExecutionException(
+					"Error while executing UDP request!", e);
 		}
-		response.setResponseContent(responseContent);
-		response.setEventStartTime(startTime.getTime());
-		response.setEventStopTime(endTime.getTime());
-		return response;
+		return new TcpUdpResponse(startTime, endTime, target, responseContent);
 	}
 
-	private Response executeBftsmartEvent() {
+	private Response executeBftsmartEvent() throws WorkloadExecutionException {
 
 		/*
 		 * "command" : { "type": "ByteObjectStream", "content":
@@ -342,6 +321,8 @@ public class Event implements Callable<Response> {
 		byte[] command = bftRequest.getCommand().getBytes();
 
 		byte[] reply = null;
+		long startTime = 0;
+		long endTime = 0;
 		try {
 			ServiceProxy serviceProxy;
 			if (clients.getBftsmartClients()[clientIndex] == null) {
@@ -352,28 +333,31 @@ public class Event implements Callable<Response> {
 			}
 			ByteArrayOutputStream out = new ByteArrayOutputStream(4);
 			new DataOutputStream(out).writeInt(1);
+			startTime = System.currentTimeMillis();
 			if (bftRequest.getType().equals("ordered")) {
 				reply = serviceProxy.invokeOrdered(command);
 			} else {
 				reply = serviceProxy.invokeUnordered(command);
 			}
+			endTime = System.currentTimeMillis();
 			if (reply != null) {
 				int newValue = new DataInputStream(
 						new ByteArrayInputStream(reply)).readInt();
 				log.info("Returned value: " + newValue);
-				response.setResponseContent(reply.toString());
 			} else {
 				log.severe("Error while executing BFTSMaRt request");
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			if (e.getMessage().equals("Impossible to connect to servers!")) {
-				log.severe(
-						"Error while executing BFTSMaRt request. Impossible to connect to servers.");
+				throw new WorkloadExecutionException(
+						"Error while executing BFTSMaRt request! Could not connect to servers!",
+						e);
 			} else {
-				e.printStackTrace();
+				throw new WorkloadExecutionException(
+						"Error while executing BFTSMaRt request!", e);
 			}
 		}
-		return response;
+		return new BftsmartResponse(startTime, endTime, target, reply);
 	}
 
 }

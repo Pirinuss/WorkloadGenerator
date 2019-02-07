@@ -31,13 +31,12 @@ public class Result {
 					EventDescriptor eventDis = results.get(j).getEvent();
 					Response response = results.get(j).getResponse();
 					if (response != null) {
-						long exeTime = response.getEventStopTime() - response.getEventStartTime();
+						long exeTime = response.getStopTime() - response.getStartTime();
 						Target target = response.getTarget();
 						int port = 0;
 						if (target.getPort() != -1) {
 							port = target.getPort();
 						}
-						Request request = response.getRequest();
 						System.out.println("   Event: " + eventDis.getEventID());
 						System.out.println("     Target: " + target.getServerName() + ", "+ port );
 						System.out.println("     Request: " + request.getProtocol() );

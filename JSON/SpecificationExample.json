@@ -14,7 +14,6 @@
          {"id":"request2",
           "protocol":"HTTP",
           "method":"GET",
-          "resourcePath":"post",
           "content":"test"
          },
          {"id":"request3",
@@ -45,16 +44,13 @@
         "frames": [
             { "id":"frame1", 
               "events": [
-                  {"id":"event1", "target":"target4", "request":"request4", "time":1000},
-                  {"id":"event2", "target":"target1", "request":"request1", "time":2000},
-                  {"id":"event3", "target":"target1", "request":"request2", "time":3000},
-                  {"id":"event4", "target":"target2", "request":"request2", "time":4000}
+                  {"id":"event1", "target":"target2", "request":"request2", "time":1000}
               ],
               "options": {
                   "transmissionType":"parallel",
                   "clientsNumber": {"BFTSMaRt":2, "HTTP":1, "FTP":1},
-                  "requestsNumber": {"growth": "fibonacci", "steps": 4},
-                  "frequency": {"mode":"increase", "factor": 1,"steps": 2}
+                  "requestsNumber": {"growth": "fibonacci", "steps": 1},
+                  "frequency": {"mode":"increase", "factor": 2,"steps": 1}
               }
             }
         ]
