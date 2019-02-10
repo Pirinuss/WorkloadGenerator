@@ -4,14 +4,14 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import bftsmart.tom.ServiceProxy;
 import wg.workload.ProtocolType;
 
 public class Clients {
 
-	private final HttpClient[] httpClients;
+	private final CloseableHttpClient[] httpClients;
 	private final FTPClient[] ftpClients;
 	private final ServiceProxy[] bftsmartClients;
 	private final Socket[] tcpClients;
@@ -30,7 +30,7 @@ public class Clients {
 			throw new IllegalArgumentException(
 					"At least one HTTP client is required!");
 		}
-		this.httpClients = new HttpClient[(int) httpClients];
+		this.httpClients = new CloseableHttpClient[(int) httpClients];
 
 		if (ftpClients < 1) {
 			throw new IllegalArgumentException(
@@ -52,7 +52,7 @@ public class Clients {
 
 	}
 
-	public HttpClient[] getHttpClients() {
+	public CloseableHttpClient[] getHttpClients() {
 		return httpClients;
 	}
 

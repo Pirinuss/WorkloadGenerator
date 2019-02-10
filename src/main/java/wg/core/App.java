@@ -1,30 +1,26 @@
 package wg.core;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wg.WorkloadGeneratorException;
-import wg.util.LogFormatter;
+import wg.result.WorkloadResult;
 import wg.workload.Workload;
 import wg.workload.parser.WorkloadParser;
 
-public class Controller {
+public class App {
 
 	private static final Executor executor = new Executor();
 	private static final WorkloadParser workloadParser = new WorkloadParser();
 	private static Workload workload;
-	private static Result result;
-	private static Logger log;
+	private static WorkloadResult result;
+	private static final Logger log = LoggerFactory.getLogger(App.class);
 	private static String path;
 
 	/**
@@ -34,14 +30,18 @@ public class Controller {
 	 * 
 	 * @param args
 	 *            The arguments of the console command
+	 * @throws WorkloadExecutionException 
 	 */
 	public static void main(String[] args) throws WorkloadGeneratorException {
-		createLogger();
 		parseCommands(args);
 		if (path != null) {
 			workload = workloadParser.parseWorkload(path);
-			result = executor.executeWorkload(workload);
-			result.printResponses();
+			try {
+				result = executor.executeWorkload(workload);
+				result.printResponses();
+			} catch (WorkloadExecutionException e) {
+				throw new WorkloadGeneratorException("Error while executing workload!", e);
+			} 
 		}
 		System.exit(0);
 	}
@@ -54,7 +54,7 @@ public class Controller {
 	 *            The arguments of the console command
 	 */
 	private static void parseCommands(String[] args) {
-		log.fine("Start parsing commands");
+		log.error("Start parsing commands");
 		CommandLineParser parser = new DefaultParser();
 		Options options = new Options();
 		Option fileOption = Option.builder("f").longOpt("file").hasArg(true)
@@ -68,32 +68,9 @@ public class Controller {
 				System.out.println("Use -f [filepath] to insert a file!");
 			}
 		} catch (ParseException e) {
-			log.severe("Errror while parsing arguments");
+			log.error("Errror while parsing arguments");
 			e.printStackTrace();
 		}
-	}
-
-	private static void createLogger() {
-		log = Logger.getLogger("logfile.txt");
-		log.setLevel(Level.ALL);
-		log.setUseParentHandlers(false);
-
-		FileHandler logFileHandler = null;
-		try {
-			logFileHandler = new FileHandler("logfile.txt");
-			logFileHandler.setLevel(Level.ALL);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		ConsoleHandler consoleHandler = new ConsoleHandler();
-		consoleHandler.setLevel(Level.ALL);
-
-		Formatter formatter = new LogFormatter();
-		logFileHandler.setFormatter(formatter);
-		consoleHandler.setFormatter(formatter);
-
-		log.addHandler(logFileHandler);
-		log.addHandler(consoleHandler);
 	}
 
 }

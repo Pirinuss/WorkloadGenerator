@@ -1,24 +1,18 @@
-package wg.core;
+package wg.result;
 
+import wg.core.Response;
 import wg.workload.EventDescriptor;
-import wg.workload.Frame;
 
-public class ResultObject {
+public class EventResult {
 	
-	Frame frame;
 	EventDescriptor event;
 	Response response;
 	int id;
 	
-	public ResultObject(Frame frame, EventDescriptor event, Response response, int id) {
-		this.frame = frame;
+	public EventResult(EventDescriptor event, Response response, int id) {
 		this.event = event;
 		this.response = response;
 		this.id = id;
-	}
-
-	public Frame getFrame() {
-		return frame;
 	}
 
 	public EventDescriptor getEvent() {

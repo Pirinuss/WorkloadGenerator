@@ -9,7 +9,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import wg.requests.BftsmartCommand;
+import wg.requests.BftsmartCommandType;
 import wg.requests.BftsmartRequest;
 import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
@@ -34,6 +38,9 @@ import wg.workload.options.TransmissionType;
 
 public class WorkloadParser {
 
+	private static final Logger log = LoggerFactory
+			.getLogger(WorkloadParser.class);
+
 	public Workload parseWorkload(String path) throws WorkloadParserException {
 		Workload workload = null;
 		try {
@@ -46,6 +53,8 @@ public class WorkloadParser {
 			workload = new Workload(targets, requests, schedule);
 		} catch (FileNotFoundException cause) {
 			throw new WorkloadParserException("File not found!", cause);
+		} catch (ClassCastException cause) {
+			throw new WorkloadParserException("Invalid data type!", cause);
 		} catch (ParseException cause) {
 			throw new WorkloadParserException("Invalid JSON document!", cause);
 		} catch (IOException cause) {
@@ -68,6 +77,9 @@ public class WorkloadParser {
 			JSONObject targetObj = (JSONObject) targets.get(i);
 
 			String id = (String) targetObj.get("id");
+			if (targetMap.containsKey(id)) {
+				throw new WorkloadParserException("Duplicated target id!" + id);
+			}
 			String server = (String) targetObj.get("server");
 			long port = -1;
 			if (targetObj.get("port") != null) {
@@ -99,7 +111,10 @@ public class WorkloadParser {
 		for (int i = 0; i < requests.size(); i++) {
 			JSONObject requestObj = (JSONObject) requests.get(i);
 			String id = (String) requestObj.get("id");
-
+			if (requestMap.containsKey(id)) {
+				throw new WorkloadParserException(
+						"Duplicated request id!" + id);
+			}
 			try {
 				Request newRequest = getSpecificRequest(requestObj, id,
 						targets);
@@ -433,7 +448,8 @@ public class WorkloadParser {
 			String requestName, ProtocolType protocolType,
 			HashMap<String, Target> targets) throws WorkloadParserException {
 
-		String command = (String) requestContent.get("command");
+		JSONObject command = (JSONObject) requestContent.get("command");
+		BftsmartCommand bftsmartCommand = parseBFTSMaRtCommand(command);
 		String type = (String) requestContent.get("type");
 
 		JSONArray targetGroupObj = (JSONArray) requestContent
@@ -453,8 +469,94 @@ public class WorkloadParser {
 			}
 		}
 
-		return new BftsmartRequest(requestName, protocolType, command, type,
-				targetGroup);
+		return new BftsmartRequest(requestName, protocolType, bftsmartCommand,
+				type, targetGroup);
+	}
+
+	private BftsmartCommand parseBFTSMaRtCommand(JSONObject command) {
+
+		String type = (String) command.get("type");
+		if (type == null) {
+			throw new IllegalArgumentException(
+					"BFTSMaRt content type not found in JSON input!");
+		}
+		BftsmartCommandType commandType = BftsmartCommandType.fromString(type);
+
+		String content = (String) command.get("content");
+		Object[] objects = null;
+
+		if (commandType == BftsmartCommandType.BYTE_OBJECT_STREAM) {
+			String[] params = content.split(",");
+			if (params.length == 0) {
+				throw new IllegalArgumentException("Invalid BFTSMaRt content!");
+			}
+			objects = new Object[params.length];
+			for (int i = 0; i < params.length; i++) {
+				String[] param = params[i].split(":");
+				if (param.length != 2) {
+					throw new IllegalArgumentException(
+							"Invalid BFTSMaRt content!");
+				}
+				String id = param[0];
+				String identifier = param[1];
+				if (command.get(id) == null) {
+					throw new IllegalArgumentException(
+							"No parameter found for BFTSMaRt content! " + id);
+				}
+				try {
+					objects[i] = getObject(identifier,
+							command.get(id).toString());
+				} catch (NumberFormatException e) {
+					throw new IllegalArgumentException(
+							"Invalid parameter for BFTSMaRt content! " + id);
+				}
+			}
+		}
+		return new BftsmartCommand(commandType, content, objects);
+	}
+
+	private static Object getObject(String identifier, String stringParam) {
+		Object object;
+		switch (identifier.toUpperCase()) {
+		case "BOOLEAN":
+			if (!stringParam.toUpperCase().equals("TRUE")
+					&& !stringParam.toUpperCase().equals("FALSE")) {
+				throw new IllegalArgumentException("Invalid parameter!");
+			}
+			object = Boolean.valueOf(stringParam);
+			break;
+		case "CHAR":
+			if (stringParam.length() != 1) {
+				throw new IllegalArgumentException("Invalid parameter!");
+			}
+			object = Character.valueOf(stringParam.charAt(0));
+			break;
+		case "BYTE":
+			object = Byte.valueOf(stringParam);
+			break;
+		case "SHORT":
+			object = Short.valueOf(stringParam);
+			break;
+		case "INT":
+			object = Integer.valueOf(stringParam);
+			break;
+		case "LONG":
+			object = Long.valueOf(stringParam);
+			break;
+		case "FLOAT":
+			object = Float.valueOf(stringParam);
+			break;
+		case "DOUBLE":
+			object = Double.valueOf(stringParam);
+			break;
+		case "STRING":
+			object = String.valueOf(stringParam);
+			break;
+		default:
+			throw new IllegalArgumentException(
+					"Unknown identifier" + identifier);
+		}
+		return object;
 	}
 
 }

@@ -7,9 +7,9 @@ public class BftsmartResponse extends Response {
 
 	private final byte[] reply;
 
-	public BftsmartResponse(long startTime, long endTime, Target target,
+	public BftsmartResponse(long startTime, long endTime, Target[] targetGroup,
 			byte[] reply) {
-		super(startTime, endTime, target);
+		super(startTime, endTime, targetGroup);
 		this.reply = reply;
 	}
 

@@ -7,13 +7,13 @@ import wg.workload.Target;
 
 public class BftsmartRequest extends Request {
 
-	private final String command;
+	private final BftsmartCommand command;
 	private final String type;
 	private final Target[] targetGroup;
 	private ServiceProxy client;
 
 	public BftsmartRequest(String requestName, ProtocolType protocol,
-			String command, String type, Target[] targetGroup) {
+			BftsmartCommand command, String type, Target[] targetGroup) {
 
 		super(requestName, protocol);
 
@@ -25,16 +25,25 @@ public class BftsmartRequest extends Request {
 		if (type == null) {
 			throw new IllegalArgumentException("Type must not be null!");
 		}
+		if (!type.toUpperCase().equals("ORDERED")
+				&& !type.toUpperCase().equals("UNORDERED")) {
+			throw new IllegalArgumentException("Invalid type! " + type);
+		}
 		this.type = type;
 
 		if (targetGroup == null) {
 			throw new IllegalArgumentException(
 					"Target group must not be null!");
 		}
+		for (int i=0; i<targetGroup.length; i++) {
+			if (targetGroup[i].getPort() == -1) {
+				throw new IllegalArgumentException("Port of " + targetGroup[i].getTargetID() + " must not be null!");
+			}
+		}
 		this.targetGroup = targetGroup;
 	}
 
-	public String getCommand() {
+	public BftsmartCommand getCommand() {
 		return command;
 	}
 

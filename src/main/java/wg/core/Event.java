@@ -2,15 +2,15 @@ package wg.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.DatagramPacket;
@@ -21,20 +21,23 @@ import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
-import java.util.logging.Logger;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bftsmart.tom.ServiceProxy;
+import wg.requests.BftsmartCommandType;
 import wg.requests.BftsmartRequest;
 import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
@@ -51,14 +54,22 @@ import wg.workload.options.Clients;
 
 public class Event implements Callable<Response> {
 
-	private static final Logger log = Logger.getLogger("logfile.txt");
-
+	private static final Logger log = LoggerFactory.getLogger(Event.class);
 	private final Target target;
 	private final Target[] targetGroup;
 	private final Request request;
 	private final Clients clients;
 	private final int clientIndex;
-	private final String USER_AGENT = "Mozilla/5.0";
+	private static final String USER_AGENT = "Mozilla/5.0";
+	/**
+	 * Maximal number of parallel connections for a HTTP client
+	 */
+	private static final int MAX_CONNECTIONS_PER_HTTPCLIENT = 100;
+	/**
+	 * The time (in seconds) a BFTSMaRt client will wait for responses before
+	 * returning null
+	 */
+	private static final int BFTSMaRt_TIMEOUT = 5;
 
 	public Event(Target target, Request request, Clients clients,
 			int clientIndex) {
@@ -78,7 +89,8 @@ public class Event implements Callable<Response> {
 		this.target = null;
 	}
 
-	public Response call() throws Exception {
+	public Response call() throws WorkloadExecutionException {
+
 		switch (request.getProtocol()) {
 
 		case HTTP:
@@ -102,9 +114,11 @@ public class Event implements Callable<Response> {
 		HttpRequest httpRequest = (HttpRequest) request;
 
 		// Get Client
-		HttpClient httpclient;
+		CloseableHttpClient httpclient;
 		if (clients.getHttpClients()[clientIndex] == null) {
-			httpclient = HttpClients.createDefault();
+			PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+			cm.setMaxTotal(MAX_CONNECTIONS_PER_HTTPCLIENT);
+			httpclient = HttpClients.custom().setConnectionManager(cm).build();
 			clients.getHttpClients()[clientIndex] = httpclient;
 		} else {
 			httpclient = clients.getHttpClients()[clientIndex];
@@ -135,23 +149,27 @@ public class Event implements Callable<Response> {
 				HttpDelete httpDelete = new HttpDelete(uri);
 				httpDelete.setHeader("User-Agent", USER_AGENT);
 				response = httpclient.execute(httpDelete);
+				httpDelete.releaseConnection();
 				break;
 			case GET:
 				HttpGet httpGet = new HttpGet(uri);
 				httpGet.setHeader("User-Agent", USER_AGENT);
 				response = httpclient.execute(httpGet);
+				httpGet.releaseConnection();
 				break;
 			case POST:
 				HttpPost httpPost = new HttpPost(uri);
 				httpPost.setHeader("User-Agent", USER_AGENT);
 				httpPost.setEntity(content);
 				response = httpclient.execute(httpPost);
+				httpPost.releaseConnection();
 				break;
 			case PUT:
 				HttpPut httpPut = new HttpPut(uri);
 				httpPut.setHeader("User-Agent", USER_AGENT);
 				httpPut.setEntity(content);
 				response = httpclient.execute(httpPut);
+				httpPut.releaseConnection();
 				break;
 			}
 		} catch (IOException e) {
@@ -286,78 +304,106 @@ public class Event implements Callable<Response> {
 
 	private Response executeBftsmartEvent() throws WorkloadExecutionException {
 
-		/*
-		 * "command" : { "type": "ByteObjectStream", "content":
-		 * "01:int,02:long,03:String", "01": 42, "03": "eiaoaer" "02": 12497914
-		 * }
-		 * 
-		 * 
-		 * 
-		 * "command" : { "type": "byteArray", "content": "ANEHOSB147eE==/" }
-		 */
-
 		BftsmartRequest bftRequest = (BftsmartRequest) request;
+
 		// Set hosts
+		setBftsmartHosts();
+
+		// Get Client
+		ServiceProxy serviceProxy;
+		if (clients.getBftsmartClients()[clientIndex] == null) {
+			serviceProxy = new ServiceProxy(clientIndex);
+			serviceProxy.setInvokeTimeout(BFTSMaRt_TIMEOUT);
+			clients.getBftsmartClients()[clientIndex] = serviceProxy;
+		} else {
+			serviceProxy = clients.getBftsmartClients()[clientIndex];
+		}
+
+		// Execution
+		byte[] reply = null;
+
+		long startTime = System.currentTimeMillis();
+		try {
+			if (bftRequest.getCommand()
+					.getType() == BftsmartCommandType.BYTE_ARRAY) {
+				reply = executeByteArrayRequest(bftRequest, serviceProxy);
+			} else {
+				reply = executeObjectStreamRequest(bftRequest, serviceProxy);
+			}
+		} catch (RuntimeException e) {
+			serviceProxy.close();
+			throw new WorkloadExecutionException(
+					"Error while executing BFTSMaRt request!", e);
+		}
+		long endTime = System.currentTimeMillis();
+
+		if (reply == null || reply.length == 0) {
+			log.error("No reply received for BFTSMaRt request!");
+			return null;
+		}
+		return new BftsmartResponse(startTime, endTime, targetGroup, reply);
+
+	}
+
+	private void setBftsmartHosts() throws WorkloadExecutionException {
 		try {
 			FileWriter fw = new FileWriter("config/hosts.config");
 			BufferedWriter bw = new BufferedWriter(fw);
 			for (int j = 0; j < targetGroup.length; j++) {
-				int port = Integer.valueOf(targetGroup[j].getPort());
-				String serverName = target.getServerName();
-				InetAddress ip;
-				ip = InetAddress.getByName(serverName);
 				bw.write(j + " ");
-				bw.write(ip.getHostAddress() + " ");
-				bw.write(String.valueOf(port));
+				bw.write(InetAddress.getByName(targetGroup[j].getServerName())
+						.getHostAddress() + " ");
+				bw.write(String.valueOf(targetGroup[j].getPort()));
 				bw.newLine();
 			}
 			bw.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new WorkloadExecutionException(
+					"Error while setting BFTSMaRt hosts!", e);
 		}
-		// BFTSMaRt Client
-		char id = target.getTargetID()
-				.charAt(target.getTargetID().length() - 1);
-		byte[] command = bftRequest.getCommand().getBytes();
+	}
 
-		byte[] reply = null;
-		long startTime = 0;
-		long endTime = 0;
+	private byte[] executeObjectStreamRequest(BftsmartRequest bftRequest,
+			ServiceProxy serviceProxy) throws WorkloadExecutionException {
+
+		byte[] reply;
+		Object[] objectsToServer = bftRequest.getCommand().getObjects();
+		ByteArrayOutputStream byteOut;
 		try {
-			ServiceProxy serviceProxy;
-			if (clients.getBftsmartClients()[clientIndex] == null) {
-				serviceProxy = new ServiceProxy(id);
-				clients.getBftsmartClients()[clientIndex] = serviceProxy;
-			} else {
-				serviceProxy = clients.getBftsmartClients()[clientIndex];
+			byteOut = new ByteArrayOutputStream();
+			ObjectOutput objOut = new ObjectOutputStream(byteOut);
+
+			for (int i = 0; i < objectsToServer.length; i++) {
+				objOut.writeObject(objectsToServer[i]);
 			}
-			ByteArrayOutputStream out = new ByteArrayOutputStream(4);
-			new DataOutputStream(out).writeInt(1);
-			startTime = System.currentTimeMillis();
-			if (bftRequest.getType().equals("ordered")) {
-				reply = serviceProxy.invokeOrdered(command);
-			} else {
-				reply = serviceProxy.invokeUnordered(command);
-			}
-			endTime = System.currentTimeMillis();
-			if (reply != null) {
-				int newValue = new DataInputStream(
-						new ByteArrayInputStream(reply)).readInt();
-				log.info("Returned value: " + newValue);
-			} else {
-				log.severe("Error while executing BFTSMaRt request");
-			}
+
+			objOut.flush();
+			byteOut.flush();
+
 		} catch (IOException e) {
-			if (e.getMessage().equals("Impossible to connect to servers!")) {
-				throw new WorkloadExecutionException(
-						"Error while executing BFTSMaRt request! Could not connect to servers!",
-						e);
-			} else {
-				throw new WorkloadExecutionException(
-						"Error while executing BFTSMaRt request!", e);
-			}
+			throw new WorkloadExecutionException(
+					"Error while preparing BFTSMaRt request for sending!", e);
 		}
-		return new BftsmartResponse(startTime, endTime, target, reply);
+
+		if (bftRequest.getType().toUpperCase().equals("ORDERED")) {
+			reply = serviceProxy.invokeOrdered(byteOut.toByteArray());
+		} else {
+			reply = serviceProxy.invokeUnordered(byteOut.toByteArray());
+		}
+
+		return reply;
+	}
+
+	private byte[] executeByteArrayRequest(BftsmartRequest bftRequest,
+			ServiceProxy serviceProxy) {
+		byte[] reply;
+		byte[] content = bftRequest.getCommand().getContent().getBytes();
+		if (bftRequest.getType().toUpperCase().equals("ORDERED")) {
+			reply = serviceProxy.invokeOrdered(content);
+		} else {
+			reply = serviceProxy.invokeUnordered(content);
+		}
+		return reply;
 	}
 
 }

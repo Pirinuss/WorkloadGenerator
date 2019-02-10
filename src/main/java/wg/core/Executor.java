@@ -2,12 +2,17 @@ package wg.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wg.requests.BftsmartRequest;
+import wg.result.EventResult;
+import wg.result.WorkloadResult;
 import wg.workload.EventDescriptor;
 import wg.workload.Frame;
 import wg.workload.ProtocolType;
@@ -28,7 +33,7 @@ public class Executor {
 
 	private ExecutorService exeService;
 	private final ArrayList<EventDescriptor> executedEvents = new ArrayList<EventDescriptor>();
-	private static final Logger log = Logger.getLogger("logfile.txt");
+	private static final Logger log = LoggerFactory.getLogger(Executor.class);
 
 	public Executor() {
 		int threadPoolSize = Runtime.getRuntime().availableProcessors()
@@ -43,9 +48,11 @@ public class Executor {
 	 * @param workload
 	 *            The workload that gets executed
 	 * @return result The results of the workloads execution
+	 * @throws WorkloadExecutionException
 	 */
-	public Result executeWorkload(Workload workload) {
-		Result result = new Result();
+	public WorkloadResult executeWorkload(Workload workload)
+			throws WorkloadExecutionException {
+		WorkloadResult result = new WorkloadResult();
 		Frame[] frames = workload.getSchedule().getFrames();
 
 		for (int i = 0; i < frames.length; i++) {
@@ -53,9 +60,8 @@ public class Executor {
 			for (int j = 0; j < responses.length; j++) {
 				EventDescriptor event = executedEvents.get(j);
 				Response response = responses[j];
-				ResultObject resultObject = new ResultObject(frames[i], event,
-						response, j);
-				result.safeResponse(resultObject);
+				EventResult eventResult = new EventResult(event, response, j);
+				result.addResponse(frames[i], eventResult);
 			}
 		}
 
@@ -64,7 +70,9 @@ public class Executor {
 		return result;
 	}
 
-	private Response[] executeFrame(Frame frame) {
+	private Response[] executeFrame(Frame frame)
+			throws WorkloadExecutionException {
+
 		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
 		ArrayList<EventDescriptor> events = new ArrayList<EventDescriptor>(
 				Arrays.asList(frame.getEvents()));
@@ -72,9 +80,7 @@ public class Executor {
 		long steps = getMaximalSteps(frame.getOptions());
 
 		for (int s = 0; s < steps; s++) {
-			events = new ArrayList<EventDescriptor>(
-					Arrays.asList(frame.getEvents()));
-
+		
 			long startTime = System.currentTimeMillis();
 
 			EventDescriptor[] sortedEvents = frame.getEvents();
@@ -96,7 +102,7 @@ public class Executor {
 					try {
 						Thread.sleep(EXECUTION_FREQUENCY);
 					} catch (InterruptedException ignore) {
-						log.warning(ignore.getMessage());
+						log.error(ignore.getMessage());
 					}
 				}
 
@@ -109,7 +115,7 @@ public class Executor {
 							frame.getOptions().getRequestsOption(), s);
 					for (int r = 0; r < repetitions; r++) {
 						long dif = System.currentTimeMillis() - startTime;
-						log.info("Event: " + nextEvent.getEventID()
+						log.error("Event: " + nextEvent.getEventID()
 								+ " ausgeführt durch Client " + i + " um: "
 								+ dif);
 
@@ -213,15 +219,19 @@ public class Executor {
 	 * @param responses
 	 *            The array of responses
 	 * @return The filled array of responses
+	 * @throws WorkloadExecutionException
 	 */
-	private Response[] parseResponses(ArrayList<Future<Response>> futures) {
+	private Response[] parseResponses(ArrayList<Future<Response>> futures)
+			throws WorkloadExecutionException {
 		Response[] responses = new Response[futures.size()];
 		for (int i = 0; i < futures.size(); i++) {
 			Response response = null;
 			try {
 				response = (Response) futures.get(i).get();
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (ExecutionException | InterruptedException e) {
+				futures.get(i).cancel(true);
+				exeService.shutdownNow();
+				throw new WorkloadExecutionException("Error while executing task!", e);
 			}
 			responses[i] = response;
 		}
