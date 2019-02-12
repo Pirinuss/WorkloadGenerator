@@ -26,6 +26,21 @@
 			"id": "request1",
 			"protocol": "BFTSMaRt",
 			"command": {
+				"type": "ByteArray",
+				"content": "1nientiren"
+			},
+			"type": "ordered",
+			"targetGroup": [
+				"target1",
+				"target2",
+				"target3",
+				"target4"
+			]
+		},
+		{
+			"id": "request2",
+			"protocol": "BFTSMaRt",
+			"command": {
 				"type": "ByteObjectStream",
 				"content": "01:Int",
 				"01": 1
@@ -54,7 +69,7 @@
 					"transmissionType": "parallel",
 					"requestsNumber": {
 						"growth": "linear",
-						"linearGrowthFactor": 2,
+						"linearGrowthFactor": 50,
 						"steps": 10
 					},
 					"frequency": {
