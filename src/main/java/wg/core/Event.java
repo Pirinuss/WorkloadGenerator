@@ -69,7 +69,7 @@ public class Event implements Callable<Response> {
 	 * The time (in seconds) a BFTSMaRt client will wait for responses before
 	 * returning null
 	 */
-	private static final int BFTSMaRt_TIMEOUT = 5;
+	private static final int BFTSMaRt_TIMEOUT = 20;
 
 	public Event(Target target, Request request, Clients clients,
 			int clientIndex) {

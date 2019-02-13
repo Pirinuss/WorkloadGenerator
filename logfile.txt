@@ -1,3 +1,0 @@
-[2019-02-08 15:02:41] [wg.core.Controller] [FINE] - Start parsing commands
-[2019-02-08 15:02:42] [wg.core.Executor] [INFO] - Event: event1 ausgeführt durch Client 0 um: 1000
-[2019-02-08 15:02:42] [wg.core.Executor] [INFO] - Event: event1 ausgeführt durch Client 1 um: 1026

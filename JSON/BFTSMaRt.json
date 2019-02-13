@@ -7,32 +7,31 @@
   ],
   "requests": [
         {"id":"request1",
-            "protocol":"BFTSMaRt",
-            "command": {
-                "type":"ByteArray",
-                "content":"1"
-            },
-            "type":"ordered",
-            "targetGroup": ["target1", "target2", "target3", "target4"] 
-        },
-        {"id":"request2",
-            "protocol":"BFTSMaRt",
-            "command": {
-                "type":"ByteObjectStream",
-                "content":"01:String,02:Int,03:long",
-                "01":"Eier",
-                "02":4,
-                "03":12
-             },
-            "type":"ordered",
-            "targetGroup": ["target1", "target2", "target3", "target4"] 
-        }
+         "protocol":"BFTSMaRt",
+         "command": {
+            "type":"ByteArray",
+            "content":"1integer"
+         },
+         "type":"ordered",
+         "numberOfClients":2,
+         "targetGroup": ["target1", "target2", "target3", "target4"] 
+         },
+         {"id":"request2",
+          "protocol":"BFTSMaRt",
+          "command": {
+             "type":"ByteObjectStream",
+             "content":"01:Int",
+             "01":1
+           },
+          "type":"ordered",
+          "targetGroup": ["target1", "target2", "target3", "target4"] 
+          }
   ],
   "schedule": {
         "frames": [
             { "id":"frame1", 
               "events": [
-                  {"id":"event1", "request":"request2", "time":1000}
+                  {"id":"event1", "request":"request1", "time":1000}
               ],
              "options": {
                   "transmissionType":"parallel",

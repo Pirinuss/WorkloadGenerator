@@ -13,6 +13,7 @@ import wg.WorkloadGeneratorException;
 import wg.result.WorkloadResult;
 import wg.workload.Workload;
 import wg.workload.parser.WorkloadParser;
+import wg.workload.parser.WorkloadParserException;
 
 public class App {
 
@@ -30,18 +31,22 @@ public class App {
 	 * 
 	 * @param args
 	 *            The arguments of the console command
-	 * @throws WorkloadExecutionException 
+	 * @throws WorkloadExecutionException
 	 */
 	public static void main(String[] args) throws WorkloadGeneratorException {
 		parseCommands(args);
 		if (path != null) {
-			workload = workloadParser.parseWorkload(path);
 			try {
+				workload = workloadParser.parseWorkload(path);
 				result = executor.executeWorkload(workload);
-				result.printResponses();
+			} catch (WorkloadParserException e) {
+				throw new WorkloadGeneratorException(
+						"Error while parsing workload", e);
 			} catch (WorkloadExecutionException e) {
-				throw new WorkloadGeneratorException("Error while executing workload!", e);
-			} 
+				throw new WorkloadGeneratorException(
+						"Error while executing workload!", e);
+			}
+			result.printResponses();
 		}
 		System.exit(0);
 	}

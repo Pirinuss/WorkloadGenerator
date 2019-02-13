@@ -1,9 +1,9 @@
 package wg.workload;
 
-public class Request {
+public interface Request {
 
-	private final String requestID;
-	private final ProtocolType protocol;
+	public final String requestID;
+	public final ProtocolType protocol;
 
 	public Request(String requestID, ProtocolType protocol) {
 		if (requestID == null) {

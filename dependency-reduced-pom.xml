@@ -5,6 +5,14 @@
   <artifactId>WorkloadGenerator</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/test/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -27,5 +35,10 @@
       </plugin>
     </plugins>
   </build>
+  <properties>
+    <maven.compiler.target>1.10</maven.compiler.target>
+    <maven.compiler.source>1.10</maven.compiler.source>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 </project>
 
