@@ -29,7 +29,6 @@ import wg.workload.Request;
 import wg.workload.Schedule;
 import wg.workload.Target;
 import wg.workload.Workload;
-import wg.workload.options.Clients;
 import wg.workload.options.FrequencyMode;
 import wg.workload.options.FrequencyOption;
 import wg.workload.options.Options;
@@ -46,9 +45,8 @@ public class WorkloadParser {
 		try {
 			Object obj = new JSONParser().parse(new FileReader(path));
 			JSONObject jsonObject = (JSONObject) obj;
-			HashMap<String, Target> targets = parseTargets(jsonObject);
-			HashMap<String, Request> requests = parseRequests(jsonObject,
-					targets);
+			HashMap<String, Target[]> targets = parseTargets(jsonObject);
+			HashMap<String, Request> requests = parseRequests(jsonObject);
 			Schedule schedule = parseSchedule(jsonObject, targets, requests);
 			workload = new Workload(targets, requests, schedule);
 		} catch (FileNotFoundException cause) {
@@ -64,42 +62,52 @@ public class WorkloadParser {
 		return workload;
 	}
 
-	private HashMap<String, Target> parseTargets(JSONObject jo)
+	private HashMap<String, Target[]> parseTargets(JSONObject jo)
 			throws WorkloadParserException {
-		JSONArray targets = (JSONArray) jo.get("targets");
-		if (targets == null || targets.size() == 0) {
+		JSONArray targetGroupsObj = (JSONArray) jo.get("targetGroups");
+		if (targetGroupsObj == null || targetGroupsObj.size() == 0) {
 			throw new WorkloadParserException(
-					"Targets not found in JSON input!");
+					"No target groups found in JSON input!");
 		}
 
-		HashMap<String, Target> targetMap = new HashMap<String, Target>();
-		for (int i = 0; i < targets.size(); i++) {
-			JSONObject targetObj = (JSONObject) targets.get(i);
+		HashMap<String, Target[]> targetMap = new HashMap<String, Target[]>();
 
-			String id = (String) targetObj.get("id");
+		for (int i = 0; i < targetGroupsObj.size(); i++) {
+			JSONObject targetGroupObj = (JSONObject) targetGroupsObj.get(i);
+
+			String id = (String) targetGroupObj.get("id");
 			if (targetMap.containsKey(id)) {
-				throw new WorkloadParserException("Duplicated target id!" + id);
-			}
-			String server = (String) targetObj.get("server");
-			long port = -1;
-			if (targetObj.get("port") != null) {
-				port = (long) targetObj.get("port");
+				throw new WorkloadParserException(
+						"Duplicated target group id!" + id);
 			}
 
-			try {
-				Target target = new Target(id, server, port);
-				targetMap.put(id, target);
-			} catch (IllegalArgumentException e) {
+			JSONArray targetsObj = (JSONArray) targetGroupObj.get("targets");
+			if (targetsObj == null || targetsObj.size() == 0) {
 				throw new WorkloadParserException(
-						"Error while parsing target: \"" + id + "\"!", e);
+						"No targets found for target group " + id + " !");
 			}
+
+			Target[] targets = new Target[targetsObj.size()];
+			for (int j = 0; j < targetsObj.size(); j++) {
+				JSONObject targetObj = (JSONObject) targetsObj.get(j);
+				String server = (String) targetObj.get("server");
+				long port = -1;
+				if (targetObj.get("port") != null) {
+					port = (long) targetObj.get("port");
+				}
+
+				Target target = new Target(server, port);
+				targets[j] = target;
+			}
+
+			targetMap.put(id, targets);
 		}
 
 		return targetMap;
 	}
 
-	private HashMap<String, Request> parseRequests(JSONObject jo,
-			HashMap<String, Target> targets) throws WorkloadParserException {
+	private HashMap<String, Request> parseRequests(JSONObject jo)
+			throws WorkloadParserException {
 
 		JSONArray requests = (JSONArray) jo.get("requests");
 		if (requests == null || requests.size() == 0) {
@@ -116,8 +124,7 @@ public class WorkloadParser {
 						"Duplicated request id!" + id);
 			}
 			try {
-				Request newRequest = getSpecificRequest(requestObj, id,
-						targets);
+				Request newRequest = getSpecificRequest(requestObj, id);
 				requestMap.put(id, newRequest);
 			} catch (IllegalArgumentException e) {
 				String s = "Error while parsing requests!";
@@ -132,8 +139,8 @@ public class WorkloadParser {
 	}
 
 	private Schedule parseSchedule(JSONObject jo,
-			HashMap<String, Target> targets, HashMap<String, Request> requests)
-			throws WorkloadParserException {
+			HashMap<String, Target[]> targets,
+			HashMap<String, Request> requests) throws WorkloadParserException {
 		JSONObject scheduleObj = (JSONObject) jo.get("schedule");
 		if (scheduleObj == null) {
 			throw new WorkloadParserException(
@@ -161,8 +168,8 @@ public class WorkloadParser {
 	}
 
 	private Frame parseFrame(JSONObject frameObj,
-			HashMap<String, Target> targets, HashMap<String, Request> requests)
-			throws WorkloadParserException {
+			HashMap<String, Target[]> targets,
+			HashMap<String, Request> requests) throws WorkloadParserException {
 		String id = (String) frameObj.get("id");
 
 		JSONArray eventsObj = (JSONArray) frameObj.get("events");
@@ -177,8 +184,8 @@ public class WorkloadParser {
 	}
 
 	private EventDescriptor[] parseFrameEvents(JSONArray eventsObj,
-			HashMap<String, Target> targets, HashMap<String, Request> requests)
-			throws WorkloadParserException {
+			HashMap<String, Target[]> targets,
+			HashMap<String, Request> requests) throws WorkloadParserException {
 
 		if (eventsObj == null || eventsObj.size() == 0) {
 			throw new IllegalArgumentException(
@@ -192,11 +199,16 @@ public class WorkloadParser {
 			String id = (String) eventObj.get("id");
 
 			String targetName = (String) eventObj.get("target");
-			Target target;
+			Target[] target;
 			if (targets.containsKey(targetName)) {
 				target = targets.get(targetName);
 			} else {
-				target = null;
+				if (targetName == null) {
+					throw new IllegalArgumentException(
+							"No target found for event: " + id);
+				}
+				throw new IllegalArgumentException("Target group \""
+						+ targetName + "\" not found in target groups!");
 			}
 
 			String requestName = (String) eventObj.get("request");
@@ -228,9 +240,10 @@ public class WorkloadParser {
 
 		TransmissionType transmissionType = parseTransmissionOption(optionsObj);
 
-		JSONObject clientOptionObj = (JSONObject) optionsObj
-				.get("clientsNumber");
-		Clients clientsOption = parseClientsOption(clientOptionObj);
+		long iterations = 1;
+		if (optionsObj.get("iterations") != null) {
+			iterations = (long) optionsObj.get("iterations");
+		}
 
 		JSONObject requestOptionObj = (JSONObject) optionsObj
 				.get("requestsNumber");
@@ -241,7 +254,7 @@ public class WorkloadParser {
 		FrequencyOption frequencyOption = parseFrequencyOption(
 				frequencyOptionObj);
 
-		return new Options(transmissionType, clientsOption, requestsOption,
+		return new Options(transmissionType, iterations, requestsOption,
 				frequencyOption);
 	}
 
@@ -259,55 +272,14 @@ public class WorkloadParser {
 		return transmissionType;
 	}
 
-	private Clients parseClientsOption(JSONObject clientOptionObj) {
-
-		Clients clients;
-		long bftsmartClients = 1;
-		long httpClients = 1;
-		long ftpClients = 1;
-		long udpClients = 1;
-		long tcpClients = 1;
-
-		if (clientOptionObj == null) {
-			clients = new Clients(bftsmartClients, httpClients, ftpClients,
-					udpClients, tcpClients);
-		} else {
-			if (clientOptionObj.get("BFTSMaRt") != null) {
-				bftsmartClients = (long) clientOptionObj.get("BFTSMaRt");
-			}
-
-			if (clientOptionObj.get("HTTP") != null) {
-				httpClients = (long) clientOptionObj.get("HTTP");
-			}
-
-			if (clientOptionObj.get("FTP") != null) {
-				ftpClients = (long) clientOptionObj.get("FTP");
-			}
-
-			if (clientOptionObj.get("UDP") != null) {
-				udpClients = (long) clientOptionObj.get("UDP");
-			}
-
-			if (clientOptionObj.get("TCP") != null) {
-				tcpClients = (long) clientOptionObj.get("TCP");
-			}
-
-			clients = new Clients(bftsmartClients, httpClients, ftpClients,
-					udpClients, tcpClients);
-		}
-
-		return clients;
-	}
-
 	private RequestsOption parseRequestsOption(JSONObject requestOptionObj) {
 
 		RequestsOption requestsOption;
 		GrowthType growthType = null;
 		long linearGrowthFactor = -1;
-		long steps = -1;
 
 		if (requestOptionObj == null) {
-			requestsOption = new RequestsOption(GrowthType.LINEAR, 1, 1);
+			requestsOption = new RequestsOption(GrowthType.LINEAR, 1);
 		} else {
 			String mode = (String) requestOptionObj.get("growth");
 			if (mode != null) {
@@ -319,12 +291,7 @@ public class WorkloadParser {
 						.get("linearGrowthFactor");
 			}
 
-			if (requestOptionObj.get("steps") != null) {
-				steps = (long) requestOptionObj.get("steps");
-			}
-
-			requestsOption = new RequestsOption(growthType, linearGrowthFactor,
-					steps);
+			requestsOption = new RequestsOption(growthType, linearGrowthFactor);
 		}
 
 		return requestsOption;
@@ -334,12 +301,11 @@ public class WorkloadParser {
 			JSONObject frequencyOptionObj) {
 
 		FrequencyOption frequencyOption;
-		long steps = -1;
 		long factor = -1;
 		FrequencyMode mode;
 
 		if (frequencyOptionObj == null) {
-			frequencyOption = new FrequencyOption(FrequencyMode.INCREASE, 1, 1);
+			frequencyOption = new FrequencyOption(FrequencyMode.INCREASE, 1);
 		} else {
 			String modeName = (String) frequencyOptionObj.get("mode");
 			if (modeName != null) {
@@ -352,19 +318,19 @@ public class WorkloadParser {
 				factor = (long) frequencyOptionObj.get("factor");
 			}
 
-			if (frequencyOptionObj.get("steps") != null) {
-				steps = (long) frequencyOptionObj.get("steps");
-			}
-
-			frequencyOption = new FrequencyOption(mode, factor, steps);
+			frequencyOption = new FrequencyOption(mode, factor);
 		}
 
 		return frequencyOption;
 	}
 
 	private Request getSpecificRequest(JSONObject requestContent,
-			String requestName, HashMap<String, Target> targets)
-			throws WorkloadParserException {
+			String requestName) throws WorkloadParserException {
+
+		long numberOfClients = 1;
+		if (requestContent.get("numberOfClients") != null) {
+			numberOfClients = (long) requestContent.get("numberOfClients");
+		}
 
 		String protocol = (String) requestContent.get("protocol");
 		if (protocol == null) {
@@ -376,16 +342,20 @@ public class WorkloadParser {
 		switch (protocolType) {
 
 		case HTTP:
-			return createHttpRequest(requestContent, requestName, protocolType);
+			return createHttpRequest(requestContent, requestName, protocolType,
+					numberOfClients);
 		case FTP:
-			return createFtpRequest(requestContent, requestName, protocolType);
+			return createFtpRequest(requestContent, requestName, protocolType,
+					numberOfClients);
 		case TCP:
-			return createTcpRequest(requestContent, requestName, protocolType);
+			return createTcpRequest(requestContent, requestName, protocolType,
+					numberOfClients);
 		case UDP:
-			return createUdpRequest(requestContent, requestName, protocolType);
+			return createUdpRequest(requestContent, requestName, protocolType,
+					numberOfClients);
 		case BFTSMaRt:
 			return createBftsmartRequest(requestContent, requestName,
-					protocolType, targets);
+					protocolType, numberOfClients);
 		default:
 			return null;
 		}
@@ -393,7 +363,7 @@ public class WorkloadParser {
 	}
 
 	private Request createHttpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType)
+			String requestName, ProtocolType protocolType, long numberOfClients)
 			throws WorkloadParserException {
 
 		String resourcePath = (String) requestContent.get("resourcePath");
@@ -406,12 +376,12 @@ public class WorkloadParser {
 		}
 		HttpMethodType methodType = HttpMethodType.fromString(methodTypeName);
 
-		return new HttpRequest(requestName, protocolType, methodType,
-				resourcePath, content);
+		return new HttpRequest(requestName, protocolType, numberOfClients,
+				methodType, resourcePath, content);
 	}
 
 	private Request createFtpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType)
+			String requestName, ProtocolType protocolType, long numberOfClients)
 			throws WorkloadParserException {
 
 		String localResource = (String) requestContent.get("localResource");
@@ -426,51 +396,38 @@ public class WorkloadParser {
 		}
 		FtpMethodType methodType = FtpMethodType.fromString(methodTypeName);
 
-		return new FtpRequest(requestName, protocolType, methodType,
-				localResource, remoteResource, username, password);
+		return new FtpRequest(requestName, protocolType, numberOfClients,
+				methodType, localResource, remoteResource, username, password);
 	}
 
 	private Request createTcpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType) {
+			String requestName, ProtocolType protocolType,
+			long numberOfClients) {
 
 		String content = (String) requestContent.get("content");
-		return new TcpRequest(requestName, protocolType, content);
+		return new TcpRequest(requestName, protocolType, numberOfClients,
+				content);
 	}
 
 	private Request createUdpRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType) {
+			String requestName, ProtocolType protocolType,
+			long numberOfClients) {
 
 		String content = (String) requestContent.get("content");
-		return new UdpRequest(requestName, protocolType, content);
+		return new UdpRequest(requestName, protocolType, numberOfClients,
+				content);
 	}
 
 	private Request createBftsmartRequest(JSONObject requestContent,
-			String requestName, ProtocolType protocolType,
-			HashMap<String, Target> targets) throws WorkloadParserException {
+			String requestName, ProtocolType protocolType, long numberOfClients)
+			throws WorkloadParserException {
 
 		JSONObject command = (JSONObject) requestContent.get("command");
 		BftsmartCommand bftsmartCommand = parseBFTSMaRtCommand(command);
 		String type = (String) requestContent.get("type");
 
-		JSONArray targetGroupObj = (JSONArray) requestContent
-				.get("targetGroup");
-		if (targetGroupObj == null || targetGroupObj.size() == 0) {
-			throw new IllegalArgumentException(
-					"No target group found in JSON input!");
-		}
-		Target[] targetGroup = new Target[targetGroupObj.size()];
-		for (int i = 0; i < targetGroupObj.size(); i++) {
-			String targetName = (String) targetGroupObj.get(i);
-			if (targets.containsKey(targetName)) {
-				targetGroup[i] = targets.get(targetName);
-			} else {
-				throw new IllegalArgumentException(
-						"Target \"" + targetName + "\" not found in targets!");
-			}
-		}
-
-		return new BftsmartRequest(requestName, protocolType, bftsmartCommand,
-				type, targetGroup);
+		return new BftsmartRequest(requestName, protocolType, numberOfClients,
+				bftsmartCommand, type);
 	}
 
 	private BftsmartCommand parseBFTSMaRtCommand(JSONObject command) {

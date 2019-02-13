@@ -6,10 +6,8 @@ public class RequestsOption {
 
 	private final GrowthType growthType;
 	private final long linearGrowthFactor;
-	private final long steps;
 
-	public RequestsOption(GrowthType growthType, long linearGrowthFactor,
-			long steps) {
+	public RequestsOption(GrowthType growthType, long linearGrowthFactor) {
 
 		if (growthType == null) {
 			throw new IllegalArgumentException("Growth type must not be null!");
@@ -20,14 +18,10 @@ public class RequestsOption {
 			throw new IllegalArgumentException("Invalid growth factor!");
 		}
 		if (linearGrowthFactor > 0 && !(growthType == GrowthType.LINEAR)) {
-			throw new IllegalArgumentException("No \"linearGrowthFactor\" required for this growth type!");
+			throw new IllegalArgumentException(
+					"No \"linearGrowthFactor\" required for this growth type!");
 		}
 		this.linearGrowthFactor = linearGrowthFactor;
-
-		if (steps < 1) {
-			throw new IllegalArgumentException("Invalid step value!");
-		}
-		this.steps = steps;
 	}
 
 	public GrowthType getGrowthType() {
@@ -36,10 +30,6 @@ public class RequestsOption {
 
 	public long getLinearGrowthFactor() {
 		return linearGrowthFactor;
-	}
-
-	public long getSteps() {
-		return steps;
 	}
 
 }

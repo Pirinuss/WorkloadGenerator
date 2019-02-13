@@ -5,11 +5,11 @@ import java.util.Map.Entry;
 
 public class Workload {
 
-	private final HashMap<String, Target> targets;
+	private final HashMap<String, Target[]> targets;
 	private final HashMap<String, Request> requests;
 	private final Schedule schedule;
 
-	public Workload(HashMap<String, Target> targets,
+	public Workload(HashMap<String, Target[]> targets,
 			HashMap<String, Request> requests, Schedule schedule) {
 		if (targets == null) {
 			throw new IllegalArgumentException("No targets found");
@@ -26,7 +26,7 @@ public class Workload {
 		}
 		this.schedule = schedule;
 
-		for (Entry<String, Target> entry : targets.entrySet()) {
+		for (Entry<String, Target[]> entry : targets.entrySet()) {
 			if (entry.getValue() == null) {
 				throw new IllegalArgumentException(
 						entry.getKey() + " not found");
@@ -41,7 +41,7 @@ public class Workload {
 		}
 	}
 
-	public HashMap<String, Target> getTargets() {
+	public HashMap<String, Target[]> getTargets() {
 		return targets;
 	}
 
@@ -51,16 +51,6 @@ public class Workload {
 
 	public Schedule getSchedule() {
 		return schedule;
-	}
-
-	public Target getTargetByName(String targetName) {
-		for (Entry<String, Target> e : targets.entrySet()) {
-			if (e.getKey().equals(targetName)) {
-				Target target = e.getValue();
-				return target;
-			}
-		}
-		return null;
 	}
 
 }

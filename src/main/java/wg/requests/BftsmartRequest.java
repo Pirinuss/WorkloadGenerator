@@ -1,21 +1,43 @@
 package wg.requests;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import bftsmart.tom.ServiceProxy;
+import wg.core.Response;
+import wg.core.WorkloadExecutionException;
+import wg.responses.BftsmartResponse;
 import wg.workload.ProtocolType;
 import wg.workload.Request;
 import wg.workload.Target;
 
-public class BftsmartRequest extends Request {
+public class BftsmartRequest extends Request implements RequestInterface {
+
+	private static final Logger log = LoggerFactory
+			.getLogger(BftsmartRequest.class);
 
 	private final BftsmartCommand command;
 	private final String type;
-	private final Target[] targetGroup;
-	private ServiceProxy client;
+	private final ServiceProxy[] clients;
+
+	/**
+	 * The time (in seconds) a BFTSMaRt client will wait for responses before
+	 * returning null
+	 */
+	private static final int BFTSMaRt_TIMEOUT = 20;
 
 	public BftsmartRequest(String requestName, ProtocolType protocol,
-			BftsmartCommand command, String type, Target[] targetGroup) {
+			long numberOfClients, BftsmartCommand command, String type) {
 
-		super(requestName, protocol);
+		super(requestName, protocol, numberOfClients);
 
 		if (command == null) {
 			throw new IllegalArgumentException("Command must not be null!");
@@ -31,36 +53,113 @@ public class BftsmartRequest extends Request {
 		}
 		this.type = type;
 
-		if (targetGroup == null) {
-			throw new IllegalArgumentException(
-					"Target group must not be null!");
+		this.clients = new ServiceProxy[(int) numberOfClients];
+//		for (int i = 0; i < numberOfClients; i++) {
+//			clients[i] = new ServiceProxy(i);
+//			clients[i].setInvokeTimeout(BFTSMaRt_TIMEOUT);
+//		}
+	}
+
+	@Override
+	public Response[] execute(Target[] targets)
+			throws WorkloadExecutionException {
+
+		setBftsmartHosts(targets);
+
+		Response[] responses = new Response[clients.length];
+
+		for (int i = 0; i < clients.length; i++) {
+			responses[i] = executeSinlgeRequest(clients[i], targets);
 		}
-		for (int i=0; i<targetGroup.length; i++) {
-			if (targetGroup[i].getPort() == -1) {
-				throw new IllegalArgumentException("Port of " + targetGroup[i].getTargetID() + " must not be null!");
+
+		return responses;
+	}
+
+	private Response executeSinlgeRequest(ServiceProxy client, Target[] targets)
+			throws WorkloadExecutionException {
+		byte[] reply = null;
+
+		long startTime = System.currentTimeMillis();
+		try {
+			if (command.getType() == BftsmartCommandType.BYTE_ARRAY) {
+				reply = executeByteArrayRequest(client);
+			} else {
+				reply = executeObjectStreamRequest(client);
 			}
+		} catch (RuntimeException e) {
+			client.close();
+			throw new WorkloadExecutionException(
+					"Error while executing BFTSMaRt request!", e);
 		}
-		this.targetGroup = targetGroup;
+		long endTime = System.currentTimeMillis();
+
+		if (reply == null || reply.length == 0) {
+			log.error("No reply received for BFTSMaRt request!");
+			return null;
+		}
+		return new BftsmartResponse(startTime, endTime, targets, reply);
+
 	}
 
-	public BftsmartCommand getCommand() {
-		return command;
+	private byte[] executeObjectStreamRequest(ServiceProxy serviceProxy)
+			throws WorkloadExecutionException {
+
+		byte[] reply;
+		Object[] objectsToServer = command.getObjects();
+		ByteArrayOutputStream byteOut;
+		try {
+			byteOut = new ByteArrayOutputStream();
+			ObjectOutput objOut = new ObjectOutputStream(byteOut);
+
+			for (int i = 0; i < objectsToServer.length; i++) {
+				objOut.writeObject(objectsToServer[i]);
+			}
+
+			objOut.flush();
+			byteOut.flush();
+
+		} catch (IOException e) {
+			throw new WorkloadExecutionException(
+					"Error while preparing BFTSMaRt request for sending!", e);
+		}
+
+		if (type.toUpperCase().equals("ORDERED")) {
+			reply = serviceProxy.invokeOrdered(byteOut.toByteArray());
+		} else {
+			reply = serviceProxy.invokeUnordered(byteOut.toByteArray());
+		}
+
+		return reply;
 	}
 
-	public String getType() {
-		return type;
+	private byte[] executeByteArrayRequest(ServiceProxy serviceProxy) {
+		byte[] reply;
+		byte[] content = command.getContent().getBytes();
+		if (type.toUpperCase().equals("ORDERED")) {
+			reply = serviceProxy.invokeOrdered(content);
+		} else {
+			reply = serviceProxy.invokeUnordered(content);
+		}
+		return reply;
 	}
 
-	public Target[] getTargetGroup() {
-		return targetGroup;
-	}
-
-	public ServiceProxy getClient() {
-		return client;
-	}
-
-	public void setClient(ServiceProxy client) {
-		this.client = client;
+	private void setBftsmartHosts(Target[] targets)
+			throws WorkloadExecutionException {
+		try {
+			FileWriter fw = new FileWriter("config/hosts.config");
+			BufferedWriter bw = new BufferedWriter(fw);
+			for (int j = 0; j < targets.length; j++) {
+				bw.write(j + " ");
+				bw.write(InetAddress.getByName(targets[j].getServerName())
+						.getHostAddress() + " ");
+				bw.write(String.valueOf(targets[j].getPort()));
+				bw.newLine();
+			}
+			bw.close();
+		} catch (IOException e) {
+			throw new WorkloadExecutionException(
+					"Error while setting BFTSMaRt hosts!", e);
+		}
 	}
 
 }

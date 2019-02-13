@@ -3,23 +3,21 @@ package wg.workload;
 public class EventDescriptor implements Comparable<EventDescriptor> {
 
 	private final String eventID;
-	private final Target target;
+	private final Target targets[];
 	private Request request;
 	private final long time;
 
-	public EventDescriptor(String eventID, long time, Target target,
+	public EventDescriptor(String eventID, long time, Target[] targets,
 			Request request) {
 		if (eventID == null) {
 			throw new IllegalArgumentException("Event id must not be null!");
 		}
 		this.eventID = eventID;
 
-		if (target == null) {
-			if (request.getProtocol() != ProtocolType.BFTSMaRt) {
-				throw new IllegalArgumentException("Target must not be null!");
-			}
+		if (targets == null || targets.length < 1) {
+			throw new IllegalArgumentException("Target must not be null!");
 		}
-		this.target = target;
+		this.targets = targets;
 
 		if (request == null) {
 			throw new IllegalArgumentException("Request must not be null!");
@@ -40,21 +38,21 @@ public class EventDescriptor implements Comparable<EventDescriptor> {
 		return time;
 	}
 
-	public Target getTarget() {
-		return target;
+	public Target[] getTargets() {
+		return targets;
 	}
 
 	public Request getRequest() {
 		return request;
 	}
-	
+
 	public void setRequest(Request request) {
 		this.request = request;
 	}
 
 	@Override
-	public int compareTo(EventDescriptor o) {
-		return (Integer) Long.compare(time, o.getTime());
+	public int compareTo(EventDescriptor descriptor) {
+		return (Integer) Long.compare(time, descriptor.getTime());
 	}
 
 }

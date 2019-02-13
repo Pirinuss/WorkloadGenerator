@@ -10,19 +10,15 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wg.requests.BftsmartRequest;
 import wg.result.EventResult;
 import wg.result.WorkloadResult;
 import wg.workload.EventDescriptor;
 import wg.workload.Frame;
-import wg.workload.ProtocolType;
 import wg.workload.Request;
 import wg.workload.Target;
 import wg.workload.Workload;
-import wg.workload.options.Clients;
 import wg.workload.options.FrequencyMode;
 import wg.workload.options.FrequencyOption;
-import wg.workload.options.Options;
 import wg.workload.options.RequestsOption;
 
 public class Executor {
@@ -56,10 +52,10 @@ public class Executor {
 		Frame[] frames = workload.getSchedule().getFrames();
 
 		for (int i = 0; i < frames.length; i++) {
-			Response[] responses = executeFrame(frames[i]);
-			for (int j = 0; j < responses.length; j++) {
+			ArrayList<Response> responses = executeFrame(frames[i]);
+			for (int j = 0; j < responses.size(); j++) {
 				EventDescriptor event = executedEvents.get(j);
-				Response response = responses[j];
+				Response response = responses.get(j);
 				EventResult eventResult = new EventResult(event, response, j);
 				result.addResponse(frames[i], eventResult);
 			}
@@ -70,25 +66,19 @@ public class Executor {
 		return result;
 	}
 
-	private Response[] executeFrame(Frame frame)
+	private ArrayList<Response> executeFrame(Frame frame)
 			throws WorkloadExecutionException {
 
-		ArrayList<Future<Response>> futures = new ArrayList<Future<Response>>();
+		ArrayList<Future<Response[]>> futures = new ArrayList<Future<Response[]>>();
 		ArrayList<EventDescriptor> events = new ArrayList<EventDescriptor>(
 				Arrays.asList(frame.getEvents()));
 
-		long steps = getMaximalSteps(frame.getOptions());
+		for (int s = 0; s < frame.getOptions().getIterations(); s++) {
 
-		for (int s = 0; s < steps; s++) {
-		
 			long startTime = System.currentTimeMillis();
 
 			EventDescriptor[] sortedEvents = frame.getEvents();
 			Arrays.sort(sortedEvents);
-
-			if (sortedEvents.length < 1) {
-				return new Response[0];
-			}
 
 			int index = 0;
 
@@ -98,6 +88,7 @@ public class Executor {
 				long eventExecution = startTime + calculateExeTime(
 						frame.getOptions().getFrequencyOption(),
 						nextEvent.getTime(), s);
+
 				while (eventExecution > System.currentTimeMillis()) {
 					try {
 						Thread.sleep(EXECUTION_FREQUENCY);
@@ -106,23 +97,15 @@ public class Executor {
 					}
 				}
 
-				int clientsNumber = frame.getOptions().getClients()
-						.getClientsNumber(nextEvent.getRequest().getProtocol());
-				frame.getOptions().getClients();
-				for (int i = 0; i < clientsNumber; i++) {
+				int repetitions = getRepetitions(
+						frame.getOptions().getRequestsOption(), s);
+				for (int r = 0; r < repetitions; r++) {
+					long dif = System.currentTimeMillis() - startTime;
+					log.error("Event: " + nextEvent.getEventID()
+							+ " ausgefï¿½hrt um: " + dif);
 
-					int repetitions = getRepetitions(
-							frame.getOptions().getRequestsOption(), s);
-					for (int r = 0; r < repetitions; r++) {
-						long dif = System.currentTimeMillis() - startTime;
-						log.error("Event: " + nextEvent.getEventID()
-								+ " ausgeführt durch Client " + i + " um: "
-								+ dif);
-
-						Future<Response> response = executeEvent(nextEvent,
-								frame.getOptions().getClients(), i);
-						futures.add(response);
-					}
+//					Future<Response[]> response = executeEvent(nextEvent);
+//					futures.add(response);
 				}
 				index++;
 			}
@@ -131,22 +114,14 @@ public class Executor {
 		return parseResponses(futures);
 	}
 
-	private Future<Response> executeEvent(EventDescriptor currentEvent,
-			Clients clients, int clientIndex) {
+	private Future<Response[]> executeEvent(EventDescriptor currentEvent) {
 
-		Event event;
 		Request request = currentEvent.getRequest();
+		Target[] targets = currentEvent.getTargets();
 
-		if (request.getProtocol() == ProtocolType.BFTSMaRt) {
-			BftsmartRequest bftRequest = (BftsmartRequest) request;
-			Target[] targetGroup = bftRequest.getTargetGroup();
-			event = new Event(targetGroup, request, clients, clientIndex);
-		} else {
-			Target target = currentEvent.getTarget();
-			event = new Event(target, request, clients, clientIndex);
-		}
 		executedEvents.add(currentEvent);
-		Future<Response> response = exeService.submit(event);
+		Future<Response[]> response = exeService
+				.submit(new Event(targets, request));
 
 		return response;
 	}
@@ -221,33 +196,24 @@ public class Executor {
 	 * @return The filled array of responses
 	 * @throws WorkloadExecutionException
 	 */
-	private Response[] parseResponses(ArrayList<Future<Response>> futures)
+	private ArrayList<Response> parseResponses(ArrayList<Future<Response[]>> futures)
 			throws WorkloadExecutionException {
-		Response[] responses = new Response[futures.size()];
+		ArrayList<Response> responses = new ArrayList<Response>();
 		for (int i = 0; i < futures.size(); i++) {
-			Response response = null;
+			Response[] eventResponses = null;
 			try {
-				response = (Response) futures.get(i).get();
+				eventResponses = (Response[]) futures.get(i).get();
 			} catch (ExecutionException | InterruptedException e) {
 				futures.get(i).cancel(true);
 				exeService.shutdownNow();
-				throw new WorkloadExecutionException("Error while executing task!", e);
+				throw new WorkloadExecutionException(
+						"Error while executing task!", e);
 			}
-			responses[i] = response;
+			for (int j = 0; j < eventResponses.length; j++) {
+				responses.add(eventResponses[i]);
+			}
 		}
 		return responses;
-	}
-
-	private long getMaximalSteps(Options options) {
-		long repeatEventsSteps = options.getRequestsOption().getSteps();
-		long changeFrequencySteps = options.getFrequencyOption().getSteps();
-		if (repeatEventsSteps == -1 && changeFrequencySteps == -1) {
-			return 1;
-		}
-		if (repeatEventsSteps >= changeFrequencySteps) {
-			return repeatEventsSteps;
-		}
-		return changeFrequencySteps;
 	}
 
 }

@@ -1,11 +1,13 @@
 package wg.workload;
 
-public interface Request {
+public class Request {
 
-	public final String requestID;
-	public final ProtocolType protocol;
+	private final String requestID;
+	private final ProtocolType protocol;
+	private long numberOfClients;
 
-	public Request(String requestID, ProtocolType protocol) {
+	public Request(String requestID, ProtocolType protocol,
+			long numberOfClients) {
 		if (requestID == null) {
 			throw new IllegalArgumentException("Request id must not be null!");
 		}
@@ -15,6 +17,11 @@ public interface Request {
 			throw new IllegalArgumentException("Protocol must not be null!");
 		}
 		this.protocol = protocol;
+		
+		if (numberOfClients < 1) {
+			throw new IllegalArgumentException("At least one client required!");
+		}
+		this.numberOfClients = numberOfClients;
 	}
 
 	public String getRequestID() {
@@ -23,6 +30,10 @@ public interface Request {
 
 	public ProtocolType getProtocol() {
 		return protocol;
+	}
+	
+	public long getNumberOfClients() {
+		return numberOfClients;
 	}
 
 }

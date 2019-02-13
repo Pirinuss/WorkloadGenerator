@@ -41,29 +41,23 @@ public class WorkloadResult {
 	private void printFrameInfos(Frame frame, ArrayList<EventResult> value) {
 		// @formatter:off
 		System.out.println(
-				"---Ergebnisse für Frame " + frame.getFrameID() + " ---");
+				"---Ergebnisse fï¿½r Frame " + frame.getFrameID() + " ---");
 		System.out.println(" Definierte Events: " + frame.getEvents().length);
 		System.out.println(" Definierte Optionen:");
-		System.out.println("   Übertragung: " + frame.getOptions().getTransmissionType());
-		System.out.print("   Clientanzahl: ");
-		System.out.print("HTTP: " + frame.getOptions().getClients().getHttpClients().length);
-		System.out.print(" , FTP: " + frame.getOptions().getClients().getFtpClients().length);
-		System.out.print(" , BFTSMaRt: " + frame.getOptions().getClients().getBftsmartClients().length);
-		System.out.print(" , TCP: " + frame.getOptions().getClients().getTcpClients().length);
-		System.out.println(" , UDP: " + frame.getOptions().getClients().getUdpClients().length);
+		System.out.println("   Ãœbertragung: " + frame.getOptions().getTransmissionType());
 		System.out.print("   Eventanzahl: ");
 		System.out.print("Wachstum: " + frame.getOptions().getRequestsOption().getGrowthType());
 		if (frame.getOptions().getRequestsOption().getGrowthType() == GrowthType.LINEAR) {
 			System.out.print(" , Wachstumsfaktor: " + frame.getOptions().getRequestsOption().getLinearGrowthFactor());
 		}
-		System.out.println(" , Wiederholungen: " + frame.getOptions().getRequestsOption().getSteps());
+		System.out.println(" , Wiederholungen: " + frame.getOptions().getIterations());
 		if (frame.getOptions().getFrequencyOption().getFactor() != 1) {
-			System.out.print("   Frequenzänderung: ");
+			System.out.print("   FrequenzÃ¤nderung: ");
 			System.out.print("Modus: " + frame.getOptions().getFrequencyOption().getMode());
-			System.out.print(" , Änderungsfaktor: " + frame.getOptions().getFrequencyOption().getFactor());
-			System.out.println(" , Wiederholungen: " + frame.getOptions().getFrequencyOption().getSteps());
+			System.out.print(" , Ã„nderungsfaktor: " + frame.getOptions().getFrequencyOption().getFactor());
+			System.out.println(" , Wiederholungen: " + frame.getOptions().getIterations());
 		}
-		System.out.println(" Insgesamt ausgeführte Events: " + value.size());
+		System.out.println(" Insgesamt ausgefï¿½hrte Events: " + value.size());
 		System.out.println();
 		// @formatter:on
 	}
@@ -91,7 +85,7 @@ public class WorkloadResult {
 			System.out.println("     Execution time: " + (response.getStopTime() - response.getStartTime()));
 			HttpResponseObject httpResponse = (HttpResponseObject) response;
 			System.out.println("     Response Code: " + httpResponse.getResponse().getStatusLine());
-			System.out.println("     Response Länge: " + httpResponse.getResponse().getEntity().getContentLength());
+			System.out.println("     Response Lï¿½nge: " + httpResponse.getResponse().getEntity().getContentLength());
 			break;
 		case TCP:
 			System.out.println("     Target: " + response.getTarget().getServerName());
