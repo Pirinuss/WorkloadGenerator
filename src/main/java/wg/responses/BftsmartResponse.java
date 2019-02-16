@@ -1,9 +1,8 @@
 package wg.responses;
 
-import wg.core.Response;
 import wg.workload.Target;
 
-public class BftsmartResponse extends Response {
+public class BftsmartResponse extends Response implements ResponseInterface {
 
 	private final byte[] reply;
 
@@ -13,8 +12,13 @@ public class BftsmartResponse extends Response {
 		this.reply = reply;
 	}
 
-	public byte[] getReply() {
-		return reply;
+	@Override
+	public void print() {
+		// @formatter:off
+		System.out.println("     Number of targets: " + getTargetGroup().length);
+		System.out.println("     Execution time: " + getRTT());
+		System.out.println("     Reply length: " + reply.length);
+		// @formatter:on
 	}
 
 }

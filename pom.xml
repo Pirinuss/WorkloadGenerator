@@ -8,8 +8,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.10</maven.compiler.source>
-		<maven.compiler.target>1.10</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<build>
@@ -37,7 +37,7 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>wg.core.Controller</mainClass>
+									<mainClass>wg.App</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
@@ -48,13 +48,14 @@
 	</build>
 
 	<dependencies>
-
+	
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
 
+		<!-- Logger-Start -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -75,6 +76,12 @@
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>2.6.2</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.4.0</version>
+		</dependency>
+		<!-- Logger-End -->
 
 		<dependency>
 			<groupId>commons-cli</groupId>
@@ -100,21 +107,11 @@
 			<version>4.5.7</version>
 		</dependency>
 
-		<!-- BFT-SMART -->
+		<!-- BFT-SMART-Start-->
 		<dependency>
 			<groupId>bftsmart</groupId>
 			<artifactId>library</artifactId>
 			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>1.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -131,6 +128,7 @@
 			<artifactId>core</artifactId>
 			<version>0.1.4</version>
 		</dependency>
+		<!-- BFT-SMART-End -->
 
 	</dependencies>
 

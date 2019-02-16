@@ -1,4 +1,4 @@
-package wg.core;
+package wg.Execution;
 
 public class WorkloadExecutionException extends Exception {
 

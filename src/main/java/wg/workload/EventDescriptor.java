@@ -1,5 +1,7 @@
 package wg.workload;
 
+import wg.requests.Request;
+
 public class EventDescriptor implements Comparable<EventDescriptor> {
 
 	private final String eventID;

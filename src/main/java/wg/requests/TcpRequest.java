@@ -7,23 +7,19 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.Callable;
 
-import wg.core.Response;
-import wg.core.WorkloadExecutionException;
-import wg.responses.TcpUdpResponse;
-import wg.workload.ProtocolType;
-import wg.workload.Request;
+import wg.Execution.WorkloadExecutionException;
+import wg.responses.Response;
+import wg.responses.TcpResponse;
 import wg.workload.Target;
 
-public class TcpRequest extends Request implements RequestInterface {
+public class TcpRequest extends Request implements Callable<Response[]> {
 
 	private final String content;
 	private Socket[] clients;
 
-	public TcpRequest(String requestName, ProtocolType protocol,
-			long numberOfClients, String content) {
-
-		super(requestName, protocol, numberOfClients);
+	public TcpRequest(long numberOfClients, String content) {
 
 		if (content == null) {
 			throw new IllegalArgumentException("Content must not be null!");
@@ -37,15 +33,16 @@ public class TcpRequest extends Request implements RequestInterface {
 	}
 
 	@Override
-	public Response[] execute(Target[] targets)
-			throws WorkloadExecutionException {
+	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length * targets.length];
+		Response[] responses = new Response[clients.length
+				* getTargets().length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < targets.length; j++) {
-				responses[index] = executeSingleRequest(clients[i], targets[j]);
+			for (int j = 0; j < getTargets().length; j++) {
+				responses[index] = executeSingleRequest(clients[i],
+						getTargets()[j]);
 				index++;
 			}
 		}
@@ -78,7 +75,7 @@ public class TcpRequest extends Request implements RequestInterface {
 					"Error while executing TCP request!", e);
 		}
 		long endTime = System.currentTimeMillis();
-		return new TcpUdpResponse(startTime, endTime, target, responseContent);
+		return new TcpResponse(startTime, endTime, target, responseContent);
 	}
 
 }

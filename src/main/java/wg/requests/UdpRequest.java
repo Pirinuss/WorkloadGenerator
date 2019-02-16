@@ -6,23 +6,24 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.Callable;
 
-import wg.core.Response;
-import wg.core.WorkloadExecutionException;
-import wg.responses.TcpUdpResponse;
-import wg.workload.ProtocolType;
-import wg.workload.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import wg.Execution.WorkloadExecutionException;
+import wg.responses.Response;
+import wg.responses.UdpResponse;
 import wg.workload.Target;
 
-public class UdpRequest extends Request implements RequestInterface {
+public class UdpRequest extends Request implements Callable<Response[]> {
+
+	private static final Logger log = LoggerFactory.getLogger(UdpRequest.class);
 
 	private final String content;
 	private DatagramSocket[] clients;
 
-	public UdpRequest(String requestName, ProtocolType protocol,
-			long numberOfClients, String content) {
-
-		super(requestName, protocol, numberOfClients);
+	public UdpRequest(long numberOfClients, String content) {
 
 		if (content == null) {
 			throw new IllegalArgumentException("Content must not be null!");
@@ -34,21 +35,22 @@ public class UdpRequest extends Request implements RequestInterface {
 			try {
 				clients[i] = new DatagramSocket();
 			} catch (SocketException e) {
-				// ignore
+				log.error(e.getMessage());
 			}
 		}
 	}
 
 	@Override
-	public Response[] execute(Target[] targets)
-			throws WorkloadExecutionException {
+	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length * targets.length];
+		Response[] responses = new Response[clients.length
+				* getTargets().length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < targets.length; j++) {
-				responses[index] = executeSingleRequest(clients[i], targets[j]);
+			for (int j = 0; j < getTargets().length; j++) {
+				responses[index] = executeSingleRequest(clients[i],
+						getTargets()[j]);
 				index++;
 			}
 		}
@@ -88,7 +90,7 @@ public class UdpRequest extends Request implements RequestInterface {
 			throw new WorkloadExecutionException(
 					"Error while executing UDP request!", e);
 		}
-		return new TcpUdpResponse(startTime, endTime, target, responseContent);
+		return new UdpResponse(startTime, endTime, target, responseContent);
 	}
 
 }

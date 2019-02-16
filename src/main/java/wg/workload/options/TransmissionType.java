@@ -2,14 +2,14 @@ package wg.workload.options;
 
 public enum TransmissionType {
 
-	PARALLEL, SEQUENTIELL;
+	PARALLEL, SEQUENTIAL;
 
 	public static TransmissionType parseString(String identifier) {
-		switch (identifier) {
-		case "parallel":
+		switch (identifier.toUpperCase()) {
+		case "PARALLEL":
 			return PARALLEL;
-		case "sequentiell":
-			return SEQUENTIELL;
+		case "SEQUENTIAL":
+			return SEQUENTIAL;
 		default:
 			throw new IllegalArgumentException(
 					"Unknown identifier! " + identifier);

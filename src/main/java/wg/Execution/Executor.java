@@ -1,4 +1,4 @@
-package wg.core;
+package wg.Execution;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,25 +10,29 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wg.result.EventResult;
-import wg.result.WorkloadResult;
+import wg.requests.Request;
+import wg.responses.Response;
 import wg.workload.EventDescriptor;
 import wg.workload.Frame;
-import wg.workload.Request;
 import wg.workload.Target;
 import wg.workload.Workload;
 import wg.workload.options.FrequencyMode;
 import wg.workload.options.FrequencyOption;
 import wg.workload.options.RequestsOption;
+import wg.workload.options.TransmissionType;
 
 public class Executor {
 
 	private static final int CORE_MULTIPLICATOR = 2;
 	/** Specifies the request execution frequency in milliseconds. */
-	private static final int EXECUTION_FREQUENCY = 1;
+	private static final int EXECUTION_FREQUENCY = 10;
+	/**
+	 * Specifies the frequency of the completion check for sequential
+	 * transmission
+	 */
+	private static final int CHECK_FOR_COMPLETION_FREQUENCY = 5;
 
-	private ExecutorService exeService;
-	private final ArrayList<EventDescriptor> executedEvents = new ArrayList<EventDescriptor>();
+	private final ExecutorService exeService;
 	private static final Logger log = LoggerFactory.getLogger(Executor.class);
 
 	public Executor() {
@@ -52,13 +56,13 @@ public class Executor {
 		Frame[] frames = workload.getSchedule().getFrames();
 
 		for (int i = 0; i < frames.length; i++) {
+			long startTime = System.currentTimeMillis();
 			ArrayList<Response> responses = executeFrame(frames[i]);
+			long endTime = System.currentTimeMillis();
 			for (int j = 0; j < responses.size(); j++) {
-				EventDescriptor event = executedEvents.get(j);
-				Response response = responses.get(j);
-				EventResult eventResult = new EventResult(event, response, j);
-				result.addResponse(frames[i], eventResult);
+				result.addResponse(frames[i], responses.get(j));
 			}
+			result.addTimes(frames[i], startTime, endTime);
 		}
 
 		exeService.shutdown();
@@ -101,11 +105,21 @@ public class Executor {
 						frame.getOptions().getRequestsOption(), s);
 				for (int r = 0; r < repetitions; r++) {
 					long dif = System.currentTimeMillis() - startTime;
-					log.error("Event: " + nextEvent.getEventID()
-							+ " ausgef�hrt um: " + dif);
+					log.debug("Event: " + nextEvent.getEventID()
+							+ " executed at: " + dif);
 
-//					Future<Response[]> response = executeEvent(nextEvent);
-//					futures.add(response);
+					Future<Response[]> response = executeEvent(nextEvent);
+					futures.add(response);
+					if (frame.getOptions()
+							.getTransmissionType() == TransmissionType.SEQUENTIAL) {
+						while (!response.isDone()) {
+							try {
+								Thread.sleep(CHECK_FOR_COMPLETION_FREQUENCY);
+							} catch (InterruptedException ignore) {
+								log.error(ignore.getMessage());
+							}
+						}
+					}
 				}
 				index++;
 			}
@@ -116,12 +130,11 @@ public class Executor {
 
 	private Future<Response[]> executeEvent(EventDescriptor currentEvent) {
 
-		Request request = currentEvent.getRequest();
 		Target[] targets = currentEvent.getTargets();
+		Request request = currentEvent.getRequest();
+		request.setTargets(targets);
 
-		executedEvents.add(currentEvent);
-		Future<Response[]> response = exeService
-				.submit(new Event(targets, request));
+		Future<Response[]> response = exeService.submit(request);
 
 		return response;
 	}
@@ -196,7 +209,8 @@ public class Executor {
 	 * @return The filled array of responses
 	 * @throws WorkloadExecutionException
 	 */
-	private ArrayList<Response> parseResponses(ArrayList<Future<Response[]>> futures)
+	private ArrayList<Response> parseResponses(
+			ArrayList<Future<Response[]>> futures)
 			throws WorkloadExecutionException {
 		ArrayList<Response> responses = new ArrayList<Response>();
 		for (int i = 0; i < futures.size(); i++) {
@@ -210,7 +224,7 @@ public class Executor {
 						"Error while executing task!", e);
 			}
 			for (int j = 0; j < eventResponses.length; j++) {
-				responses.add(eventResponses[i]);
+				responses.add(eventResponses[j]);
 			}
 		}
 		return responses;

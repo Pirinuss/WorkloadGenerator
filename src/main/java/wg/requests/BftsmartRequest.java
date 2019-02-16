@@ -7,19 +7,18 @@ import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bftsmart.tom.ServiceProxy;
-import wg.core.Response;
-import wg.core.WorkloadExecutionException;
+import wg.Execution.WorkloadExecutionException;
 import wg.responses.BftsmartResponse;
-import wg.workload.ProtocolType;
-import wg.workload.Request;
+import wg.responses.Response;
 import wg.workload.Target;
 
-public class BftsmartRequest extends Request implements RequestInterface {
+public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(BftsmartRequest.class);
@@ -34,10 +33,8 @@ public class BftsmartRequest extends Request implements RequestInterface {
 	 */
 	private static final int BFTSMaRt_TIMEOUT = 20;
 
-	public BftsmartRequest(String requestName, ProtocolType protocol,
-			long numberOfClients, BftsmartCommand command, String type) {
-
-		super(requestName, protocol, numberOfClients);
+	public BftsmartRequest(long numberOfClients, BftsmartCommand command,
+			String type) {
 
 		if (command == null) {
 			throw new IllegalArgumentException("Command must not be null!");
@@ -54,22 +51,40 @@ public class BftsmartRequest extends Request implements RequestInterface {
 		this.type = type;
 
 		this.clients = new ServiceProxy[(int) numberOfClients];
-//		for (int i = 0; i < numberOfClients; i++) {
-//			clients[i] = new ServiceProxy(i);
-//			clients[i].setInvokeTimeout(BFTSMaRt_TIMEOUT);
-//		}
+		// for (int i = 0; i < numberOfClients; i++) {
+		// clients[i] = new ServiceProxy(i);
+		// clients[i].setInvokeTimeout(BFTSMaRt_TIMEOUT);
+		// }
+	}
+
+	private void setBftsmartHosts(Target[] targets)
+			throws WorkloadExecutionException {
+		try {
+			FileWriter fw = new FileWriter("config/hosts.config");
+			BufferedWriter bw = new BufferedWriter(fw);
+			for (int j = 0; j < targets.length; j++) {
+				bw.write(j + " ");
+				bw.write(InetAddress.getByName(targets[j].getServerName())
+						.getHostAddress() + " ");
+				bw.write(String.valueOf(targets[j].getPort()));
+				bw.newLine();
+			}
+			bw.close();
+		} catch (IOException e) {
+			throw new WorkloadExecutionException(
+					"Error while setting BFTSMaRt hosts!", e);
+		}
 	}
 
 	@Override
-	public Response[] execute(Target[] targets)
-			throws WorkloadExecutionException {
+	public Response[] call() throws WorkloadExecutionException {
 
-		setBftsmartHosts(targets);
+		setBftsmartHosts(getTargets());
 
 		Response[] responses = new Response[clients.length];
 
 		for (int i = 0; i < clients.length; i++) {
-			responses[i] = executeSinlgeRequest(clients[i], targets);
+			responses[i] = executeSinlgeRequest(clients[i], getTargets());
 		}
 
 		return responses;
@@ -87,7 +102,6 @@ public class BftsmartRequest extends Request implements RequestInterface {
 				reply = executeObjectStreamRequest(client);
 			}
 		} catch (RuntimeException e) {
-			client.close();
 			throw new WorkloadExecutionException(
 					"Error while executing BFTSMaRt request!", e);
 		}
@@ -141,25 +155,6 @@ public class BftsmartRequest extends Request implements RequestInterface {
 			reply = serviceProxy.invokeUnordered(content);
 		}
 		return reply;
-	}
-
-	private void setBftsmartHosts(Target[] targets)
-			throws WorkloadExecutionException {
-		try {
-			FileWriter fw = new FileWriter("config/hosts.config");
-			BufferedWriter bw = new BufferedWriter(fw);
-			for (int j = 0; j < targets.length; j++) {
-				bw.write(j + " ");
-				bw.write(InetAddress.getByName(targets[j].getServerName())
-						.getHostAddress() + " ");
-				bw.write(String.valueOf(targets[j].getPort()));
-				bw.newLine();
-			}
-			bw.close();
-		} catch (IOException e) {
-			throw new WorkloadExecutionException(
-					"Error while setting BFTSMaRt hosts!", e);
-		}
 	}
 
 }

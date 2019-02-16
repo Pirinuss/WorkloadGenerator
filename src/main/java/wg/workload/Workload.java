@@ -3,6 +3,8 @@ package wg.workload;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import wg.requests.Request;
+
 public class Workload {
 
 	private final HashMap<String, Target[]> targets;

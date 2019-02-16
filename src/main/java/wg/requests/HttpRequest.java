@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.Callable;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -16,14 +17,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
-import wg.core.Response;
-import wg.core.WorkloadExecutionException;
+import wg.Execution.WorkloadExecutionException;
 import wg.responses.HttpResponseObject;
-import wg.workload.ProtocolType;
-import wg.workload.Request;
+import wg.responses.Response;
 import wg.workload.Target;
 
-public class HttpRequest extends Request implements RequestInterface {
+public class HttpRequest extends Request implements Callable<Response[]> {
 
 	private static final String USER_AGENT = "Mozilla/5.0";
 	/**
@@ -35,11 +34,8 @@ public class HttpRequest extends Request implements RequestInterface {
 	private final String content;
 	private final CloseableHttpClient[] clients;
 
-	public HttpRequest(String requestName, ProtocolType protocol,
-			long numberOfClients, HttpMethodType method, String resourcePath,
-			String content) {
-
-		super(requestName, protocol, numberOfClients);
+	public HttpRequest(long numberOfClients, HttpMethodType method,
+			String resourcePath, String content) {
 
 		if (method == null) {
 			throw new IllegalArgumentException("Method must not be null!");
@@ -66,15 +62,16 @@ public class HttpRequest extends Request implements RequestInterface {
 	}
 
 	@Override
-	public Response[] execute(Target[] targets)
-			throws WorkloadExecutionException {
+	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length * targets.length];
+		Response[] responses = new Response[clients.length
+				* getTargets().length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < targets.length; j++) {
-				responses[index] = executeSingleRequest(clients[i], targets[j]);
+			for (int j = 0; j < getTargets().length; j++) {
+				responses[index] = executeSingleRequest(clients[i],
+						getTargets()[j]);
 				index++;
 			}
 		}

@@ -3,17 +3,20 @@ package wg.requests;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import wg.core.Response;
-import wg.core.WorkloadExecutionException;
+import wg.Execution.WorkloadExecutionException;
 import wg.responses.FtpResponse;
-import wg.workload.ProtocolType;
-import wg.workload.Request;
+import wg.responses.Response;
 import wg.workload.Target;
 
-public class FtpRequest extends Request implements RequestInterface {
+public class FtpRequest extends Request implements Callable<Response[]> {
+
+	private static final Logger log = LoggerFactory.getLogger(FtpRequest.class);
 
 	private final FtpMethodType method;
 	private final String localResource;
@@ -22,11 +25,15 @@ public class FtpRequest extends Request implements RequestInterface {
 	private final String password;
 	private FTPClient[] clients;
 
-	public FtpRequest(String requestName, ProtocolType protocol,
-			long numberOfClients, FtpMethodType method, String localResource,
-			String remoteResource, String username, String password) {
+	/**
+	 * The time (in milliseconds) a FTP client will wait for responses before
+	 * returning null
+	 */
+	private static final int TIMEOUT = 20;
 
-		super(requestName, protocol, numberOfClients);
+	public FtpRequest(long numberOfClients, FtpMethodType method,
+			String localResource, String remoteResource, String username,
+			String password) {
 
 		if (method == null) {
 			throw new IllegalArgumentException("Method must not be null!");
@@ -50,20 +57,23 @@ public class FtpRequest extends Request implements RequestInterface {
 
 		this.clients = new FTPClient[(int) numberOfClients];
 		for (int i = 0; i < numberOfClients; i++) {
+			FTPClient client = new FTPClient();
+			client.setDefaultTimeout(TIMEOUT);
 			clients[i] = new FTPClient();
 		}
 	}
 
 	@Override
-	public Response[] execute(Target[] targets)
-			throws WorkloadExecutionException {
+	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length * targets.length];
+		Response[] responses = new Response[clients.length
+				* getTargets().length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < targets.length; j++) {
-				responses[index] = executeSingleRequest(clients[i], targets[j]);
+			for (int j = 0; j < getTargets().length; j++) {
+				responses[index] = executeSingleRequest(clients[i],
+						getTargets()[j]);
 				index++;
 			}
 		}
@@ -95,9 +105,11 @@ public class FtpRequest extends Request implements RequestInterface {
 			client.logout();
 			client.disconnect();
 		} catch (IOException e) {
+			log.error(e.getMessage());
 			throw new WorkloadExecutionException(
 					"Error while executing FTP request!", e);
 		}
+
 		long endTime = System.currentTimeMillis();
 		return new FtpResponse(startTime, endTime, target, replyCode);
 	}

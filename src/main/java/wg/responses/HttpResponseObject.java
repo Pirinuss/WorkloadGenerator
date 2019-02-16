@@ -2,10 +2,9 @@ package wg.responses;
 
 import org.apache.http.HttpResponse;
 
-import wg.core.Response;
 import wg.workload.Target;
 
-public class HttpResponseObject extends Response {
+public class HttpResponseObject extends Response implements ResponseInterface {
 
 	private final HttpResponse response;
 
@@ -15,8 +14,14 @@ public class HttpResponseObject extends Response {
 		this.response = response;
 	}
 
-	public HttpResponse getResponse() {
-		return response;
+	@Override
+	public void print() {
+		// @formatter:off
+		System.out.println("     Target: " + getTargetGroup()[0].getServerName());
+		System.out.println("     Execution time: " + getRTT());
+		System.out.println("     Response code: " + response.getStatusLine());
+		System.out.println("     Response length: " + response.getEntity().getContentLength());
+		// @formatter:on
 	}
 
 }
