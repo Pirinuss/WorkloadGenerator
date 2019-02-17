@@ -8,6 +8,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.Callable;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,15 +24,18 @@ public class UdpRequest extends Request implements Callable<Response[]> {
 	private final String content;
 	private DatagramSocket[] clients;
 
-	public UdpRequest(long numberOfClients, String content) {
+	public UdpRequest(JSONObject object) {
+		
+		super(object);
 
+		String content = (String) object.get("content");
 		if (content == null) {
 			throw new IllegalArgumentException("Content must not be null!");
 		}
 		this.content = content;
 
-		this.clients = new DatagramSocket[(int) numberOfClients];
-		for (int i = 0; i < numberOfClients; i++) {
+		this.clients = new DatagramSocket[(int) getNumberOfClients()];
+		for (int i = 0; i < getNumberOfClients(); i++) {
 			try {
 				clients[i] = new DatagramSocket();
 			} catch (SocketException e) {

@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.util.concurrent.Callable;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,19 +38,20 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 	 */
 	private static final int BFTSMaRt_TIMEOUT = 20;
 
-	public BftsmartRequest(long numberOfClients, BftsmartCommand command,
-			String type, String clientType) {
+	public BftsmartRequest(JSONObject object) {
 
-		if (numberOfClients < 1) {
-			throw new IllegalArgumentException("At least one client required!");
-		}
-		this.numberOfClients = numberOfClients;
+		super(object);
 
-		if (command == null) {
+		// Command specification
+		JSONObject commandObj = (JSONObject) object.get("command");
+		if (commandObj == null) {
 			throw new IllegalArgumentException("Command must not be null!");
 		}
+		BftsmartCommand command = new BftsmartCommand(commandObj);
 		this.command = command;
 
+		// Type
+		String type = (String) object.get("type");
 		if (type == null) {
 			throw new IllegalArgumentException("Type must not be null!");
 		}
@@ -59,6 +61,13 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 		}
 		this.type = type;
 
+		// Client specification
+		JSONObject clientObj = (JSONObject) object.get("client");
+		if (clientObj == null) {
+			throw new IllegalArgumentException(
+					"Client specification must not be null!");
+		}
+		String clientType = (String) clientObj.get("type");
 		if (clientType == null || (!clientType.equals("asynchron")
 				&& !clientType.equals("synchron"))) {
 			log.error("Invalid BFTSMaRt client type");
@@ -66,6 +75,17 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 		}
 		this.isSynch = clientType.equals("synchron");
 
+		long numberOfClients = 1;
+		if (clientObj.get("numberOfClients") != null) {
+			numberOfClients = (long) clientObj.get("numberOfClients");
+			if (numberOfClients < 1) {
+				throw new IllegalArgumentException(
+						"At least one client required!");
+			}
+		}
+		this.numberOfClients = numberOfClients;
+
+		// Initialize clients
 		if (isSynch) {
 			this.synchClients = new ServiceProxy[(int) numberOfClients];
 			this.asynchClients = null;

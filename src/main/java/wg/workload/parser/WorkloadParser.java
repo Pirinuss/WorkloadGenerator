@@ -12,12 +12,8 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wg.requests.BftsmartCommand;
-import wg.requests.BftsmartCommandType;
 import wg.requests.BftsmartRequest;
-import wg.requests.FtpMethodType;
 import wg.requests.FtpRequest;
-import wg.requests.HttpMethodType;
 import wg.requests.HttpRequest;
 import wg.requests.Request;
 import wg.requests.TcpRequest;
@@ -25,7 +21,6 @@ import wg.requests.UdpRequest;
 import wg.workload.EventDescriptor;
 import wg.workload.Frame;
 import wg.workload.GrowthType;
-import wg.workload.ProtocolType;
 import wg.workload.Schedule;
 import wg.workload.Target;
 import wg.workload.Workload;
@@ -146,6 +141,32 @@ public class WorkloadParser {
 		}
 
 		return requestMap;
+	}
+
+	private Request getSpecificRequest(JSONObject requestContent)
+			throws WorkloadParserException {
+
+		String protocol = (String) requestContent.get("protocol");
+		if (protocol == null) {
+			throw new IllegalArgumentException("Protocol must not be null!");
+		}
+
+		switch (protocol.toLowerCase()) {
+
+		case "http":
+			return new HttpRequest(requestContent);
+		case "ftp":
+			return new FtpRequest(requestContent);
+		case "tcp":
+			return new TcpRequest(requestContent);
+		case "udp":
+			return new UdpRequest(requestContent);
+		case "bftsmart":
+			return new BftsmartRequest(requestContent);
+		default:
+			throw new IllegalArgumentException("Unknown protocol");
+		}
+
 	}
 
 	private Schedule parseSchedule(JSONObject jo,
@@ -359,215 +380,6 @@ public class WorkloadParser {
 		}
 
 		return frequencyOption;
-	}
-
-	private Request getSpecificRequest(JSONObject requestContent)
-			throws WorkloadParserException {
-
-		long numberOfClients = 1;
-		if (requestContent.get("numberOfClients") != null) {
-			numberOfClients = (long) requestContent.get("numberOfClients");
-		}
-
-		String protocol = (String) requestContent.get("protocol");
-		if (protocol == null) {
-			log.error("Protocol not found in JSON input");
-			throw new IllegalArgumentException(
-					"Protocol not found in JSON input!");
-		}
-
-		ProtocolType protocolType = ProtocolType.fromString(protocol);
-		switch (protocolType) {
-
-		case HTTP:
-			return createHttpRequest(requestContent, numberOfClients);
-		case FTP:
-			return createFtpRequest(requestContent, numberOfClients);
-		case TCP:
-			return createTcpRequest(requestContent, numberOfClients);
-		case UDP:
-			return createUdpRequest(requestContent, numberOfClients);
-		case BFTSMaRt:
-			return createBftsmartRequest(requestContent);
-		default:
-			return null;
-		}
-
-	}
-
-	private Request createHttpRequest(JSONObject requestContent,
-			long numberOfClients) throws WorkloadParserException {
-
-		String resourcePath = (String) requestContent.get("resourcePath");
-		String content = (String) requestContent.get("content");
-
-		String methodTypeName = (String) requestContent.get("method");
-		if (methodTypeName == null) {
-			log.error("HTTP method not found in JSON input");
-			throw new IllegalArgumentException(
-					"HTTP method not found in JSON input!");
-		}
-		HttpMethodType methodType = HttpMethodType.fromString(methodTypeName);
-
-		return new HttpRequest(numberOfClients, methodType, resourcePath,
-				content);
-	}
-
-	private Request createFtpRequest(JSONObject requestContent,
-			long numberOfClients) throws WorkloadParserException {
-
-		String localResource = (String) requestContent.get("localResource");
-		String remoteResource = (String) requestContent.get("remoteResource");
-		String username = (String) requestContent.get("username");
-		String password = (String) requestContent.get("password");
-
-		String methodTypeName = (String) requestContent.get("method");
-		if (methodTypeName == null) {
-			log.error("Method not found in JSON input");
-			throw new IllegalArgumentException(
-					"Method not found in JSON input!");
-		}
-		FtpMethodType methodType = FtpMethodType.fromString(methodTypeName);
-
-		return new FtpRequest(numberOfClients, methodType, localResource,
-				remoteResource, username, password);
-	}
-
-	private Request createTcpRequest(JSONObject requestContent,
-			long numberOfClients) {
-
-		String content = (String) requestContent.get("content");
-		return new TcpRequest(numberOfClients, content);
-	}
-
-	private Request createUdpRequest(JSONObject requestContent,
-			long numberOfClients) {
-
-		String content = (String) requestContent.get("content");
-		return new UdpRequest(numberOfClients, content);
-	}
-
-	private Request createBftsmartRequest(JSONObject requestContent)
-			throws WorkloadParserException {
-
-		JSONObject clientObj = (JSONObject) requestContent.get("client");
-		if (clientObj == null) {
-			log.error("No BFTSMaRt client specification found");
-			throw new IllegalArgumentException(
-					"No BFTSMaRt client specification found!");
-		}
-		String clientType = (String) clientObj.get("type");
-		long numberOfClients = 1;
-		if (clientObj.get("numberOfClients") != null) {
-			numberOfClients = (long) clientObj.get("numberOfClients");
-		}
-
-		JSONObject command = (JSONObject) requestContent.get("command");
-		if (command == null) {
-			log.error("No BFTSMaRt command specification found");
-			throw new IllegalArgumentException(
-					"No BFTSMaRt command specification found!");
-		}
-		BftsmartCommand bftsmartCommand = parseBFTSMaRtCommand(command);
-
-		String type = (String) requestContent.get("type");
-
-		return new BftsmartRequest(numberOfClients, bftsmartCommand, type,
-				clientType);
-	}
-
-	private BftsmartCommand parseBFTSMaRtCommand(JSONObject command) {
-
-		String type = (String) command.get("type");
-		if (type == null) {
-			log.error("BFTSMaRt content type not found in JSON input");
-			throw new IllegalArgumentException(
-					"BFTSMaRt content type not found in JSON input!");
-		}
-		BftsmartCommandType commandType = BftsmartCommandType.fromString(type);
-
-		String content = (String) command.get("content");
-		Object[] objects = null;
-
-		if (commandType == BftsmartCommandType.BYTE_OBJECT_STREAM) {
-			String[] params = content.split(",");
-			if (params.length == 0) {
-				log.error("Invalid BFTSMaRt content");
-				throw new IllegalArgumentException("Invalid BFTSMaRt content!");
-			}
-			objects = new Object[params.length];
-			for (int i = 0; i < params.length; i++) {
-				String[] param = params[i].split(":");
-				if (param.length != 2) {
-					log.error("Invalid BFTSMaRt content");
-					throw new IllegalArgumentException(
-							"Invalid BFTSMaRt content!");
-				}
-				String id = param[0];
-				String identifier = param[1];
-				if (command.get(id) == null) {
-					log.error("No parameter found for BFTSMaRt content " + id);
-					throw new IllegalArgumentException(
-							"No parameter found for BFTSMaRt content! " + id);
-				}
-				try {
-					objects[i] = getObject(identifier,
-							command.get(id).toString());
-				} catch (NumberFormatException e) {
-					log.error(e.getMessage());
-					throw new IllegalArgumentException(
-							"Invalid parameter for BFTSMaRt content! " + id);
-				}
-			}
-		}
-		return new BftsmartCommand(commandType, content, objects);
-	}
-
-	private static Object getObject(String identifier, String stringParam) {
-		Object object;
-		switch (identifier.toUpperCase()) {
-		case "BOOLEAN":
-			if (!stringParam.toUpperCase().equals("TRUE")
-					&& !stringParam.toUpperCase().equals("FALSE")) {
-				log.error("Invalid parameter");
-				throw new IllegalArgumentException("Invalid parameter!");
-			}
-			object = Boolean.valueOf(stringParam);
-			break;
-		case "CHAR":
-			if (stringParam.length() != 1) {
-				log.error("Invalid parameter");
-				throw new IllegalArgumentException("Invalid parameter!");
-			}
-			object = Character.valueOf(stringParam.charAt(0));
-			break;
-		case "BYTE":
-			object = Byte.valueOf(stringParam);
-			break;
-		case "SHORT":
-			object = Short.valueOf(stringParam);
-			break;
-		case "INT":
-			object = Integer.valueOf(stringParam);
-			break;
-		case "LONG":
-			object = Long.valueOf(stringParam);
-			break;
-		case "FLOAT":
-			object = Float.valueOf(stringParam);
-			break;
-		case "DOUBLE":
-			object = Double.valueOf(stringParam);
-			break;
-		case "STRING":
-			object = String.valueOf(stringParam);
-			break;
-		default:
-			log.error("Unknown identifier" + identifier);
-			throw new IllegalArgumentException(
-					"Unknown identifier" + identifier);
-		}
-		return object;
 	}
 
 }

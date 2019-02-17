@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,32 +32,45 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 	 */
 	private static final int TIMEOUT = 20;
 
-	public FtpRequest(long numberOfClients, FtpMethodType method,
-			String localResource, String remoteResource, String username,
-			String password) {
+	public FtpRequest(JSONObject object) {
 
+		super(object);
+
+		String method = (String) object.get("method");
 		if (method == null) {
 			throw new IllegalArgumentException("Method must not be null!");
 		}
-		this.method = method;
+		FtpMethodType methodType = FtpMethodType.fromString(method);
+		this.method = methodType;
 
+		String localResource = (String) object.get("localResource");
 		if (localResource == null) {
 			throw new IllegalArgumentException(
-					"Local resource must not be null");
+					"Local resource must not be null!");
 		}
 		this.localResource = localResource;
 
+		String remoteResource = (String) object.get("remoteResource");
 		if (remoteResource == null) {
 			throw new IllegalArgumentException(
-					"Remote resource must not be null");
+					"Remote resource must not be null!");
 		}
 		this.remoteResource = remoteResource;
 
+		String username = (String) object.get("username");
+		if (username == null) {
+			username = "";
+		}
 		this.username = username;
+
+		String password = (String) object.get("password");
+		if (password == null) {
+			password = "";
+		}
 		this.password = password;
 
-		this.clients = new FTPClient[(int) numberOfClients];
-		for (int i = 0; i < numberOfClients; i++) {
+		this.clients = new FTPClient[(int) getNumberOfClients()];
+		for (int i = 0; i < getNumberOfClients(); i++) {
 			FTPClient client = new FTPClient();
 			client.setDefaultTimeout(TIMEOUT);
 			clients[i] = new FTPClient();

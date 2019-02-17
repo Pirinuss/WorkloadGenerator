@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.Callable;
 
+import org.json.simple.JSONObject;
+
 import wg.Execution.WorkloadExecutionException;
 import wg.responses.Response;
 import wg.responses.TcpResponse;
@@ -19,15 +21,19 @@ public class TcpRequest extends Request implements Callable<Response[]> {
 	private final String content;
 	private Socket[] clients;
 
-	public TcpRequest(long numberOfClients, String content) {
+	public TcpRequest(JSONObject object) {
+		
+		super(object);
 
+		String content = (String) object.get("content");
 		if (content == null) {
 			throw new IllegalArgumentException("Content must not be null!");
 		}
 		this.content = content;
 
-		this.clients = new Socket[(int) numberOfClients];
-		for (int i = 0; i < numberOfClients; i++) {
+		
+		this.clients = new Socket[(int) getNumberOfClients()];
+		for (int i = 0; i < getNumberOfClients(); i++) {
 			clients[i] = new Socket();
 		}
 	}

@@ -1078,3 +1078,36 @@ java.lang.InterruptedException
 2019-02-17 10:59:34,963 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006
 2019-02-17 10:59:35,414 INFO wg.Execution.Executor [main] Event: event1 executed at: 449
 2019-02-17 10:59:35,415 INFO wg.Execution.Executor [main] Event: event1 executed at: 450
+2019-02-17 21:20:27,876 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:20:27,903 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 21:20:28,610 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 21:20:29,621 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 0
+2019-02-17 21:20:29,629 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 21:20:30,631 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 1
+2019-02-17 21:20:30,657 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 21:20:38,598 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:20:40,275 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-02-17 21:20:40,778 INFO wg.Execution.Executor [main] Event: event1 executed at: 501
+2019-02-17 21:20:40,779 INFO wg.Execution.Executor [main] Event: event1 executed at: 502
+2019-02-17 21:20:40,780 INFO wg.Execution.Executor [main] Event: event1 executed at: 503
+2019-02-17 21:22:33,975 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:22:35,588 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003
+2019-02-17 21:22:36,090 INFO wg.Execution.Executor [main] Event: event1 executed at: 501
+2019-02-17 21:22:36,091 INFO wg.Execution.Executor [main] Event: event1 executed at: 502
+2019-02-17 21:22:36,093 INFO wg.Execution.Executor [main] Event: event1 executed at: 504
+2019-02-17 21:28:28,900 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:28:28,921 ERROR wg.workload.parser.WorkloadParser [main] Unknown protocol
+2019-02-17 21:30:07,445 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:30:09,180 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003
+2019-02-17 21:30:09,690 INFO wg.Execution.Executor [main] Event: event1 executed at: 507
+2019-02-17 21:30:09,691 INFO wg.Execution.Executor [main] Event: event1 executed at: 508
+2019-02-17 21:30:09,692 INFO wg.Execution.Executor [main] Event: event1 executed at: 509
+2019-02-17 21:30:47,700 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:30:48,264 ERROR wg.workload.parser.WorkloadParser [main] Method must not be null!
+2019-02-17 21:31:04,849 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:31:05,432 ERROR wg.workload.parser.WorkloadParser [main] Local resource must not be null!
+2019-02-17 21:33:00,183 INFO wg.App [main] Start Workload Generator
+2019-02-17 21:33:01,808 INFO wg.Execution.Executor [main] Event: event1 executed at: 1000
+2019-02-17 21:33:02,315 INFO wg.Execution.Executor [main] Event: event1 executed at: 506
+2019-02-17 21:33:02,316 INFO wg.Execution.Executor [main] Event: event1 executed at: 507
+2019-02-17 21:33:02,317 INFO wg.Execution.Executor [main] Event: event1 executed at: 508

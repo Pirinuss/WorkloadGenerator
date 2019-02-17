@@ -16,6 +16,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.json.simple.JSONObject;
 
 import wg.Execution.WorkloadExecutionException;
 import wg.responses.HttpResponseObject;
@@ -34,26 +35,31 @@ public class HttpRequest extends Request implements Callable<Response[]> {
 	private final String content;
 	private final CloseableHttpClient[] clients;
 
-	public HttpRequest(long numberOfClients, HttpMethodType method,
-			String resourcePath, String content) {
+	public HttpRequest(JSONObject object) {
 
-		if (method == null) {
+		super(object);
+
+		String methodTypeName = (String) object.get("method");
+		if (methodTypeName == null) {
 			throw new IllegalArgumentException("Method must not be null!");
 		}
-		this.method = method;
+		HttpMethodType methodType = HttpMethodType.fromString(methodTypeName);
+		this.method = methodType;
 
+		String resourcePath = (String) object.get("resourcePath");
 		if (resourcePath == null) {
 			resourcePath = "";
 		}
 		this.resourcePath = resourcePath;
 
+		String content = (String) object.get("content");
 		if (content == null) {
 			content = "";
 		}
 		this.content = content;
 
-		this.clients = new CloseableHttpClient[(int) numberOfClients];
-		for (int i = 0; i < numberOfClients; i++) {
+		this.clients = new CloseableHttpClient[(int) getNumberOfClients()];
+		for (int i = 0; i < getNumberOfClients(); i++) {
 			PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 			cm.setMaxTotal(MAX_CONNECTIONS_PER_HTTPCLIENT);
 			clients[i] = HttpClients.custom().setConnectionManager(cm).build();

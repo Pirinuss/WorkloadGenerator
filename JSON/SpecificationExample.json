@@ -2,13 +2,13 @@
   "targetGroups": [
         {"id":"group1",
          "targets": [
-             {"server":"www.httpbin.org", "port":8080}
+             {"server":"httpbin.org", "port":8080}
          ]
         },
         {"id":"group2",
          "targets": [
              {"server":"www.bridge2ppm.de"},
-             {"server":"www.httpbin.org", "port":8080}
+             {"server":"httpbin.org", "port":8080}
          ]
         },
         {"id":"group3",
