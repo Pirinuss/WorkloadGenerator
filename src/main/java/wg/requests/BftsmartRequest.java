@@ -12,6 +12,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bftsmart.tom.AsynchServiceProxy;
 import bftsmart.tom.ServiceProxy;
 import wg.Execution.WorkloadExecutionException;
 import wg.responses.BftsmartResponse;
@@ -25,7 +26,10 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 	private final BftsmartCommand command;
 	private final String type;
-	private final ServiceProxy[] clients;
+	private final boolean isSynch;
+	private final long numberOfClients;
+	private final ServiceProxy[] synchClients;
+	private final AsynchServiceProxy[] asynchClients;
 
 	/**
 	 * The time (in seconds) a BFTSMaRt client will wait for responses before
@@ -34,7 +38,12 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 	private static final int BFTSMaRt_TIMEOUT = 20;
 
 	public BftsmartRequest(long numberOfClients, BftsmartCommand command,
-			String type) {
+			String type, String clientType) {
+
+		if (numberOfClients < 1) {
+			throw new IllegalArgumentException("At least one client required!");
+		}
+		this.numberOfClients = numberOfClients;
 
 		if (command == null) {
 			throw new IllegalArgumentException("Command must not be null!");
@@ -50,11 +59,29 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 		}
 		this.type = type;
 
-		this.clients = new ServiceProxy[(int) numberOfClients];
-		// for (int i = 0; i < numberOfClients; i++) {
-		// clients[i] = new ServiceProxy(i);
-		// clients[i].setInvokeTimeout(BFTSMaRt_TIMEOUT);
-		// }
+		if (clientType == null || (!clientType.equals("asynchron")
+				&& !clientType.equals("synchron"))) {
+			log.error("Invalid BFTSMaRt client type");
+			throw new IllegalArgumentException("Invalid BFTSMaRt client type!");
+		}
+		this.isSynch = clientType.equals("synchron");
+
+		if (isSynch) {
+			this.synchClients = new ServiceProxy[(int) numberOfClients];
+			this.asynchClients = null;
+			for (int i = 0; i < numberOfClients; i++) {
+				synchClients[i] = new ServiceProxy(i);
+				synchClients[i].setInvokeTimeout(BFTSMaRt_TIMEOUT);
+			}
+		} else {
+			this.asynchClients = new AsynchServiceProxy[(int) numberOfClients];
+			this.synchClients = null;
+			for (int j = 0; j < numberOfClients; j++) {
+				asynchClients[j] = new AsynchServiceProxy(j);
+				asynchClients[j].setInvokeTimeout(BFTSMaRt_TIMEOUT);
+			}
+		}
+
 	}
 
 	private void setBftsmartHosts(Target[] targets)
@@ -81,25 +108,25 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 		setBftsmartHosts(getTargets());
 
-		Response[] responses = new Response[clients.length];
+		Response[] responses = new Response[(int) numberOfClients];
 
-		for (int i = 0; i < clients.length; i++) {
-			responses[i] = executeSinlgeRequest(clients[i], getTargets());
+		for (int i = 0; i < numberOfClients; i++) {
+			responses[i] = executeSinlgeRequest(i, getTargets());
 		}
 
 		return responses;
 	}
 
-	private Response executeSinlgeRequest(ServiceProxy client, Target[] targets)
+	private Response executeSinlgeRequest(int clientIndex, Target[] targets)
 			throws WorkloadExecutionException {
 		byte[] reply = null;
 
 		long startTime = System.currentTimeMillis();
 		try {
 			if (command.getType() == BftsmartCommandType.BYTE_ARRAY) {
-				reply = executeByteArrayRequest(client);
+				reply = executeByteArrayRequest(clientIndex);
 			} else {
-				reply = executeObjectStreamRequest(client);
+				reply = executeObjectStreamRequest(clientIndex);
 			}
 		} catch (RuntimeException e) {
 			throw new WorkloadExecutionException(
@@ -109,13 +136,13 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 		if (reply == null || reply.length == 0) {
 			log.error("No reply received for BFTSMaRt request!");
-			return null;
+			reply = null;
 		}
 		return new BftsmartResponse(startTime, endTime, targets, reply);
 
 	}
 
-	private byte[] executeObjectStreamRequest(ServiceProxy serviceProxy)
+	private byte[] executeObjectStreamRequest(int clientIndex)
 			throws WorkloadExecutionException {
 
 		byte[] reply;
@@ -138,21 +165,41 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 		}
 
 		if (type.toUpperCase().equals("ORDERED")) {
-			reply = serviceProxy.invokeOrdered(byteOut.toByteArray());
+			if (isSynch) {
+				reply = synchClients[clientIndex]
+						.invokeOrdered(byteOut.toByteArray());
+			} else {
+				reply = asynchClients[clientIndex]
+						.invokeOrdered(byteOut.toByteArray());
+			}
 		} else {
-			reply = serviceProxy.invokeUnordered(byteOut.toByteArray());
+			if (isSynch) {
+				reply = synchClients[clientIndex]
+						.invokeUnordered(byteOut.toByteArray());
+			} else {
+				reply = asynchClients[clientIndex]
+						.invokeUnordered(byteOut.toByteArray());
+			}
 		}
 
 		return reply;
 	}
 
-	private byte[] executeByteArrayRequest(ServiceProxy serviceProxy) {
+	private byte[] executeByteArrayRequest(int clientIndex) {
 		byte[] reply;
 		byte[] content = command.getContent().getBytes();
 		if (type.toUpperCase().equals("ORDERED")) {
-			reply = serviceProxy.invokeOrdered(content);
+			if (isSynch) {
+				reply = synchClients[clientIndex].invokeOrdered(content);
+			} else {
+				reply = asynchClients[clientIndex].invokeOrdered(content);
+			}
 		} else {
-			reply = serviceProxy.invokeUnordered(content);
+			if (isSynch) {
+				reply = synchClients[clientIndex].invokeUnordered(content);
+			} else {
+				reply = asynchClients[clientIndex].invokeUnordered(content);
+			}
 		}
 		return reply;
 	}

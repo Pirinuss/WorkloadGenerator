@@ -388,7 +388,7 @@ public class WorkloadParser {
 		case UDP:
 			return createUdpRequest(requestContent, numberOfClients);
 		case BFTSMaRt:
-			return createBftsmartRequest(requestContent, numberOfClients);
+			return createBftsmartRequest(requestContent);
 		default:
 			return null;
 		}
@@ -403,9 +403,9 @@ public class WorkloadParser {
 
 		String methodTypeName = (String) requestContent.get("method");
 		if (methodTypeName == null) {
-			log.error("Method not found in JSON input");
+			log.error("HTTP method not found in JSON input");
 			throw new IllegalArgumentException(
-					"Method not found in JSON input!");
+					"HTTP method not found in JSON input!");
 		}
 		HttpMethodType methodType = HttpMethodType.fromString(methodTypeName);
 
@@ -447,14 +447,33 @@ public class WorkloadParser {
 		return new UdpRequest(numberOfClients, content);
 	}
 
-	private Request createBftsmartRequest(JSONObject requestContent,
-			long numberOfClients) throws WorkloadParserException {
+	private Request createBftsmartRequest(JSONObject requestContent)
+			throws WorkloadParserException {
+
+		JSONObject clientObj = (JSONObject) requestContent.get("client");
+		if (clientObj == null) {
+			log.error("No BFTSMaRt client specification found");
+			throw new IllegalArgumentException(
+					"No BFTSMaRt client specification found!");
+		}
+		String clientType = (String) clientObj.get("type");
+		long numberOfClients = 1;
+		if (clientObj.get("numberOfClients") != null) {
+			numberOfClients = (long) clientObj.get("numberOfClients");
+		}
 
 		JSONObject command = (JSONObject) requestContent.get("command");
+		if (command == null) {
+			log.error("No BFTSMaRt command specification found");
+			throw new IllegalArgumentException(
+					"No BFTSMaRt command specification found!");
+		}
 		BftsmartCommand bftsmartCommand = parseBFTSMaRtCommand(command);
+
 		String type = (String) requestContent.get("type");
 
-		return new BftsmartRequest(numberOfClients, bftsmartCommand, type);
+		return new BftsmartRequest(numberOfClients, bftsmartCommand, type,
+				clientType);
 	}
 
 	private BftsmartCommand parseBFTSMaRtCommand(JSONObject command) {

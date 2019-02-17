@@ -12,34 +12,42 @@
   "requests": [
         {"id":"request1",
          "protocol":"BFTSMaRt",
+         "client": {
+            "type":"synchron",
+            "numberOfClients":1 
+         },
          "command": {
             "type":"ByteArray",
-            "content":"1integer"
-            },
+            "content":"1000"
+         },
          "type":"ordered",
-         "numberOfClients":2,
+         "numberOfClients":3,
          },
          {"id":"request2",
           "protocol":"BFTSMaRt",
+          "client": {
+            "type":"asynchron",
+            "numberOfClients":1  
+          },
           "command": {
              "type":"ByteObjectStream",
              "content":"01:Int",
              "01":1
-            },
+          },
           "type":"ordered",
-          }
+         }
   ],
   "schedule": {
         "frames": [
             { "id":"frame1", 
               "events": [
-                  {"id":"event1", "request":"request1", "target":"group1", "time":1000}
+                  {"id":"event1", "request":"request2", "target":"group1", "time":1000}
               ],
              "options": {
                   "transmissionType":"parallel",
-                  "iterations":3,
-                  "requestsNumber": {"growth": "linear", "linearGrowthFactor":2},
-                  "frequency": {"mode":"increase", "factor": 1}
+                  "iterations":2,
+                  "requestsNumber": {"growth":"linear", "linearGrowthFactor":2},
+                  "frequency": {"mode":"increase", "factor": 3}
               }
             }
         ]

@@ -179,3 +179,902 @@
 2019-02-16 10:59:14,120 DEBUG wg.Execution.Executor [main] Event: event1 executed at: 504
 2019-02-16 10:59:14,121 DEBUG wg.Execution.Executor [main] Event: event1 executed at: 505
 2019-02-16 10:59:14,122 DEBUG wg.Execution.Executor [main] Event: event1 executed at: 506
+2019-02-17 09:38:48,470 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:38:48,523 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:38:48,543 DEBUG io.netty.util.internal.logging.InternalLoggerFactory [main] Using SLF4J as the default logging framework
+2019-02-17 09:38:48,545 DEBUG io.netty.util.internal.InternalThreadLocalMap [main] -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+2019-02-17 09:38:48,545 DEBUG io.netty.util.internal.InternalThreadLocalMap [main] -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+2019-02-17 09:38:48,558 DEBUG io.netty.channel.MultithreadEventLoopGroup [main] -Dio.netty.eventLoopThreads: 8
+2019-02-17 09:38:48,589 DEBUG io.netty.channel.nio.NioEventLoop [main] -Dio.netty.noKeySetOptimization: false
+2019-02-17 09:38:48,589 DEBUG io.netty.channel.nio.NioEventLoop [main] -Dio.netty.selectorAutoRebuildThreshold: 512
+2019-02-17 09:38:48,610 DEBUG io.netty.util.internal.PlatformDependent [main] Platform: Windows
+2019-02-17 09:38:48,612 DEBUG io.netty.util.internal.PlatformDependent0 [main] -Dio.netty.noUnsafe: false
+2019-02-17 09:38:48,613 DEBUG io.netty.util.internal.PlatformDependent0 [main] Java version: 11
+2019-02-17 09:38:48,615 DEBUG io.netty.util.internal.PlatformDependent0 [main] sun.misc.Unsafe.theUnsafe: available
+2019-02-17 09:38:48,616 DEBUG io.netty.util.internal.PlatformDependent0 [main] sun.misc.Unsafe.copyMemory: available
+2019-02-17 09:38:48,617 DEBUG io.netty.util.internal.PlatformDependent0 [main] java.nio.Buffer.address: available
+2019-02-17 09:38:48,618 DEBUG io.netty.util.internal.PlatformDependent0 [main] direct buffer constructor: unavailable
+java.lang.UnsupportedOperationException: Reflective setAccessible(true) disabled
+	at io.netty.util.internal.ReflectionUtil.trySetAccessible(ReflectionUtil.java:31) ~[netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent0$4.run(PlatformDependent0.java:224) ~[netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[?:?]
+	at io.netty.util.internal.PlatformDependent0.<clinit>(PlatformDependent0.java:218) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.isAndroid(PlatformDependent.java:212) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.<clinit>(PlatformDependent.java:80) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.newTaskQueue(NioEventLoop.java:268) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.<init>(SingleThreadEventExecutor.java:165) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.SingleThreadEventLoop.<init>(SingleThreadEventLoop.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.<init>(NioEventLoop.java:134) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:127) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:36) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:84) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.MultithreadEventLoopGroup.<init>(MultithreadEventLoopGroup.java:52) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:87) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:82) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:63) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:51) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:43) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide.<init>(NettyClientServerCommunicationSystemClientSide.java:96) [library-1.2.jar:?]
+	at bftsmart.communication.client.CommunicationSystemClientSideFactory.getCommunicationSystemClientSide(CommunicationSystemClientSideFactory.java:28) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.startsCS(TOMSender.java:89) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.init(TOMSender.java:80) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:108) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:73) [library-1.2.jar:?]
+	at wg.requests.BftsmartRequest.<init>(BftsmartRequest.java:55) [classes/:?]
+	at wg.workload.parser.WorkloadParser.createBftsmartRequest(WorkloadParser.java:457) [classes/:?]
+	at wg.workload.parser.WorkloadParser.getSpecificRequest(WorkloadParser.java:391) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseRequests(WorkloadParser.java:136) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseWorkload(WorkloadParser.java:49) [classes/:?]
+	at wg.App.main(App.java:43) [classes/:?]
+2019-02-17 09:38:48,625 DEBUG io.netty.util.internal.PlatformDependent0 [main] java.nio.Bits.unaligned: available, true
+2019-02-17 09:38:48,627 DEBUG io.netty.util.internal.PlatformDependent0 [main] jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable
+java.lang.IllegalAccessException: class io.netty.util.internal.PlatformDependent0$6 cannot access class jdk.internal.misc.Unsafe (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @146587a2
+	at java.base/jdk.internal.reflect.Reflection.newIllegalAccessException(Reflection.java:361) ~[?:?]
+	at java.base/java.lang.reflect.AccessibleObject.checkAccess(AccessibleObject.java:591) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:558) ~[?:?]
+	at io.netty.util.internal.PlatformDependent0$6.run(PlatformDependent0.java:334) ~[netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[?:?]
+	at io.netty.util.internal.PlatformDependent0.<clinit>(PlatformDependent0.java:325) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.isAndroid(PlatformDependent.java:212) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.<clinit>(PlatformDependent.java:80) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.newTaskQueue(NioEventLoop.java:268) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.<init>(SingleThreadEventExecutor.java:165) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.SingleThreadEventLoop.<init>(SingleThreadEventLoop.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.<init>(NioEventLoop.java:134) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:127) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:36) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:84) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.MultithreadEventLoopGroup.<init>(MultithreadEventLoopGroup.java:52) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:87) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:82) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:63) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:51) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:43) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide.<init>(NettyClientServerCommunicationSystemClientSide.java:96) [library-1.2.jar:?]
+	at bftsmart.communication.client.CommunicationSystemClientSideFactory.getCommunicationSystemClientSide(CommunicationSystemClientSideFactory.java:28) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.startsCS(TOMSender.java:89) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.init(TOMSender.java:80) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:108) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:73) [library-1.2.jar:?]
+	at wg.requests.BftsmartRequest.<init>(BftsmartRequest.java:55) [classes/:?]
+	at wg.workload.parser.WorkloadParser.createBftsmartRequest(WorkloadParser.java:457) [classes/:?]
+	at wg.workload.parser.WorkloadParser.getSpecificRequest(WorkloadParser.java:391) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseRequests(WorkloadParser.java:136) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseWorkload(WorkloadParser.java:49) [classes/:?]
+	at wg.App.main(App.java:43) [classes/:?]
+2019-02-17 09:38:48,628 DEBUG io.netty.util.internal.PlatformDependent0 [main] java.nio.DirectByteBuffer.<init>(long, int): unavailable
+2019-02-17 09:38:48,629 DEBUG io.netty.util.internal.PlatformDependent [main] sun.misc.Unsafe: available
+2019-02-17 09:38:48,630 DEBUG io.netty.util.internal.PlatformDependent [main] maxDirectMemory: 4271898624 bytes (maybe)
+2019-02-17 09:38:48,630 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.tmpdir: C:\Users\Marc\AppData\Local\Temp (java.io.tmpdir)
+2019-02-17 09:38:48,631 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2019-02-17 09:38:48,632 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.maxDirectMemory: -1 bytes
+2019-02-17 09:38:48,632 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.uninitializedArrayAllocationThreshold: -1
+2019-02-17 09:38:48,633 DEBUG io.netty.util.internal.CleanerJava9 [main] java.nio.ByteBuffer.cleaner(): available
+2019-02-17 09:38:48,633 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.noPreferDirect: false
+2019-02-17 09:38:48,641 DEBUG io.netty.util.internal.PlatformDependent [main] org.jctools-core.MpscChunkedArrayQueue: available
+2019-02-17 09:38:48,971 DEBUG io.netty.channel.DefaultChannelId [main] -Dio.netty.processId: 12076 (auto-detected)
+2019-02-17 09:38:48,976 DEBUG io.netty.util.NetUtil [main] -Djava.net.preferIPv4Stack: false
+2019-02-17 09:38:48,976 DEBUG io.netty.util.NetUtil [main] -Djava.net.preferIPv6Addresses: false
+2019-02-17 09:38:49,088 DEBUG io.netty.util.NetUtil [main] Loopback interface: lo (Software Loopback Interface 1, 127.0.0.1)
+2019-02-17 09:38:49,089 DEBUG io.netty.util.NetUtil [main] Failed to get SOMAXCONN from sysctl and file \proc\sys\net\core\somaxconn. Default: 200
+2019-02-17 09:38:49,185 DEBUG io.netty.channel.DefaultChannelId [main] -Dio.netty.machineId: 94:65:9c:ff:fe:2d:2f:3f (auto-detected)
+2019-02-17 09:38:49,202 DEBUG io.netty.util.ResourceLeakDetector [main] -Dio.netty.leakDetection.level: simple
+2019-02-17 09:38:49,202 DEBUG io.netty.util.ResourceLeakDetector [main] -Dio.netty.leakDetection.targetRecords: 4
+2019-02-17 09:38:49,235 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.numHeapArenas: 8
+2019-02-17 09:38:49,235 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.numDirectArenas: 8
+2019-02-17 09:38:49,235 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.pageSize: 8192
+2019-02-17 09:38:49,235 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.maxOrder: 11
+2019-02-17 09:38:49,235 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.chunkSize: 16777216
+2019-02-17 09:38:49,237 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.tinyCacheSize: 512
+2019-02-17 09:38:49,237 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.smallCacheSize: 256
+2019-02-17 09:38:49,238 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.normalCacheSize: 64
+2019-02-17 09:38:49,238 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+2019-02-17 09:38:49,238 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.cacheTrimInterval: 8192
+2019-02-17 09:38:49,238 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.useCacheForAllThreads: true
+2019-02-17 09:38:49,248 DEBUG io.netty.buffer.ByteBufUtil [main] -Dio.netty.allocator.type: pooled
+2019-02-17 09:38:49,248 DEBUG io.netty.buffer.ByteBufUtil [main] -Dio.netty.threadLocalDirectBufferSize: 0
+2019-02-17 09:38:49,248 DEBUG io.netty.buffer.ByteBufUtil [main] -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2019-02-17 09:38:49,258 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:38:49,264 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-1] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,279 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:38:49,294 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-2] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,296 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:38:49,304 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:38:49,339 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-3] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,341 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:38:49,363 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:38:49,371 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-4] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,373 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:38:49,397 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:38:49,400 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:38:49,419 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:38:49,419 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-1] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,421 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:38:49,428 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-2] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,431 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:38:49,436 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:38:49,442 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-3] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,445 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:38:49,448 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:38:49,455 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-4] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:38:49,459 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:38:49,464 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:38:50,651 DEBUG wg.Execution.Executor [main] Event: event1 executed at: 1004
+2019-02-17 09:38:50,672 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [pool-2-thread-1] All channel operations completed or timed out
+2019-02-17 09:38:50,674 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [pool-2-thread-1] Sending request from 0 with sequence number 0 to [0, 1, 2, 3]
+2019-02-17 09:38:50,690 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.maxCapacityPerThread: 4096
+2019-02-17 09:38:50,690 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.maxSharedCapacityFactor: 2
+2019-02-17 09:38:50,691 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.linkCapacity: 16
+2019-02-17 09:38:50,691 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.ratio: 8
+2019-02-17 09:38:50,697 DEBUG bftsmart.tom.ServiceProxy [pool-2-thread-1] Sending request (ORDERED_REQUEST) with reqId=0
+2019-02-17 09:38:50,697 DEBUG bftsmart.tom.ServiceProxy [pool-2-thread-1] Expected number of matching replies: 3
+2019-02-17 09:38:50,717 DEBUG io.netty.buffer.AbstractByteBuf [nioEventLoopGroup-2-4] -Dio.netty.buffer.checkAccessible: true
+2019-02-17 09:38:50,718 DEBUG io.netty.buffer.AbstractByteBuf [nioEventLoopGroup-2-4] -Dio.netty.buffer.checkBounds: true
+2019-02-17 09:38:50,721 DEBUG io.netty.util.ResourceLeakDetectorFactory [nioEventLoopGroup-2-4] Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@4e7014df
+2019-02-17 09:38:50,750 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] 2 channel operations remaining to complete
+2019-02-17 09:38:50,795 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] 1 channel operations remaining to complete
+2019-02-17 09:38:50,815 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] 0 channel operations remaining to complete
+2019-02-17 09:38:50,815 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] -1 channel operations remaining to complete
+2019-02-17 09:38:51,432 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-1] Decoded reply from 0 with sequence number 0
+2019-02-17 09:38:51,432 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-3] Decoded reply from 2 with sequence number 0
+2019-02-17 09:38:51,432 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-3] Synchronously received reply from 2 with sequence number 0
+2019-02-17 09:38:51,432 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-1] Synchronously received reply from 0 with sequence number 0
+2019-02-17 09:38:51,432 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-3] Receiving reply from 2 with reqId:0. Putting on pos=2
+2019-02-17 09:38:51,433 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-1] Receiving reply from 0 with reqId:0. Putting on pos=0
+2019-02-17 09:38:51,443 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-2] Decoded reply from 1 with sequence number 0
+2019-02-17 09:38:51,444 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-2] Synchronously received reply from 1 with sequence number 0
+2019-02-17 09:38:51,444 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-2] Receiving reply from 1 with reqId:0. Putting on pos=1
+2019-02-17 09:38:51,446 DEBUG bftsmart.tom.ServiceProxy [pool-2-thread-1] Response extracted = [1:20612058:0]
+2019-02-17 09:40:56,935 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:40:56,961 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:40:56,972 DEBUG io.netty.util.internal.logging.InternalLoggerFactory [main] Using SLF4J as the default logging framework
+2019-02-17 09:40:56,973 DEBUG io.netty.util.internal.InternalThreadLocalMap [main] -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+2019-02-17 09:40:56,974 DEBUG io.netty.util.internal.InternalThreadLocalMap [main] -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+2019-02-17 09:40:56,981 DEBUG io.netty.channel.MultithreadEventLoopGroup [main] -Dio.netty.eventLoopThreads: 8
+2019-02-17 09:40:57,004 DEBUG io.netty.channel.nio.NioEventLoop [main] -Dio.netty.noKeySetOptimization: false
+2019-02-17 09:40:57,004 DEBUG io.netty.channel.nio.NioEventLoop [main] -Dio.netty.selectorAutoRebuildThreshold: 512
+2019-02-17 09:40:57,016 DEBUG io.netty.util.internal.PlatformDependent [main] Platform: Windows
+2019-02-17 09:40:57,018 DEBUG io.netty.util.internal.PlatformDependent0 [main] -Dio.netty.noUnsafe: false
+2019-02-17 09:40:57,018 DEBUG io.netty.util.internal.PlatformDependent0 [main] Java version: 11
+2019-02-17 09:40:57,020 DEBUG io.netty.util.internal.PlatformDependent0 [main] sun.misc.Unsafe.theUnsafe: available
+2019-02-17 09:40:57,021 DEBUG io.netty.util.internal.PlatformDependent0 [main] sun.misc.Unsafe.copyMemory: available
+2019-02-17 09:40:57,022 DEBUG io.netty.util.internal.PlatformDependent0 [main] java.nio.Buffer.address: available
+2019-02-17 09:40:57,022 DEBUG io.netty.util.internal.PlatformDependent0 [main] direct buffer constructor: unavailable
+java.lang.UnsupportedOperationException: Reflective setAccessible(true) disabled
+	at io.netty.util.internal.ReflectionUtil.trySetAccessible(ReflectionUtil.java:31) ~[netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent0$4.run(PlatformDependent0.java:224) ~[netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[?:?]
+	at io.netty.util.internal.PlatformDependent0.<clinit>(PlatformDependent0.java:218) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.isAndroid(PlatformDependent.java:212) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.<clinit>(PlatformDependent.java:80) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.newTaskQueue(NioEventLoop.java:268) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.<init>(SingleThreadEventExecutor.java:165) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.SingleThreadEventLoop.<init>(SingleThreadEventLoop.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.<init>(NioEventLoop.java:134) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:127) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:36) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:84) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.MultithreadEventLoopGroup.<init>(MultithreadEventLoopGroup.java:52) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:87) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:82) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:63) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:51) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:43) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide.<init>(NettyClientServerCommunicationSystemClientSide.java:96) [library-1.2.jar:?]
+	at bftsmart.communication.client.CommunicationSystemClientSideFactory.getCommunicationSystemClientSide(CommunicationSystemClientSideFactory.java:28) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.startsCS(TOMSender.java:89) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.init(TOMSender.java:80) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:108) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:73) [library-1.2.jar:?]
+	at wg.requests.BftsmartRequest.<init>(BftsmartRequest.java:55) [classes/:?]
+	at wg.workload.parser.WorkloadParser.createBftsmartRequest(WorkloadParser.java:457) [classes/:?]
+	at wg.workload.parser.WorkloadParser.getSpecificRequest(WorkloadParser.java:391) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseRequests(WorkloadParser.java:136) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseWorkload(WorkloadParser.java:49) [classes/:?]
+	at wg.App.main(App.java:43) [classes/:?]
+2019-02-17 09:40:57,027 DEBUG io.netty.util.internal.PlatformDependent0 [main] java.nio.Bits.unaligned: available, true
+2019-02-17 09:40:57,028 DEBUG io.netty.util.internal.PlatformDependent0 [main] jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable
+java.lang.IllegalAccessException: class io.netty.util.internal.PlatformDependent0$6 cannot access class jdk.internal.misc.Unsafe (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @146587a2
+	at java.base/jdk.internal.reflect.Reflection.newIllegalAccessException(Reflection.java:361) ~[?:?]
+	at java.base/java.lang.reflect.AccessibleObject.checkAccess(AccessibleObject.java:591) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:558) ~[?:?]
+	at io.netty.util.internal.PlatformDependent0$6.run(PlatformDependent0.java:334) ~[netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[?:?]
+	at io.netty.util.internal.PlatformDependent0.<clinit>(PlatformDependent0.java:325) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.isAndroid(PlatformDependent.java:212) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.internal.PlatformDependent.<clinit>(PlatformDependent.java:80) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.newTaskQueue(NioEventLoop.java:268) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.<init>(SingleThreadEventExecutor.java:165) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.SingleThreadEventLoop.<init>(SingleThreadEventLoop.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoop.<init>(NioEventLoop.java:134) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:127) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.newChild(NioEventLoopGroup.java:36) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:84) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.util.concurrent.MultithreadEventExecutorGroup.<init>(MultithreadEventExecutorGroup.java:58) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.MultithreadEventLoopGroup.<init>(MultithreadEventLoopGroup.java:52) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:87) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:82) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:63) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:51) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at io.netty.channel.nio.NioEventLoopGroup.<init>(NioEventLoopGroup.java:43) [netty-all-4.1.30.Final.jar:4.1.30.Final]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide.<init>(NettyClientServerCommunicationSystemClientSide.java:96) [library-1.2.jar:?]
+	at bftsmart.communication.client.CommunicationSystemClientSideFactory.getCommunicationSystemClientSide(CommunicationSystemClientSideFactory.java:28) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.startsCS(TOMSender.java:89) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.init(TOMSender.java:80) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:108) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.<init>(ServiceProxy.java:73) [library-1.2.jar:?]
+	at wg.requests.BftsmartRequest.<init>(BftsmartRequest.java:55) [classes/:?]
+	at wg.workload.parser.WorkloadParser.createBftsmartRequest(WorkloadParser.java:457) [classes/:?]
+	at wg.workload.parser.WorkloadParser.getSpecificRequest(WorkloadParser.java:391) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseRequests(WorkloadParser.java:136) [classes/:?]
+	at wg.workload.parser.WorkloadParser.parseWorkload(WorkloadParser.java:49) [classes/:?]
+	at wg.App.main(App.java:43) [classes/:?]
+2019-02-17 09:40:57,029 DEBUG io.netty.util.internal.PlatformDependent0 [main] java.nio.DirectByteBuffer.<init>(long, int): unavailable
+2019-02-17 09:40:57,029 DEBUG io.netty.util.internal.PlatformDependent [main] sun.misc.Unsafe: available
+2019-02-17 09:40:57,030 DEBUG io.netty.util.internal.PlatformDependent [main] maxDirectMemory: 4271898624 bytes (maybe)
+2019-02-17 09:40:57,031 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.tmpdir: C:\Users\Marc\AppData\Local\Temp (java.io.tmpdir)
+2019-02-17 09:40:57,031 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2019-02-17 09:40:57,032 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.maxDirectMemory: -1 bytes
+2019-02-17 09:40:57,032 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.uninitializedArrayAllocationThreshold: -1
+2019-02-17 09:40:57,033 DEBUG io.netty.util.internal.CleanerJava9 [main] java.nio.ByteBuffer.cleaner(): available
+2019-02-17 09:40:57,033 DEBUG io.netty.util.internal.PlatformDependent [main] -Dio.netty.noPreferDirect: false
+2019-02-17 09:40:57,040 DEBUG io.netty.util.internal.PlatformDependent [main] org.jctools-core.MpscChunkedArrayQueue: available
+2019-02-17 09:40:57,268 DEBUG io.netty.channel.DefaultChannelId [main] -Dio.netty.processId: 12884 (auto-detected)
+2019-02-17 09:40:57,272 DEBUG io.netty.util.NetUtil [main] -Djava.net.preferIPv4Stack: false
+2019-02-17 09:40:57,272 DEBUG io.netty.util.NetUtil [main] -Djava.net.preferIPv6Addresses: false
+2019-02-17 09:40:57,373 DEBUG io.netty.util.NetUtil [main] Loopback interface: lo (Software Loopback Interface 1, 127.0.0.1)
+2019-02-17 09:40:57,374 DEBUG io.netty.util.NetUtil [main] Failed to get SOMAXCONN from sysctl and file \proc\sys\net\core\somaxconn. Default: 200
+2019-02-17 09:40:57,465 DEBUG io.netty.channel.DefaultChannelId [main] -Dio.netty.machineId: 94:65:9c:ff:fe:2d:2f:3f (auto-detected)
+2019-02-17 09:40:57,485 DEBUG io.netty.util.ResourceLeakDetector [main] -Dio.netty.leakDetection.level: simple
+2019-02-17 09:40:57,487 DEBUG io.netty.util.ResourceLeakDetector [main] -Dio.netty.leakDetection.targetRecords: 4
+2019-02-17 09:40:57,512 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.numHeapArenas: 8
+2019-02-17 09:40:57,512 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.numDirectArenas: 8
+2019-02-17 09:40:57,512 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.pageSize: 8192
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.maxOrder: 11
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.chunkSize: 16777216
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.tinyCacheSize: 512
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.smallCacheSize: 256
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.normalCacheSize: 64
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.cacheTrimInterval: 8192
+2019-02-17 09:40:57,513 DEBUG io.netty.buffer.PooledByteBufAllocator [main] -Dio.netty.allocator.useCacheForAllThreads: true
+2019-02-17 09:40:57,522 DEBUG io.netty.buffer.ByteBufUtil [main] -Dio.netty.allocator.type: pooled
+2019-02-17 09:40:57,522 DEBUG io.netty.buffer.ByteBufUtil [main] -Dio.netty.threadLocalDirectBufferSize: 0
+2019-02-17 09:40:57,522 DEBUG io.netty.buffer.ByteBufUtil [main] -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2019-02-17 09:40:57,533 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:40:57,536 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-1] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,547 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:40:57,553 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:40:57,553 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-2] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,555 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:40:57,564 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-3] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,566 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:40:57,571 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:40:57,579 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:40:57,579 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-4] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,581 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:40:57,584 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:40:57,594 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-1] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,596 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:40:57,595 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:40:57,603 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-2] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,605 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:40:57,603 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:40:57,611 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-3] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,613 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:40:57,613 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:40:57,620 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:40:57,620 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-3-4] new NettyTOMMessageDecoder!!, isClient=true
+2019-02-17 09:40:57,625 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:40:58,635 DEBUG wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-02-17 09:40:58,648 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [pool-2-thread-1] All channel operations completed or timed out
+2019-02-17 09:40:58,650 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [pool-2-thread-1] Sending request from 0 with sequence number 0 to [0, 1, 2, 3]
+2019-02-17 09:40:58,665 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.maxCapacityPerThread: 4096
+2019-02-17 09:40:58,666 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.maxSharedCapacityFactor: 2
+2019-02-17 09:40:58,666 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.linkCapacity: 16
+2019-02-17 09:40:58,667 DEBUG io.netty.util.Recycler [pool-2-thread-1] -Dio.netty.recycler.ratio: 8
+2019-02-17 09:40:58,681 DEBUG bftsmart.tom.ServiceProxy [pool-2-thread-1] Sending request (ORDERED_REQUEST) with reqId=0
+2019-02-17 09:40:58,682 DEBUG bftsmart.tom.ServiceProxy [pool-2-thread-1] Expected number of matching replies: 3
+2019-02-17 09:40:58,701 DEBUG io.netty.buffer.AbstractByteBuf [nioEventLoopGroup-2-3] -Dio.netty.buffer.checkAccessible: true
+2019-02-17 09:40:58,701 DEBUG io.netty.buffer.AbstractByteBuf [nioEventLoopGroup-2-3] -Dio.netty.buffer.checkBounds: true
+2019-02-17 09:40:58,705 DEBUG io.netty.util.ResourceLeakDetectorFactory [nioEventLoopGroup-2-3] Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@4360158e
+2019-02-17 09:40:58,776 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] 2 channel operations remaining to complete
+2019-02-17 09:40:58,777 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] 1 channel operations remaining to complete
+2019-02-17 09:40:58,778 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] 0 channel operations remaining to complete
+2019-02-17 09:40:58,778 DEBUG bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] -1 channel operations remaining to complete
+2019-02-17 09:40:59,045 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-3] Decoded reply from 2 with sequence number 0
+2019-02-17 09:40:59,045 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-3] Synchronously received reply from 2 with sequence number 0
+2019-02-17 09:40:59,045 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-3] Receiving reply from 2 with reqId:0. Putting on pos=2
+2019-02-17 09:40:59,047 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-4] Decoded reply from 3 with sequence number 0
+2019-02-17 09:40:59,048 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-4] Synchronously received reply from 3 with sequence number 0
+2019-02-17 09:40:59,048 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-4] Receiving reply from 3 with reqId:0. Putting on pos=3
+2019-02-17 09:40:59,051 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-2] Decoded reply from 1 with sequence number 0
+2019-02-17 09:40:59,052 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-2] Synchronously received reply from 1 with sequence number 0
+2019-02-17 09:40:59,052 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-2] Receiving reply from 1 with reqId:0. Putting on pos=1
+2019-02-17 09:40:59,054 DEBUG bftsmart.tom.ServiceProxy [pool-2-thread-1] Response extracted = [1:-787728866:0]
+2019-02-17 09:40:59,075 DEBUG bftsmart.communication.client.netty.NettyTOMMessageDecoder [nioEventLoopGroup-2-1] Decoded reply from 0 with sequence number 0
+2019-02-17 09:40:59,075 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-1] Synchronously received reply from 0 with sequence number 0
+2019-02-17 09:40:59,075 DEBUG bftsmart.tom.ServiceProxy [nioEventLoopGroup-2-1] throwing out request: sender=0 reqId=0
+2019-02-17 09:43:18,068 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:43:18,099 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:43:18,653 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:43:18,665 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:43:18,676 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:43:18,678 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:43:18,688 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:43:18,691 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:43:18,701 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:43:18,702 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:43:18,707 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:43:18,723 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:43:18,722 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:43:18,738 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:43:18,738 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:43:18,748 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:43:18,750 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:43:18,756 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:43:18,755 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:45:11,516 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:45:11,543 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:45:12,092 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:45:12,106 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:45:12,112 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:45:12,114 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:45:12,124 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:45:12,123 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:45:12,139 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:45:12,140 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:45:12,144 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:45:12,161 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:45:12,160 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:45:12,170 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:45:12,169 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:45:12,177 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:45:12,181 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:45:12,186 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:45:12,187 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:45:13,199 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-02-17 09:47:49,303 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:47:49,328 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:47:49,879 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:47:49,893 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:47:49,900 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:47:49,901 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:47:49,915 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:47:49,914 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:47:49,924 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:47:49,925 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:47:49,928 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:47:49,941 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:47:49,943 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:47:49,949 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:47:49,950 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:47:49,959 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:47:49,961 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:47:49,967 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:47:49,965 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:47:50,977 INFO wg.Execution.Executor [main] Event: event1 executed at: 1001
+2019-02-17 09:51:15,589 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:51:15,614 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:51:16,128 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:51:16,142 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:51:16,155 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:51:16,156 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:51:16,168 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:51:16,169 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:51:16,178 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:51:16,179 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:51:16,183 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:51:16,197 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:51:16,197 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:51:16,204 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:51:16,203 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:51:16,211 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:51:16,212 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:51:16,217 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:51:16,218 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:51:17,235 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-02-17 09:52:23,394 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:52:23,420 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:52:24,000 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:52:24,012 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:52:24,019 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:52:24,021 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:52:24,031 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:52:24,031 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:52:24,041 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:52:24,042 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:52:24,045 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:52:24,057 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:52:24,059 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:52:24,064 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:52:24,065 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:52:24,070 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:52:24,071 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:52:24,076 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:52:24,077 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:52:25,086 INFO wg.Execution.Executor [main] Event: event1 executed at: 1004
+2019-02-17 09:54:46,322 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:54:46,345 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:54:46,896 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:54:46,909 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:54:46,915 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:54:46,917 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:54:46,927 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:54:46,929 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:54:46,941 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:54:46,942 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:54:46,945 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:54:46,963 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:54:46,964 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:54:46,979 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:54:46,981 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:54:46,989 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:54:46,992 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:54:46,998 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:54:46,997 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:54:48,010 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-02-17 09:56:19,851 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:56:19,876 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:56:20,424 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:56:20,437 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:56:20,444 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:56:20,445 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:56:20,458 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:56:20,459 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:56:20,468 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:56:20,469 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:56:20,472 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:56:20,488 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:56:20,493 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:56:20,509 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:56:20,513 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:56:20,530 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:56:20,540 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:56:20,547 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:56:20,549 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:56:20,556 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:56:20,569 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:56:20,574 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-17 09:56:20,581 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-17 09:56:20,584 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:56:20,592 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-17 09:56:20,594 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:56:20,599 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-17 09:56:20,600 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:56:20,602 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:56:20,628 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-17 09:56:20,627 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:56:20,633 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-17 09:56:20,632 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:56:20,642 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-17 09:56:20,645 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:56:20,656 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-17 09:56:20,660 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:56:21,667 INFO wg.Execution.Executor [main] Event: event1 executed at: 1000
+2019-02-17 09:59:16,253 INFO wg.App [main] Start Workload Generator
+2019-02-17 09:59:16,278 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:59:16,964 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:59:16,979 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 09:59:16,987 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 09:59:16,989 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:59:17,003 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 09:59:17,004 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:59:17,014 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:59:17,016 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 09:59:17,019 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:59:17,038 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 09:59:17,037 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:59:17,047 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:59:17,048 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 09:59:17,058 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 09:59:17,059 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:59:17,070 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 09:59:17,068 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:59:17,074 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:59:17,093 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:59:17,094 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-17 09:59:17,102 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:59:17,107 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-17 09:59:17,193 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-17 09:59:17,195 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:59:17,253 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-17 09:59:17,258 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:59:17,261 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 09:59:17,286 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-17 09:59:17,290 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 09:59:17,313 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-17 09:59:17,315 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 09:59:17,324 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-17 09:59:17,325 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 09:59:17,330 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 09:59:17,331 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-17 09:59:18,347 INFO wg.Execution.Executor [main] Event: event1 executed at: 1010
+2019-02-17 09:59:18,474 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 09:59:18,540 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 09:59:18,639 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 10:00:51,207 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:00:51,230 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:00:51,775 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:00:51,787 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 10:00:51,800 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:00:51,800 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 10:00:51,810 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 10:00:51,812 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:00:51,819 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:00:51,820 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 10:00:51,823 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:00:51,833 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:00:51,835 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 10:00:51,841 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:00:51,842 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 10:00:51,847 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:00:51,848 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 10:00:51,854 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:00:51,855 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 10:00:51,857 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:00:51,871 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-17 10:00:51,870 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:00:51,877 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:00:51,879 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-17 10:00:51,885 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-17 10:00:51,887 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:00:51,893 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-17 10:00:51,894 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:00:51,895 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:00:51,907 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:00:51,909 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-17 10:00:51,915 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-17 10:00:51,913 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:00:51,921 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-17 10:00:51,922 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:00:51,927 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:00:51,928 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-17 10:00:52,946 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-02-17 10:01:12,980 INFO bftsmart.tom.ServiceProxy [pool-2-thread-1] ###################TIMEOUT#######################
+2019-02-17 10:01:12,982 INFO bftsmart.tom.ServiceProxy [pool-2-thread-1] Reply timeout for reqId=0, Replies received: 0
+2019-02-17 10:01:12,991 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 10:01:13,079 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 10:01:13,155 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 10:02:27,161 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:02:27,184 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:27,749 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:27,763 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 10:02:27,775 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:27,776 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 10:02:27,790 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 10:02:27,789 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:27,800 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:27,802 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 10:02:27,804 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:27,823 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 10:02:27,821 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:27,837 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 10:02:27,838 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:27,851 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 10:02:27,853 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:27,866 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:27,867 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 10:02:27,870 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:27,885 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:27,886 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-17 10:02:27,895 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-17 10:02:27,893 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:27,901 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-17 10:02:27,902 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:27,934 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-17 10:02:27,936 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:27,940 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:27,955 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-17 10:02:27,957 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:27,960 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:27,961 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-17 10:02:27,968 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-17 10:02:27,969 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:27,973 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:27,976 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-17 10:02:28,989 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007
+2019-02-17 10:02:29,093 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 10:02:29,225 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 10:02:29,275 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-17 10:02:59,016 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:02:59,045 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:59,569 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:59,583 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 10:02:59,592 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:59,593 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 10:02:59,603 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 10:02:59,602 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:59,613 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:59,614 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 10:02:59,617 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:59,629 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 10:02:59,628 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:59,639 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 10:02:59,640 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:59,644 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 10:02:59,647 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:59,651 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:59,652 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 10:02:59,657 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:59,673 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-17 10:02:59,673 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:59,681 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-17 10:02:59,680 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:59,691 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-17 10:02:59,692 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:59,698 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-17 10:02:59,697 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:59,700 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:02:59,717 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-17 10:02:59,717 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:02:59,724 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-17 10:02:59,722 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:02:59,733 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-17 10:02:59,735 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:02:59,740 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:02:59,742 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-17 10:03:00,757 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007
+2019-02-17 10:07:43,247 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:07:43,261 ERROR wg.workload.parser.WorkloadParser [main] Method not found in JSON input
+2019-02-17 10:07:43,262 ERROR wg.workload.parser.WorkloadParser [main] Method not found in JSON input!
+2019-02-17 10:09:10,917 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:09:10,942 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:09:11,513 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:09:11,526 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 10:09:11,534 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 10:09:11,533 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:09:11,550 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 10:09:11,552 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:09:11,560 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:09:11,561 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 10:09:11,565 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:09:11,580 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 10:09:11,580 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:09:11,588 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:09:11,589 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 10:09:11,596 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 10:09:11,598 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:09:11,604 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 10:09:11,604 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:09:11,607 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:09:11,626 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-17 10:09:11,627 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:09:11,633 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:09:11,637 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-17 10:09:11,645 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-17 10:09:11,647 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:09:11,653 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-17 10:09:11,657 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:09:11,658 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:09:11,677 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-17 10:09:11,678 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:09:11,685 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-17 10:09:11,692 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:09:11,700 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-17 10:09:11,702 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:09:11,709 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-17 10:09:11,708 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:09:12,725 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-02-17 10:09:13,064 INFO wg.Execution.Executor [main] Event: event1 executed at: 337
+2019-02-17 10:09:13,065 INFO wg.Execution.Executor [main] Event: event1 executed at: 338
+2019-02-17 10:47:32,074 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:49:30,169 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:49:30,183 ERROR wg.workload.parser.WorkloadParser [main] No BFTSMaRt client specification found
+2019-02-17 10:49:30,183 ERROR wg.workload.parser.WorkloadParser [main] No BFTSMaRt client specification found!
+2019-02-17 10:51:09,408 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:51:09,422 ERROR wg.workload.parser.WorkloadParser [main] No BFTSMaRt client specification found
+2019-02-17 10:51:09,422 ERROR wg.workload.parser.WorkloadParser [main] No BFTSMaRt client specification found!
+2019-02-17 10:52:10,668 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:52:10,684 ERROR wg.workload.parser.WorkloadParser [main] No BFTSMaRt client specification found
+2019-02-17 10:52:10,684 ERROR wg.workload.parser.WorkloadParser [main] No BFTSMaRt client specification found!
+2019-02-17 10:53:52,219 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:53:52,261 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:53:52,835 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:53:53,856 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 0
+2019-02-17 10:53:53,890 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:53:54,892 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 1
+2019-02-17 10:53:54,909 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:53:55,911 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 2
+2019-02-17 10:53:55,924 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:53:56,928 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 3
+2019-02-17 10:53:56,938 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:53:56,967 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:53:57,971 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 0
+2019-02-17 10:53:57,982 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:53:58,986 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 1
+2019-02-17 10:53:58,998 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:00,005 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 2
+2019-02-17 10:54:00,018 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:01,022 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 3
+2019-02-17 10:54:01,026 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:54:01,051 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:02,056 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 0
+2019-02-17 10:54:02,065 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:03,077 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 1
+2019-02-17 10:54:03,085 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:03,865 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:04,092 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 2
+2019-02-17 10:54:04,103 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:04,894 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:05,107 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 3
+2019-02-17 10:54:05,111 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:54:05,133 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:05,914 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:06,135 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 0
+2019-02-17 10:54:06,143 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:06,929 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:07,147 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 1
+2019-02-17 10:54:07,154 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:07,972 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:08,157 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 2
+2019-02-17 10:54:08,170 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:08,988 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:09,173 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 3
+2019-02-17 10:54:10,006 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:10,226 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-02-17 10:54:10,568 INFO wg.Execution.Executor [main] Event: event1 executed at: 340
+2019-02-17 10:54:10,569 INFO wg.Execution.Executor [main] Event: event1 executed at: 341
+2019-02-17 10:54:10,573 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [pool-2-thread-2] Interruption while waiting on condition
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2197) ~[?:?]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide$SyncListener.waitForChannels(NettyClientServerCommunicationSystemClientSide.java:558) [library-1.2.jar:?]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide.send(NettyClientServerCommunicationSystemClientSide.java:342) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.TOMulticast(TOMSender.java:124) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.invoke(ServiceProxy.java:255) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.invokeOrdered(ServiceProxy.java:180) [library-1.2.jar:?]
+	at wg.requests.BftsmartRequest.executeObjectStreamRequest(BftsmartRequest.java:173) [classes/:?]
+	at wg.requests.BftsmartRequest.executeSinlgeRequest(BftsmartRequest.java:129) [classes/:?]
+	at wg.requests.BftsmartRequest.call(BftsmartRequest.java:114) [classes/:?]
+	at wg.requests.Request.call(Request.java:9) [classes/:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:834) [?:?]
+2019-02-17 10:54:10,594 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [pool-2-thread-3] Interruption while waiting on condition
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2197) ~[?:?]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide$SyncListener.waitForChannels(NettyClientServerCommunicationSystemClientSide.java:558) [library-1.2.jar:?]
+	at bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide.send(NettyClientServerCommunicationSystemClientSide.java:342) [library-1.2.jar:?]
+	at bftsmart.tom.core.TOMSender.TOMulticast(TOMSender.java:124) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.invoke(ServiceProxy.java:255) [library-1.2.jar:?]
+	at bftsmart.tom.ServiceProxy.invokeOrdered(ServiceProxy.java:180) [library-1.2.jar:?]
+	at wg.requests.BftsmartRequest.executeObjectStreamRequest(BftsmartRequest.java:173) [classes/:?]
+	at wg.requests.BftsmartRequest.executeSinlgeRequest(BftsmartRequest.java:129) [classes/:?]
+	at wg.requests.BftsmartRequest.call(BftsmartRequest.java:114) [classes/:?]
+	at wg.requests.Request.call(Request.java:9) [classes/:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:834) [?:?]
+2019-02-17 10:54:11,024 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:12,056 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:13,079 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:14,094 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:14,872 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:15,110 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:15,901 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:16,137 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:16,919 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:17,148 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:17,936 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:18,159 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:18,982 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:19,175 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:19,996 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:21,013 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:22,031 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:23,061 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:24,086 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:25,100 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:25,878 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:26,116 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:26,905 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:27,142 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:27,925 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:28,154 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:28,941 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:29,168 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:29,987 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:30,182 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:31,001 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:32,018 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:33,039 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:34,064 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:35,093 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:36,106 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:36,884 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:37,121 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:37,909 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:38,147 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:38,928 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:39,158 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:39,946 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:40,174 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:40,992 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:41,186 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:42,006 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:43,022 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:44,043 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:45,068 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:46,096 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:47,111 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:47,889 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:48,125 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:48,914 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:49,151 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:49,932 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:50,162 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:50,951 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:51,177 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:51,997 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:52,190 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:53,011 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:54,027 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:55,048 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:56,072 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:57,101 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:54:58,115 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:54:58,894 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:54:59,129 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:54:59,919 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:55:00,155 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:55:00,935 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:55:01,165 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:55:01,954 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:55:02,180 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:55:02,999 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:55:03,194 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:55:04,016 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:55:05,030 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:55:06,051 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:55:07,075 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-5] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:55:08,105 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-6] re-connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:55:09,119 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-7] re-connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:55:09,897 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] re-connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:55:10,133 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-8] re-connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:59:33,183 INFO wg.App [main] Start Workload Generator
+2019-02-17 10:59:33,209 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:59:33,806 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:59:33,820 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-17 10:59:33,837 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:59:33,838 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-17 10:59:33,854 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-17 10:59:33,855 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:59:33,878 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-17 10:59:33,880 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:59:33,905 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-17 10:59:33,923 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-17 10:59:33,922 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-17 10:59:33,932 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-17 10:59:33,931 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-17 10:59:33,940 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-17 10:59:33,941 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-17 10:59:33,947 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-17 10:59:33,948 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-17 10:59:34,963 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006
+2019-02-17 10:59:35,414 INFO wg.Execution.Executor [main] Event: event1 executed at: 449
+2019-02-17 10:59:35,415 INFO wg.Execution.Executor [main] Event: event1 executed at: 450
