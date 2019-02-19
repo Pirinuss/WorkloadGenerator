@@ -22,7 +22,7 @@ public class TcpRequest extends Request implements Callable<Response[]> {
 	private Socket[] clients;
 
 	public TcpRequest(JSONObject object) {
-		
+
 		super(object);
 
 		String content = (String) object.get("content");
@@ -31,9 +31,8 @@ public class TcpRequest extends Request implements Callable<Response[]> {
 		}
 		this.content = content;
 
-		
-		this.clients = new Socket[(int) getNumberOfClients()];
-		for (int i = 0; i < getNumberOfClients(); i++) {
+		this.clients = new Socket[(int) numberOfClients];
+		for (int i = 0; i < numberOfClients; i++) {
 			clients[i] = new Socket();
 		}
 	}
@@ -41,14 +40,12 @@ public class TcpRequest extends Request implements Callable<Response[]> {
 	@Override
 	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length
-				* getTargets().length];
+		Response[] responses = new Response[clients.length * targets.length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < getTargets().length; j++) {
-				responses[index] = executeSingleRequest(clients[i],
-						getTargets()[j]);
+			for (int j = 0; j < targets.length; j++) {
+				responses[index] = executeSingleRequest(clients[i], targets[j]);
 				index++;
 			}
 		}

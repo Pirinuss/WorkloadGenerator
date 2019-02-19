@@ -2,7 +2,7 @@ package wg.responses;
 
 import wg.workload.Target;
 
-public class TcpResponse extends Response implements ResponseInterface {
+public class TcpResponse extends Response {
 
 	private final String content;
 
@@ -15,7 +15,7 @@ public class TcpResponse extends Response implements ResponseInterface {
 	@Override
 	public void print() {
 		// @formatter:off
-		System.out.println("     Target: " + getTargetGroup()[0].getServerName());
+		System.out.println("     Target: " + targetGroup[0].getServerName());
 		System.out.println("     Execution time: " + getRTT());
 		if (content.length() < 100) {
 			System.out.println("     Response: " + content);

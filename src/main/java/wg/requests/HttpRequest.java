@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.Callable;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -23,7 +22,7 @@ import wg.responses.HttpResponseObject;
 import wg.responses.Response;
 import wg.workload.Target;
 
-public class HttpRequest extends Request implements Callable<Response[]> {
+public class HttpRequest extends Request {
 
 	private static final String USER_AGENT = "Mozilla/5.0";
 	/**
@@ -58,8 +57,8 @@ public class HttpRequest extends Request implements Callable<Response[]> {
 		}
 		this.content = content;
 
-		this.clients = new CloseableHttpClient[(int) getNumberOfClients()];
-		for (int i = 0; i < getNumberOfClients(); i++) {
+		this.clients = new CloseableHttpClient[(int) numberOfClients];
+		for (int i = 0; i < numberOfClients; i++) {
 			PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 			cm.setMaxTotal(MAX_CONNECTIONS_PER_HTTPCLIENT);
 			clients[i] = HttpClients.custom().setConnectionManager(cm).build();
@@ -70,14 +69,12 @@ public class HttpRequest extends Request implements Callable<Response[]> {
 	@Override
 	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length
-				* getTargets().length];
+		Response[] responses = new Response[clients.length * targets.length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < getTargets().length; j++) {
-				responses[index] = executeSingleRequest(clients[i],
-						getTargets()[j]);
+			for (int j = 0; j < targets.length; j++) {
+				responses[index] = executeSingleRequest(clients[i], targets[j]);
 				index++;
 			}
 		}

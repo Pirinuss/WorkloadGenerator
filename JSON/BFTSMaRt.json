@@ -12,22 +12,16 @@
   "requests": [
         {"id":"request1",
          "protocol":"BFTSMaRt",
-         "client": {
-            "type":"synchron",
-            "numberOfClients":1 
-         },
          "command": {
             "type":"ByteArray",
-            "content":"1000"
+            "content":"1"
          },
          "type":"ordered"
          },
          {"id":"request2",
           "protocol":"BFTSMaRt",
-          "client": {
-            "type":"asynchron",
-            "numberOfClients":1  
-          },
+          "clientType":"asynchron",
+          "numberOfClients":3,
           "command": {
              "type":"ByteObjectStream",
              "content":"01:Int",
@@ -44,7 +38,7 @@
               ],
              "options": {
                   "transmissionType":"parallel",
-                  "iterations":2,
+                  "iterations":1,
                   "requestsNumber": {"growth":"linear", "linearGrowthFactor":2},
                   "frequency": {"mode":"increase", "factor": 3}
               }

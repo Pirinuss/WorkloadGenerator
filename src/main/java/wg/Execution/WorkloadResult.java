@@ -40,7 +40,7 @@ public class WorkloadResult {
 				System.out.println(" --- Results per request ---");
 				for (int i = 0; i < frameResults.size(); i++) {
 					Response response = frameResults.get(i);
-					System.out.println("   Request: " + (i+1));
+					System.out.println("   Request: " + (i + 1));
 					if (response == null) {
 						System.out.println("     Failed");
 					} else {
@@ -53,7 +53,8 @@ public class WorkloadResult {
 
 	private void printFrameInfos(Frame frame, ArrayList<Response> value) {
 
-		double exeTime = (double) (endTimes.get(frame) - (double) startTimes.get(frame)) / 1000.0;
+		double exeTime = (double) (endTimes.get(frame)
+				- (double) startTimes.get(frame)) / 1000.0;
 		double averageRttTime = calculateAvgTime(frame, value);
 
 		// @formatter:off

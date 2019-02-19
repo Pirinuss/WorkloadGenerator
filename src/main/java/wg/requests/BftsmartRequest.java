@@ -4,11 +4,10 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,7 @@ import wg.Execution.WorkloadExecutionException;
 import wg.responses.BftsmartResponse;
 import wg.responses.Response;
 import wg.workload.Target;
+import wg.workload.parser.WorkloadParserException;
 
 public class BftsmartRequest extends Request implements Callable<Response[]> {
 
@@ -28,7 +28,6 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 	private final BftsmartCommand command;
 	private final String type;
 	private final boolean isSynch;
-	private final long numberOfClients;
 	private final ServiceProxy[] synchClients;
 	private final AsynchServiceProxy[] asynchClients;
 
@@ -38,7 +37,7 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 	 */
 	private static final int BFTSMaRt_TIMEOUT = 20;
 
-	public BftsmartRequest(JSONObject object) {
+	public BftsmartRequest(JSONObject object) throws WorkloadParserException {
 
 		super(object);
 
@@ -62,28 +61,17 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 		this.type = type;
 
 		// Client specification
-		JSONObject clientObj = (JSONObject) object.get("client");
-		if (clientObj == null) {
-			throw new IllegalArgumentException(
-					"Client specification must not be null!");
-		}
-		String clientType = (String) clientObj.get("type");
-		if (clientType == null || (!clientType.equals("asynchron")
-				&& !clientType.equals("synchron"))) {
-			log.error("Invalid BFTSMaRt client type");
-			throw new IllegalArgumentException("Invalid BFTSMaRt client type!");
-		}
-		this.isSynch = clientType.equals("synchron");
-
-		long numberOfClients = 1;
-		if (clientObj.get("numberOfClients") != null) {
-			numberOfClients = (long) clientObj.get("numberOfClients");
-			if (numberOfClients < 1) {
+		String clientType = (String) object.get("clientType");
+		if (clientType == null) {
+			this.isSynch = true;
+		} else {
+			if (clientType == null || (!clientType.equals("asynchron")
+					&& !clientType.equals("synchron"))) {
 				throw new IllegalArgumentException(
-						"At least one client required!");
+						"Invalid BFTSMaRt client type! " + clientType);
 			}
+			this.isSynch = clientType.equals("synchron");
 		}
-		this.numberOfClients = numberOfClients;
 
 		// Initialize clients
 		if (isSynch) {
@@ -126,12 +114,12 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 	@Override
 	public Response[] call() throws WorkloadExecutionException {
 
-		setBftsmartHosts(getTargets());
+		setBftsmartHosts(targets);
 
 		Response[] responses = new Response[(int) numberOfClients];
 
 		for (int i = 0; i < numberOfClients; i++) {
-			responses[i] = executeSinlgeRequest(i, getTargets());
+			responses[i] = executeSinlgeRequest(i, targets);
 		}
 
 		return responses;
@@ -166,23 +154,7 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 			throws WorkloadExecutionException {
 
 		byte[] reply;
-		Object[] objectsToServer = command.getObjects();
-		ByteArrayOutputStream byteOut;
-		try {
-			byteOut = new ByteArrayOutputStream();
-			ObjectOutput objOut = new ObjectOutputStream(byteOut);
-
-			for (int i = 0; i < objectsToServer.length; i++) {
-				objOut.writeObject(objectsToServer[i]);
-			}
-
-			objOut.flush();
-			byteOut.flush();
-
-		} catch (IOException e) {
-			throw new WorkloadExecutionException(
-					"Error while preparing BFTSMaRt request for sending!", e);
-		}
+		ByteArrayOutputStream byteOut = command.getByteOut();
 
 		if (type.toUpperCase().equals("ORDERED")) {
 			if (isSynch) {
@@ -207,7 +179,7 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 	private byte[] executeByteArrayRequest(int clientIndex) {
 		byte[] reply;
-		byte[] content = command.getContent().getBytes();
+		byte[] content = Base64.encodeBase64(command.getContent().getBytes());
 		if (type.toUpperCase().equals("ORDERED")) {
 			if (isSynch) {
 				reply = synchClients[clientIndex].invokeOrdered(content);
@@ -221,7 +193,7 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 				reply = asynchClients[clientIndex].invokeUnordered(content);
 			}
 		}
-		return reply;
+		return Base64.decodeBase64(reply);
 	}
 
 }

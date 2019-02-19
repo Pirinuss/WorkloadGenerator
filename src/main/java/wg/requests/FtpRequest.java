@@ -69,8 +69,8 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 		}
 		this.password = password;
 
-		this.clients = new FTPClient[(int) getNumberOfClients()];
-		for (int i = 0; i < getNumberOfClients(); i++) {
+		this.clients = new FTPClient[(int) numberOfClients];
+		for (int i = 0; i < numberOfClients; i++) {
 			FTPClient client = new FTPClient();
 			client.setDefaultTimeout(TIMEOUT);
 			clients[i] = new FTPClient();
@@ -80,14 +80,12 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 	@Override
 	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length
-				* getTargets().length];
+		Response[] responses = new Response[clients.length * targets.length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < getTargets().length; j++) {
-				responses[index] = executeSingleRequest(clients[i],
-						getTargets()[j]);
+			for (int j = 0; j < targets.length; j++) {
+				responses[index] = executeSingleRequest(clients[i], targets[j]);
 				index++;
 			}
 		}

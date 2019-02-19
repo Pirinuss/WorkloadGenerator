@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import wg.workload.Target;
 
-public class BftsmartResponse extends Response implements ResponseInterface {
+public class BftsmartResponse extends Response {
 
 	/** If the length of a reply is bigger than this value it won´t get print */
 	private static final int MAX_LENGTH_FOR_PRINT = 100;
@@ -20,7 +20,7 @@ public class BftsmartResponse extends Response implements ResponseInterface {
 	public void print() {
 
 		// @formatter:off
-		System.out.println("     Number of targets: " + getTargetGroup().length);
+		System.out.println("     Number of targets: " + targetGroup.length);
 		System.out.println("     Execution time: " + getRTT());
 		if (reply == null) {
 			System.out.println("     No reply received");

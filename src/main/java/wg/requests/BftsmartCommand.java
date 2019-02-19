@@ -1,15 +1,23 @@
 package wg.requests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+
 import org.json.simple.JSONObject;
+
+import wg.workload.parser.WorkloadParserException;
 
 public class BftsmartCommand {
 
 	private final BftsmartCommandType type;
 	private final String content;
-	private final Object[] objects;
+	private final ByteArrayOutputStream byteOut;
 
-	public BftsmartCommand(JSONObject command) {
+	public BftsmartCommand(JSONObject command) throws WorkloadParserException {
 
+		// Type
 		String type = (String) command.get("type");
 		if (type == null) {
 			throw new IllegalArgumentException(
@@ -18,19 +26,20 @@ public class BftsmartCommand {
 		BftsmartCommandType commandType = BftsmartCommandType.fromString(type);
 		this.type = commandType;
 
+		// Content
 		String content = (String) command.get("content");
 		if (content == null) {
 			throw new IllegalArgumentException("Content must not be null!");
 		}
 		this.content = content;
 
-		Object[] objects = null;
+		// OutputStream
+		ByteArrayOutputStream byteOut = null;
 		if (commandType == BftsmartCommandType.BYTE_OBJECT_STREAM) {
 			String[] params = content.split(",");
 			if (params.length == 0) {
 				throw new IllegalArgumentException("Invalid content!");
 			}
-			objects = new Object[params.length];
 			for (int i = 0; i < params.length; i++) {
 				String[] param = params[i].split(":");
 				if (param.length != 2) {
@@ -43,15 +52,23 @@ public class BftsmartCommand {
 							"Content parameter not found! " + id);
 				}
 				try {
-					objects[i] = getObject(identifier,
-							command.get(id).toString());
+					byteOut = new ByteArrayOutputStream();
+					ObjectOutput objOut = new ObjectOutputStream(byteOut);
+					objOut.writeObject(
+							getObject(identifier, command.get(id).toString()));
+
+					objOut.flush();
+					byteOut.flush();
 				} catch (NumberFormatException e) {
 					throw new IllegalArgumentException(
 							"Invalid parameter content! " + id);
+				} catch (IOException e) {
+					throw new WorkloadParserException(
+							"Error while creating object output!", e);
 				}
 			}
 		}
-		this.objects = objects;
+		this.byteOut = byteOut;
 
 	}
 
@@ -107,8 +124,8 @@ public class BftsmartCommand {
 		return content;
 	}
 
-	public Object[] getObjects() {
-		return objects;
+	public ByteArrayOutputStream getByteOut() {
+		return byteOut;
 	}
 
 }

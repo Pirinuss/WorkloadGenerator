@@ -8,10 +8,10 @@ import wg.Execution.WorkloadExecutionException;
 import wg.responses.Response;
 import wg.workload.Target;
 
-public class Request implements Callable<Response[]> {
+public abstract class Request implements Callable<Response[]> {
 
-	private final long numberOfClients;
-	private Target[] targets;
+	protected final long numberOfClients;
+	protected Target[] targets;
 
 	public Request(JSONObject object) {
 		if (object.get("numberOfClients") != null) {
@@ -24,21 +24,11 @@ public class Request implements Callable<Response[]> {
 		}
 	}
 	
-	public long getNumberOfClients() {
-		return numberOfClients;
-	}
-	
 	public void setTargets(Target[] targets) {
 		this.targets = targets;
 	}
 
-	public Target[] getTargets() {
-		return targets;
-	}
-
 	@Override
-	public Response[] call() throws WorkloadExecutionException {
-		return null;
-	}
+	public abstract Response[] call() throws WorkloadExecutionException;
 
 }

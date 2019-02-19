@@ -2,7 +2,7 @@ package wg.responses;
 
 import wg.workload.Target;
 
-public class FtpResponse extends Response implements ResponseInterface {
+public class FtpResponse extends Response {
 
 	private final int replyCode;
 
@@ -15,7 +15,7 @@ public class FtpResponse extends Response implements ResponseInterface {
 	@Override
 	public void print() {
 		// @formatter:off
-		System.out.println("     Target: " + getTargetGroup()[0].getServerName());
+		System.out.println("     Target: " + targetGroup[0].getServerName());
 		System.out.println("     Execution time: " + getRTT());
 		System.out.println("     Reply code: " + replyCode);
 		// @formatter:on

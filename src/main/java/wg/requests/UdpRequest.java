@@ -25,7 +25,7 @@ public class UdpRequest extends Request implements Callable<Response[]> {
 	private DatagramSocket[] clients;
 
 	public UdpRequest(JSONObject object) {
-		
+
 		super(object);
 
 		String content = (String) object.get("content");
@@ -34,8 +34,8 @@ public class UdpRequest extends Request implements Callable<Response[]> {
 		}
 		this.content = content;
 
-		this.clients = new DatagramSocket[(int) getNumberOfClients()];
-		for (int i = 0; i < getNumberOfClients(); i++) {
+		this.clients = new DatagramSocket[(int) numberOfClients];
+		for (int i = 0; i < numberOfClients; i++) {
 			try {
 				clients[i] = new DatagramSocket();
 			} catch (SocketException e) {
@@ -47,14 +47,12 @@ public class UdpRequest extends Request implements Callable<Response[]> {
 	@Override
 	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length
-				* getTargets().length];
+		Response[] responses = new Response[clients.length * targets.length];
 
 		int index = 0;
 		for (int i = 0; i < clients.length; i++) {
-			for (int j = 0; j < getTargets().length; j++) {
-				responses[index] = executeSingleRequest(clients[i],
-						getTargets()[j]);
+			for (int j = 0; j < targets.length; j++) {
+				responses[index] = executeSingleRequest(clients[i], targets[j]);
 				index++;
 			}
 		}

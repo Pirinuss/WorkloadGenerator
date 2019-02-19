@@ -2,9 +2,9 @@ package wg.responses;
 
 import wg.workload.Target;
 
-public class Response implements ResponseInterface {
+public abstract class Response {
 
-	private final Target[] targetGroup;
+	protected final Target[] targetGroup;
 	private final long startTime;
 	private final long stopTime;
 
@@ -25,13 +25,6 @@ public class Response implements ResponseInterface {
 		return stopTime - startTime;
 	}
 
-	public Target[] getTargetGroup() {
-		return targetGroup;
-	}
-
-	@Override
-	public void print() {
-
-	}
+	public abstract void print();
 
 }

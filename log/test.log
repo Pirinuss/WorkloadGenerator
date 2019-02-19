@@ -1111,3 +1111,450 @@ java.lang.InterruptedException
 2019-02-17 21:33:02,315 INFO wg.Execution.Executor [main] Event: event1 executed at: 506
 2019-02-17 21:33:02,316 INFO wg.Execution.Executor [main] Event: event1 executed at: 507
 2019-02-17 21:33:02,317 INFO wg.Execution.Executor [main] Event: event1 executed at: 508
+2019-02-18 00:07:47,400 INFO wg.App [main] Start Workload Generator
+2019-02-18 00:07:49,279 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007
+2019-02-18 00:07:49,781 INFO wg.Execution.Executor [main] Event: event1 executed at: 501
+2019-02-18 00:07:49,782 INFO wg.Execution.Executor [main] Event: event1 executed at: 502
+2019-02-18 00:07:49,782 INFO wg.Execution.Executor [main] Event: event1 executed at: 502
+2019-02-18 00:08:21,438 INFO wg.App [main] Start Workload Generator
+2019-02-18 00:08:23,358 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006
+2019-02-18 00:08:23,864 INFO wg.Execution.Executor [main] Event: event1 executed at: 505
+2019-02-18 00:08:23,864 INFO wg.Execution.Executor [main] Event: event1 executed at: 505
+2019-02-18 00:08:23,865 INFO wg.Execution.Executor [main] Event: event1 executed at: 506
+2019-02-18 00:11:49,951 INFO wg.App [main] Start Workload Generator
+2019-02-18 00:11:51,566 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-02-18 00:11:52,068 INFO wg.Execution.Executor [main] Event: event1 executed at: 502
+2019-02-18 00:11:52,069 INFO wg.Execution.Executor [main] Event: event1 executed at: 503
+2019-02-18 00:11:52,070 INFO wg.Execution.Executor [main] Event: event1 executed at: 504
+2019-02-18 09:45:35,937 INFO wg.App [main] Start Workload Generator
+2019-02-18 09:45:35,961 ERROR wg.workload.parser.WorkloadParser [main] Invalid BFTSMaRt client type!
+2019-02-18 09:46:47,121 INFO wg.App [main] Start Workload Generator
+2019-02-18 09:46:47,153 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:46:47,807 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:46:48,829 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 0
+2019-02-18 09:46:48,853 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:46:49,856 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 1
+2019-02-18 09:46:49,872 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:46:50,874 ERROR bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Impossible to connect to 2
+2019-02-18 09:46:50,888 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:47:23,646 INFO wg.App [main] Start Workload Generator
+2019-02-18 09:47:23,668 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:47:24,255 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:47:24,269 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-18 09:47:24,280 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-18 09:47:24,287 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:47:24,310 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-18 09:47:24,316 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:47:24,335 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-18 09:47:24,335 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:47:24,343 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:47:24,369 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-18 09:47:24,371 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:47:24,378 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-18 09:47:24,377 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:47:24,391 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-18 09:47:24,393 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:47:24,399 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:47:24,403 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-18 09:47:24,408 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:47:24,424 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-18 09:47:24,426 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:47:24,432 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-18 09:47:24,430 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:47:24,464 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-18 09:47:24,468 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:47:24,474 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-18 09:47:24,479 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:47:24,483 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:47:24,494 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:47:24,495 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-18 09:47:24,499 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:47:24,500 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-18 09:47:24,509 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-18 09:47:24,512 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:47:24,527 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-18 09:47:24,529 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:47:25,542 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003
+2019-02-18 09:47:25,990 INFO wg.Execution.Executor [main] Event: event1 executed at: 439
+2019-02-18 09:47:25,991 INFO wg.Execution.Executor [main] Event: event1 executed at: 440
+2019-02-18 09:50:58,758 INFO wg.App [main] Start Workload Generator
+2019-02-18 09:50:58,780 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:50:59,327 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:50:59,342 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-18 09:50:59,355 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:50:59,356 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-18 09:50:59,367 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-18 09:50:59,370 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:50:59,379 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-18 09:50:59,379 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:50:59,386 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:50:59,402 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-18 09:50:59,401 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:50:59,410 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-18 09:50:59,412 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:50:59,418 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-18 09:50:59,420 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:50:59,426 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:50:59,427 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-18 09:50:59,432 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:50:59,473 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-18 09:50:59,473 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:50:59,489 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-18 09:50:59,492 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:50:59,542 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-18 09:50:59,545 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:50:59,565 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-18 09:50:59,566 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:50:59,568 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:50:59,589 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-18 09:50:59,589 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:50:59,607 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-18 09:50:59,609 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:50:59,620 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-18 09:50:59,619 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:50:59,625 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:50:59,626 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-18 09:51:00,634 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-02-18 09:56:07,248 INFO wg.App [main] Start Workload Generator
+2019-02-18 09:56:07,276 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:56:07,837 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:56:07,852 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-18 09:56:07,860 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-18 09:56:07,862 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:56:07,874 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-18 09:56:07,873 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:56:07,883 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:56:07,884 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-18 09:56:07,890 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:56:07,921 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-18 09:56:07,924 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:56:07,932 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-18 09:56:07,934 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:56:07,943 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-18 09:56:07,949 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:56:07,957 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-18 09:56:07,959 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:56:07,961 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:56:07,987 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-18 09:56:07,988 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:56:07,997 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-18 09:56:08,002 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:56:08,008 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-18 09:56:08,010 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:56:08,019 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-18 09:56:08,021 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:56:08,023 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-18 09:56:08,048 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-18 09:56:08,053 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-18 09:56:08,059 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-18 09:56:08,058 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-18 09:56:08,068 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-18 09:56:08,067 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-18 09:56:08,073 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-18 09:56:08,074 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-18 09:56:09,089 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-02-19 09:19:48,368 INFO wg.App [main] Start Workload Generator
+2019-02-19 09:19:48,410 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:19:49,074 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:19:49,089 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 09:19:49,106 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 09:19:49,105 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:19:49,132 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 09:19:49,137 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:19:49,191 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 09:19:49,193 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:19:49,216 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:19:49,230 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 09:19:49,241 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:19:49,260 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:19:49,260 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 09:19:49,270 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 09:19:49,272 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:19:49,276 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:19:49,277 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 09:19:49,283 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:19:49,296 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:19:49,297 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 09:19:49,310 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 09:19:49,312 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:19:49,316 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 09:19:49,319 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:19:49,323 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 09:19:49,322 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:19:49,328 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:19:49,337 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:19:49,339 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 09:19:49,343 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:19:49,347 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 09:19:49,353 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 09:19:49,356 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:19:49,361 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:19:49,361 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 09:19:50,376 INFO wg.Execution.Executor [main] Event: event1 executed at: 1004
+2019-02-19 09:21:03,420 INFO wg.App [main] Start Workload Generator
+2019-02-19 09:21:03,445 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:04,024 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:04,039 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 09:21:04,051 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:04,053 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 09:21:04,067 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 09:21:04,070 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:04,081 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:04,083 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 09:21:04,091 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:04,108 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 09:21:04,109 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:04,115 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:04,116 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 09:21:04,124 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 09:21:04,127 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:04,132 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:04,133 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 09:21:04,139 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:04,156 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:04,157 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 09:21:04,167 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 09:21:04,165 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:04,178 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 09:21:04,180 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:04,185 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 09:21:04,184 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:04,191 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:04,208 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 09:21:04,207 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:04,222 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 09:21:04,221 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:04,231 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 09:21:04,234 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:04,238 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:04,239 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 09:21:05,248 INFO wg.Execution.Executor [main] Event: event1 executed at: 1000
+2019-02-19 09:21:37,531 INFO wg.App [main] Start Workload Generator
+2019-02-19 09:21:37,566 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:38,176 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:38,191 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 09:21:38,201 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:38,203 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 09:21:38,212 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 09:21:38,212 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:38,222 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:38,223 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 09:21:38,229 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:38,244 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:38,245 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 09:21:38,253 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:38,255 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 09:21:38,261 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 09:21:38,264 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:38,268 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:38,269 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 09:21:38,271 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:38,283 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:38,284 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 09:21:38,290 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 09:21:38,289 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:38,298 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 09:21:38,300 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:38,304 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 09:21:38,306 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:38,307 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:21:38,323 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 09:21:38,323 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:21:38,335 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 09:21:38,334 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:21:38,345 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 09:21:38,348 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:21:38,354 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 09:21:38,353 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:21:39,371 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-02-19 09:21:39,507 ERROR wg.requests.BftsmartRequest [pool-2-thread-1] No reply received for BFTSMaRt request!
+2019-02-19 09:22:30,632 INFO wg.App [main] Start Workload Generator
+2019-02-19 09:22:30,655 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:22:31,204 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:22:31,217 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 09:22:31,224 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:22:31,225 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 09:22:31,236 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 09:22:31,236 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:22:31,245 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:22:31,246 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 09:22:31,251 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:22:31,267 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 09:22:31,269 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:22:31,276 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 09:22:31,275 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:22:31,285 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 09:22:31,287 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:22:31,294 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 09:22:31,293 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:22:31,297 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:22:31,322 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 09:22:31,321 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:22:31,335 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 09:22:31,334 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:22:31,344 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 09:22:31,347 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:22:31,354 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 09:22:31,361 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:22:31,367 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:22:31,388 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 09:22:31,387 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:22:31,395 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 09:22:31,393 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:22:31,403 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 09:22:31,405 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:22:31,410 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:22:31,411 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 09:22:32,424 INFO wg.Execution.Executor [main] Event: event1 executed at: 1005
+2019-02-19 09:25:40,123 INFO wg.App [main] Start Workload Generator
+2019-02-19 09:25:40,150 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:25:40,700 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:25:40,712 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 09:25:40,722 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:25:40,724 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 09:25:40,737 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 09:25:40,739 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:25:40,748 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:25:40,750 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 09:25:40,754 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:25:40,771 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 09:25:40,770 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:25:40,779 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 09:25:40,781 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:25:40,786 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 09:25:40,788 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:25:40,795 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:25:40,796 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 09:25:40,799 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:25:40,815 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 09:25:40,813 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:25:40,828 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:25:40,831 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 09:25:40,838 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 09:25:40,840 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:25:40,846 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 09:25:40,848 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:25:40,850 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:25:40,864 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 09:25:40,865 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:25:40,871 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 09:25:40,873 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:25:40,882 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 09:25:40,885 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:25:40,893 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 09:25:40,895 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:25:41,903 INFO wg.Execution.Executor [main] Event: event1 executed at: 1001
+2019-02-19 09:28:07,046 INFO wg.App [main] Start Workload Generator
+2019-02-19 09:28:07,069 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:28:07,612 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:28:07,623 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 09:28:07,636 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 09:28:07,635 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:28:07,647 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 09:28:07,648 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:28:07,658 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:28:07,659 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 09:28:07,666 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:28:07,682 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 09:28:07,685 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:28:07,691 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:28:07,692 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 09:28:07,698 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 09:28:07,701 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:28:07,705 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:28:07,707 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 09:28:07,709 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:28:07,725 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:28:07,726 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 09:28:07,733 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 09:28:07,732 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:28:07,741 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 09:28:07,742 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:28:07,750 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 09:28:07,752 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:28:07,755 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:28:07,773 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 09:28:07,777 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:28:07,783 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:28:07,784 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 09:28:07,792 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 09:28:07,794 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:28:07,800 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:28:07,804 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 09:28:08,816 INFO wg.Execution.Executor [main] Event: event1 executed at: 1005
+2019-02-19 09:55:40,649 INFO wg.App [main] Start Workload Generator
+2019-02-19 09:55:40,674 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:55:41,257 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:55:41,271 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 09:55:41,278 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:55:41,279 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 09:55:41,288 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 09:55:41,291 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:55:41,301 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:55:41,302 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 09:55:41,321 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:55:41,338 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 09:55:41,337 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:55:41,345 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:55:41,346 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 09:55:41,353 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 09:55:41,354 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:55:41,362 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:55:41,363 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 09:55:41,367 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:55:41,383 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 09:55:41,384 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:55:41,390 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 09:55:41,389 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:55:41,397 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:55:41,400 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 09:55:41,404 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:55:41,405 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 09:55:41,408 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 09:55:41,425 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 09:55:41,429 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 09:55:41,435 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 09:55:41,437 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 09:55:41,446 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 09:55:41,458 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 09:55:41,468 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 09:55:41,469 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 09:55:42,485 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-02-19 10:16:49,086 INFO wg.App [main] Start Workload Generator
+2019-02-19 10:16:49,113 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 10:16:49,719 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 10:16:49,732 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-1] Channel active
+2019-02-19 10:16:49,743 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-2] Channel active
+2019-02-19 10:16:49,743 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 10:16:49,757 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-3] Channel active
+2019-02-19 10:16:49,759 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 10:16:49,773 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-2-4] Channel active
+2019-02-19 10:16:49,774 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 10:16:49,787 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 10:16:49,800 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-1] Channel active
+2019-02-19 10:16:49,798 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 10:16:49,807 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-2] Channel active
+2019-02-19 10:16:49,808 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 10:16:49,813 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-3] Channel active
+2019-02-19 10:16:49,815 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 10:16:49,819 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 10:16:49,820 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-3-4] Channel active
+2019-02-19 10:16:49,823 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 10:16:49,840 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 10:16:49,842 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-1] Channel active
+2019-02-19 10:16:49,847 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 10:16:49,848 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-2] Channel active
+2019-02-19 10:16:49,860 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-3] Channel active
+2019-02-19 10:16:49,863 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 10:16:49,868 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-4-4] Channel active
+2019-02-19 10:16:49,870 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 10:16:49,872 ERROR bftsmart.reconfiguration.util.TOMConfiguration [main] Wrong system.config file format.
+2019-02-19 10:16:49,888 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-1] Channel active
+2019-02-19 10:16:49,893 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 0 at /127.0.0.1:11000
+2019-02-19 10:16:49,900 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-2] Channel active
+2019-02-19 10:16:49,904 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 1 at /127.0.0.1:11010
+2019-02-19 10:16:49,909 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-3] Channel active
+2019-02-19 10:16:49,910 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 2 at /127.0.0.1:11020
+2019-02-19 10:16:49,914 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [nioEventLoopGroup-5-4] Channel active
+2019-02-19 10:16:49,914 INFO bftsmart.communication.client.netty.NettyClientServerCommunicationSystemClientSide [main] Connecting to replica 3 at /127.0.0.1:11030
+2019-02-19 10:16:50,929 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003
