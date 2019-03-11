@@ -45,19 +45,20 @@
           "localResource": "src/main/resources/testNeu.txt",
           "remoteResource": "testNeu.txt",
           "username":"dlpuser@dlptest.com",
-          "password":"puTeT3Yei1IJ4UYT7q0r" 
+          "password":"puTeT3Yei1IJ4UYT7q0r",
+          "numberOfClients":4
          }
   ],
   "schedule": {
         "frames": [
             { "id":"frame2", 
               "events": [
-                  {"id":"event1", "target":"group2", "request":"request2", "time":1000},
+                  {"id":"event1", "target":"group4", "request":"request4", "time":1000},
               ],
               "options": {
                   "transmissionType":"parallel",
                   "iterations":2,
-                  "requestsNumber": {"growth": "linear", "linearGrowthFactor":3},
+                  "requestsNumber": {"growth": "linear", "linearGrowthFactor":1},
                   "frequency": {"mode":"increase", "factor": 2}
               }
             }

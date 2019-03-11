@@ -2,6 +2,7 @@ package wg.Execution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 import wg.responses.Response;
@@ -56,6 +57,8 @@ public class WorkloadResult {
 		double exeTime = (double) (endTimes.get(frame)
 				- (double) startTimes.get(frame)) / 1000.0;
 		double averageRttTime = calculateAvgTime(frame, value);
+		int responsesReceived = getNumberOfResponses(value);
+		float successRate = (responsesReceived/value.size()) * 100;
 
 		// @formatter:off
 		System.out.println(
@@ -83,8 +86,19 @@ public class WorkloadResult {
 		System.out.println(" --- Results --- ");
 		System.out.println("   Total execution time for frame (in seconds): " + exeTime);
 		System.out.println("   Total amount of executed requests: " + value.size());
+		System.out.println("   Responses received: " + responsesReceived + " (" + successRate + "%)" );
 		System.out.println("   Average RTT (in milliseconds): " + averageRttTime);
 		// @formatter:on
+	}
+
+	private int getNumberOfResponses(ArrayList<Response> value) {
+		int counter = 0;
+		for (Response response : value) {
+			if (response != null) {
+				counter++;
+			}
+		}
+		return counter;
 	}
 
 	private double calculateAvgTime(Frame frame, ArrayList<Response> value) {

@@ -1,13 +1,11 @@
-package wg.requests;
+package wg.requests.bftsmart;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import bftsmart.tom.AsynchServiceProxy;
 import bftsmart.tom.ServiceProxy;
 import wg.Execution.WorkloadExecutionException;
+import wg.requests.Request;
 import wg.responses.BftsmartResponse;
 import wg.responses.Response;
 import wg.workload.Target;
@@ -127,14 +126,25 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 	private Response executeSinlgeRequest(int clientIndex, Target[] targets)
 			throws WorkloadExecutionException {
+
 		byte[] reply = null;
 
 		long startTime = System.currentTimeMillis();
 		try {
-			if (command.getType() == BftsmartCommandType.BYTE_ARRAY) {
-				reply = executeByteArrayRequest(clientIndex);
+			byte[] byteOut = command.getByteOut().toByteArray();
+
+			if (type.toUpperCase().equals("ORDERED")) {
+				if (isSynch) {
+					reply = synchClients[clientIndex].invokeOrdered(byteOut);
+				} else {
+					reply = asynchClients[clientIndex].invokeOrdered(byteOut);
+				}
 			} else {
-				reply = executeObjectStreamRequest(clientIndex);
+				if (isSynch) {
+					reply = synchClients[clientIndex].invokeUnordered(byteOut);
+				} else {
+					reply = asynchClients[clientIndex].invokeUnordered(byteOut);
+				}
 			}
 		} catch (RuntimeException e) {
 			throw new WorkloadExecutionException(
@@ -146,54 +156,9 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 			log.error("No reply received for BFTSMaRt request!");
 			reply = null;
 		}
+
 		return new BftsmartResponse(startTime, endTime, targets, reply);
 
-	}
-
-	private byte[] executeObjectStreamRequest(int clientIndex)
-			throws WorkloadExecutionException {
-
-		byte[] reply;
-		ByteArrayOutputStream byteOut = command.getByteOut();
-
-		if (type.toUpperCase().equals("ORDERED")) {
-			if (isSynch) {
-				reply = synchClients[clientIndex]
-						.invokeOrdered(byteOut.toByteArray());
-			} else {
-				reply = asynchClients[clientIndex]
-						.invokeOrdered(byteOut.toByteArray());
-			}
-		} else {
-			if (isSynch) {
-				reply = synchClients[clientIndex]
-						.invokeUnordered(byteOut.toByteArray());
-			} else {
-				reply = asynchClients[clientIndex]
-						.invokeUnordered(byteOut.toByteArray());
-			}
-		}
-
-		return reply;
-	}
-
-	private byte[] executeByteArrayRequest(int clientIndex) {
-		byte[] reply;
-		byte[] content = Base64.encodeBase64(command.getContent().getBytes());
-		if (type.toUpperCase().equals("ORDERED")) {
-			if (isSynch) {
-				reply = synchClients[clientIndex].invokeOrdered(content);
-			} else {
-				reply = asynchClients[clientIndex].invokeOrdered(content);
-			}
-		} else {
-			if (isSynch) {
-				reply = synchClients[clientIndex].invokeUnordered(content);
-			} else {
-				reply = asynchClients[clientIndex].invokeUnordered(content);
-			}
-		}
-		return Base64.decodeBase64(reply);
 	}
 
 }

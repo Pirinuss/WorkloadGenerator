@@ -17,6 +17,12 @@ import wg.workload.Target;
 
 public class FtpRequest extends Request implements Callable<Response[]> {
 
+	/**
+	 * Specifies the frequency for the client availability check in
+	 * milliseconds.
+	 */
+	private static final int CHECK_FOR_AVAILABILITY_FREQUENCY = 5;
+
 	private static final Logger log = LoggerFactory.getLogger(FtpRequest.class);
 
 	private final FtpMethodType method;
@@ -95,11 +101,17 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 
 	private Response executeSingleRequest(FTPClient client, Target target)
 			throws WorkloadExecutionException {
+
 		long startTime = System.currentTimeMillis();
 		int replyCode = 0;
 		try {
-			// TODO FTPConnectionClosedException abfangen (passiert wenn FTP
-			// response = 421)
+			while (client.isConnected()) {
+				try {
+					Thread.sleep(CHECK_FOR_AVAILABILITY_FREQUENCY);
+				} catch (InterruptedException e) {
+					log.error(e.getMessage());
+				}
+			}
 			client.connect(target.getServerName(), target.getPort());
 			client.login(username, password);
 			if (method == FtpMethodType.GET) {

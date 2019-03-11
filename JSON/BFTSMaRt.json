@@ -13,21 +13,40 @@
         {"id":"request1",
          "protocol":"BFTSMaRt",
          "command": {
-            "type":"ByteArray",
+            "type":"DataOutputStream",
             "content":"1"
          },
          "type":"ordered"
          },
          {"id":"request2",
           "protocol":"BFTSMaRt",
-          "clientType":"asynchron",
-          "numberOfClients":3,
           "command": {
-             "type":"ByteObjectStream",
-             "content":"01:Int",
-             "01":1
+             "type":"ObjectOutputStream",
+             "content":"01:EnumObject,02:String,03:String",
+             "03":"Montagstest3",
+             "02":"test",
+             "01": {
+                "path":"C:\Users\Marc\Documents\Uni\Bachelorarbeit\Bachelorarbeit\BFT-SMaRt\library\bin",
+                "classname":"bftsmart.demo.map.MapRequestType",
+                "type":"put"
+             }
           },
           "type":"ordered",
+         },
+         {"id":"request3",
+          "protocol":"BFTSMaRt",
+          "type":"ordered",
+          "command": {
+              "type":"ObjectOutputStream",
+              "content":"01:Object",
+              "01": {
+                  "path":"src/main/resources",
+                  "classname":"testInput",
+                  "constructor":"01:String,02:String",
+                  "01":4,
+                  "02":"hallo"
+              }
+          }
          }
   ],
   "schedule": {

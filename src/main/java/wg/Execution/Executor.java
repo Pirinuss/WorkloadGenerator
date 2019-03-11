@@ -30,7 +30,7 @@ public class Executor {
 	 * Specifies the frequency of the completion check for sequential
 	 * transmission
 	 */
-	private static final int CHECK_FOR_COMPLETION_FREQUENCY = 5;
+	private static final int CHECK_FOR_COMPLETION_FREQUENCY = 10;
 
 	private final ExecutorService exeService;
 	private static final Logger log = LoggerFactory.getLogger(Executor.class);

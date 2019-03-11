@@ -12,12 +12,12 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wg.requests.BftsmartRequest;
 import wg.requests.FtpRequest;
 import wg.requests.HttpRequest;
 import wg.requests.Request;
 import wg.requests.TcpRequest;
 import wg.requests.UdpRequest;
+import wg.requests.bftsmart.BftsmartRequest;
 import wg.workload.EventDescriptor;
 import wg.workload.Frame;
 import wg.workload.GrowthType;
