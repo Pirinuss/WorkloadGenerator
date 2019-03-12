@@ -7,8 +7,8 @@ public class UdpResponse extends Response {
 	private final String content;
 
 	public UdpResponse(long startTime, long endTime, Target target,
-			String content) {
-		super(startTime, endTime, target);
+			String content, boolean failed) {
+		super(startTime, endTime, target, failed);
 		this.content = content;
 	}
 
@@ -21,10 +21,14 @@ public class UdpResponse extends Response {
 		// @formatter:off
 		System.out.println("     Target: " + targetGroup[0].getServerName());
 		System.out.println("     Execution time: " + getRTT());
-		if (content.length() < 100) {
-			System.out.println("     Response: " + content);
+		if (failed) {
+			System.out.println("     Failed! Reason: " + content);
 		} else {
-			System.out.println("     Response length: " + content.length());
+			if (content.length() < 100) {
+				System.out.println("     Response: " + content);
+			} else {
+				System.out.println("     Response length: " + content.length());
+			}
 		}
 		// @formatter:on
 	}

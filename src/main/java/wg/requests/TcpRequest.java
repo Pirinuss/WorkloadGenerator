@@ -5,11 +5,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.concurrent.Callable;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wg.Execution.WorkloadExecutionException;
 import wg.responses.Response;
@@ -18,8 +22,12 @@ import wg.workload.Target;
 
 public class TcpRequest extends Request implements Callable<Response[]> {
 
+	/** The time (in milliseconds) a TCP Socket will wait for responses **/
+	private static final int TIMEOUT = 5000;
+
+	private static final Logger log = LoggerFactory.getLogger(TcpRequest.class);
+
 	private final String content;
-	private Socket[] clients;
 
 	public TcpRequest(JSONObject object) {
 
@@ -30,22 +38,18 @@ public class TcpRequest extends Request implements Callable<Response[]> {
 			throw new IllegalArgumentException("Content must not be null!");
 		}
 		this.content = content;
-
-		this.clients = new Socket[(int) numberOfClients];
-		for (int i = 0; i < numberOfClients; i++) {
-			clients[i] = new Socket();
-		}
 	}
 
 	@Override
 	public Response[] call() throws WorkloadExecutionException {
 
-		Response[] responses = new Response[clients.length * targets.length];
+		Response[] responses = new Response[(int) (numberOfClients
+				* targets.length)];
 
 		int index = 0;
-		for (int i = 0; i < clients.length; i++) {
+		for (int i = 0; i < numberOfClients; i++) {
 			for (int j = 0; j < targets.length; j++) {
-				responses[index] = executeSingleRequest(clients[i], targets[j]);
+				responses[index] = executeSingleRequest(targets[j]);
 				index++;
 			}
 		}
@@ -53,32 +57,46 @@ public class TcpRequest extends Request implements Callable<Response[]> {
 		return responses;
 	}
 
-	private Response executeSingleRequest(Socket client, Target target)
+	private Response executeSingleRequest(Target target)
 			throws WorkloadExecutionException {
-		String responseContent = null;
-		long startTime = System.currentTimeMillis();
-		try {
 
-			client.setSoTimeout(5000);
+		String responseContent = null;
+		boolean failed = false;
+
+		long startTime = System.currentTimeMillis();
+
+		try {
+			InetAddress addr = InetAddress.getByName(target.getServerName());
+			Socket client = new Socket(addr, target.getPort());
+			client.setSoTimeout(TIMEOUT);
+
 			DataOutputStream outToServer = new DataOutputStream(
 					client.getOutputStream());
 			BufferedReader inFromServer = new BufferedReader(
 					new InputStreamReader(client.getInputStream()));
 			outToServer.writeBytes(content);
 			responseContent = inFromServer.readLine();
+
 			client.close();
 		} catch (SocketTimeoutException e) {
-			throw new WorkloadExecutionException("TCP connection timed out!",
-					e);
+			responseContent = "Socket timed out";
+			log.error(responseContent);
+			failed = true;
 		} catch (ConnectException e) {
-			throw new WorkloadExecutionException(
-					"Could not estabilish TCP connection!", e);
+			responseContent = "Could not establish TCP connection";
+			log.error(responseContent);
+			failed = true;
+		} catch (UnknownHostException e) {
+			responseContent = "Invalid servername";
+			log.error(responseContent);
+			failed = true;
 		} catch (IOException e) {
 			throw new WorkloadExecutionException(
 					"Error while executing TCP request!", e);
 		}
 		long endTime = System.currentTimeMillis();
-		return new TcpResponse(startTime, endTime, target, responseContent);
+		return new TcpResponse(startTime, endTime, target, responseContent,
+				failed);
 	}
 
 }

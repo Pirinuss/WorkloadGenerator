@@ -1,5 +1,7 @@
 package wg;
 
+import java.util.concurrent.ExecutionException;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -45,7 +47,7 @@ public class App {
 			} catch (WorkloadParserException e) {
 				throw new WorkloadGeneratorException(
 						"Error while parsing workload", e);
-			} catch (WorkloadExecutionException e) {
+			} catch (ExecutionException e) {
 				throw new WorkloadGeneratorException(
 						"Error while executing workload!", e);
 			}

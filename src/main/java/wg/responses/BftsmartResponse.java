@@ -11,8 +11,8 @@ public class BftsmartResponse extends Response {
 	private final byte[] reply;
 
 	public BftsmartResponse(long startTime, long endTime, Target[] targetGroup,
-			byte[] reply) {
-		super(startTime, endTime, targetGroup);
+			byte[] reply, boolean failed) {
+		super(startTime, endTime, targetGroup, failed);
 		this.reply = reply;
 	}
 

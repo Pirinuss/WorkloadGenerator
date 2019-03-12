@@ -7,8 +7,8 @@ public class FtpResponse extends Response {
 	private final int replyCode;
 
 	public FtpResponse(long startTime, long endTime, Target target,
-			int replyCode) {
-		super(startTime, endTime, target);
+			int replyCode, boolean failed) {
+		super(startTime, endTime, target, failed);
 		this.replyCode = replyCode;
 	}
 

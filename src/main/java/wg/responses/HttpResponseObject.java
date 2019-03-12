@@ -9,8 +9,8 @@ public class HttpResponseObject extends Response {
 	private final HttpResponse response;
 
 	public HttpResponseObject(long startTime, long endTime, Target target,
-			HttpResponse response) {
-		super(startTime, endTime, target);
+			HttpResponse response, boolean failed) {
+		super(startTime, endTime, target, failed);
 		this.response = response;
 	}
 

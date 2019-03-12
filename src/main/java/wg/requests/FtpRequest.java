@@ -21,7 +21,13 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 	 * Specifies the frequency for the client availability check in
 	 * milliseconds.
 	 */
-	private static final int CHECK_FOR_AVAILABILITY_FREQUENCY = 5;
+	private static final int CHECK_FOR_AVAILABILITY_FREQUENCY = 10;
+
+	/**
+	 * The time (in milliseconds) a FTP client will wait for responses before
+	 * returning null
+	 */
+	private static final int TIMEOUT = 5000;
 
 	private static final Logger log = LoggerFactory.getLogger(FtpRequest.class);
 
@@ -31,12 +37,6 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 	private final String username;
 	private final String password;
 	private FTPClient[] clients;
-
-	/**
-	 * The time (in milliseconds) a FTP client will wait for responses before
-	 * returning null
-	 */
-	private static final int TIMEOUT = 20;
 
 	public FtpRequest(JSONObject object) {
 
@@ -102,16 +102,22 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 	private Response executeSingleRequest(FTPClient client, Target target)
 			throws WorkloadExecutionException {
 
+		boolean failed = false;
+
+		// Check if the client is available
+		while (client.isConnected()) {
+			try {
+				Thread.sleep(CHECK_FOR_AVAILABILITY_FREQUENCY);
+			} catch (InterruptedException e) {
+				log.error(e.getMessage());
+			}
+		}
+
 		long startTime = System.currentTimeMillis();
 		int replyCode = 0;
+
 		try {
-			while (client.isConnected()) {
-				try {
-					Thread.sleep(CHECK_FOR_AVAILABILITY_FREQUENCY);
-				} catch (InterruptedException e) {
-					log.error(e.getMessage());
-				}
-			}
+
 			client.connect(target.getServerName(), target.getPort());
 			client.login(username, password);
 			if (method == FtpMethodType.GET) {
@@ -135,7 +141,7 @@ public class FtpRequest extends Request implements Callable<Response[]> {
 		}
 
 		long endTime = System.currentTimeMillis();
-		return new FtpResponse(startTime, endTime, target, replyCode);
+		return new FtpResponse(startTime, endTime, target, replyCode, failed);
 	}
 
 }

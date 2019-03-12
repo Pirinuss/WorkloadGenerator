@@ -2,7 +2,6 @@ package wg.Execution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 import wg.responses.Response;
@@ -57,8 +56,9 @@ public class WorkloadResult {
 		double exeTime = (double) (endTimes.get(frame)
 				- (double) startTimes.get(frame)) / 1000.0;
 		double averageRttTime = calculateAvgTime(frame, value);
-		int responsesReceived = getNumberOfResponses(value);
-		float successRate = (responsesReceived/value.size()) * 100;
+		int responsesReceived = getNumberOfSuccessResponses(value);
+		float successRate = ((float) responsesReceived / (float) value.size())
+				* 100;
 
 		// @formatter:off
 		System.out.println(
@@ -91,10 +91,10 @@ public class WorkloadResult {
 		// @formatter:on
 	}
 
-	private int getNumberOfResponses(ArrayList<Response> value) {
+	private int getNumberOfSuccessResponses(ArrayList<Response> value) {
 		int counter = 0;
 		for (Response response : value) {
-			if (response != null) {
+			if (!response.isFailed()) {
 				counter++;
 			}
 		}
@@ -102,12 +102,15 @@ public class WorkloadResult {
 	}
 
 	private double calculateAvgTime(Frame frame, ArrayList<Response> value) {
-		int totalEvents = value.size();
+		int totalSuccessfulEvents = 0;
 		int totalTime = 0;
 		for (Response response : value) {
-			totalTime += response.getRTT();
+			if (response != null) {
+				totalTime += response.getRTT();
+				totalSuccessfulEvents++;
+			}
 		}
-		return ((double) totalTime / (double) totalEvents);
+		return ((double) totalTime / (double) totalSuccessfulEvents);
 	}
 
 }

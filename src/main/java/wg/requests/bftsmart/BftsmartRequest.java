@@ -126,6 +126,8 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 	private Response executeSinlgeRequest(int clientIndex, Target[] targets)
 			throws WorkloadExecutionException {
+		
+		boolean failed = false;
 
 		byte[] reply = null;
 
@@ -154,10 +156,11 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 		if (reply == null || reply.length == 0) {
 			log.error("No reply received for BFTSMaRt request!");
+			failed = true;
 			reply = null;
 		}
 
-		return new BftsmartResponse(startTime, endTime, targets, reply);
+		return new BftsmartResponse(startTime, endTime, targets, reply, failed);
 
 	}
 

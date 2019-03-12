@@ -2,7 +2,7 @@
   "targetGroups": [
         {"id":"group1",
          "targets": [
-             {"server":"httpbin.org", "port":8080}
+             {"server":"localhost", "port":23}
          ]
         },
         {"id":"group2",
@@ -36,8 +36,9 @@
           "numberOfClients":2
          },
          {"id":"request3",
-          "protocol":"TCP",
-          "content":"Testnachricht"
+          "protocol":"UDP",
+          "content":"Testnachricht",
+          "numberOfClients":4
          },
          {"id":"request4",
           "protocol":"FTP",
@@ -46,18 +47,18 @@
           "remoteResource": "testNeu.txt",
           "username":"dlpuser@dlptest.com",
           "password":"puTeT3Yei1IJ4UYT7q0r",
-          "numberOfClients":4
+          "numberOfClients":2
          }
   ],
   "schedule": {
         "frames": [
             { "id":"frame2", 
               "events": [
-                  {"id":"event1", "target":"group4", "request":"request4", "time":1000},
+                  {"id":"event1", "target":"group1", "request":"request3", "time":1000},
               ],
               "options": {
                   "transmissionType":"parallel",
-                  "iterations":2,
+                  "iterations":1,
                   "requestsNumber": {"growth": "linear", "linearGrowthFactor":1},
                   "frequency": {"mode":"increase", "factor": 2}
               }

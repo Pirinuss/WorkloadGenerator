@@ -16,6 +16,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wg.Execution.WorkloadExecutionException;
 import wg.responses.HttpResponseObject;
@@ -29,6 +31,10 @@ public class HttpRequest extends Request {
 	 * Maximal number of parallel connections for a HTTP client
 	 */
 	private static final int MAX_CONNECTIONS_PER_HTTPCLIENT = 100;
+
+	private static final Logger log = LoggerFactory
+			.getLogger(HttpRequest.class);
+
 	private final HttpMethodType method;
 	private final String resourcePath;
 	private final String content;
@@ -85,6 +91,8 @@ public class HttpRequest extends Request {
 	private Response executeSingleRequest(CloseableHttpClient client,
 			Target target) throws WorkloadExecutionException {
 
+		boolean failed = false;
+
 		URI uri = getUri(target);
 
 		HttpResponse response = null;
@@ -92,6 +100,7 @@ public class HttpRequest extends Request {
 		try {
 			content = new StringEntity(this.content);
 		} catch (UnsupportedEncodingException e) {
+			log.error("Invalid content");
 			throw new WorkloadExecutionException("Invalid content!", e);
 		}
 		long startTime = System.currentTimeMillis();
@@ -129,7 +138,7 @@ public class HttpRequest extends Request {
 					"Error while executing HTTP request!", e);
 		}
 		long endTime = System.currentTimeMillis();
-		return new HttpResponseObject(startTime, endTime, target, response);
+		return new HttpResponseObject(startTime, endTime, target, response, failed);
 	}
 
 	private URI getUri(Target target) throws WorkloadExecutionException {

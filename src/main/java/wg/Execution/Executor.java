@@ -48,10 +48,10 @@ public class Executor {
 	 * @param workload
 	 *            The workload that gets executed
 	 * @return result The results of the workloads execution
-	 * @throws WorkloadExecutionException
+	 * @throws ExecutionException
 	 */
 	public WorkloadResult executeWorkload(Workload workload)
-			throws WorkloadExecutionException {
+			throws ExecutionException {
 		WorkloadResult result = new WorkloadResult();
 		Frame[] frames = workload.getSchedule().getFrames();
 
@@ -71,7 +71,7 @@ public class Executor {
 	}
 
 	private ArrayList<Response> executeFrame(Frame frame)
-			throws WorkloadExecutionException {
+			throws ExecutionException {
 
 		ArrayList<Future<Response[]>> futures = new ArrayList<Future<Response[]>>();
 		ArrayList<EventDescriptor> events = new ArrayList<EventDescriptor>(
@@ -207,21 +207,18 @@ public class Executor {
 	 * @param responses
 	 *            The array of responses
 	 * @return The filled array of responses
-	 * @throws WorkloadExecutionException
+	 * @throws ExecutionException
 	 */
 	private ArrayList<Response> parseResponses(
-			ArrayList<Future<Response[]>> futures)
-			throws WorkloadExecutionException {
+			ArrayList<Future<Response[]>> futures) throws ExecutionException {
 		ArrayList<Response> responses = new ArrayList<Response>();
 		for (int i = 0; i < futures.size(); i++) {
 			Response[] eventResponses = null;
 			try {
 				eventResponses = (Response[]) futures.get(i).get();
-			} catch (ExecutionException | InterruptedException e) {
+			} catch (InterruptedException e) {
 				futures.get(i).cancel(true);
 				exeService.shutdownNow();
-				throw new WorkloadExecutionException(
-						"Error while executing task!", e);
 			}
 			for (int j = 0; j < eventResponses.length; j++) {
 				responses.add(eventResponses[j]);
