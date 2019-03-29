@@ -151,6 +151,7 @@ public class WorkloadParser {
 			throw new IllegalArgumentException("Protocol must not be null!");
 		}
 
+		//TODO Auslagern in ProtocolType
 		switch (protocol.toLowerCase()) {
 
 		case "http":

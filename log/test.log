@@ -5356,3 +5356,100 @@ java.io.IOException: Eine vorhandene Verbindung wurde vom Remotehost geschlossen
 2019-03-12 17:46:00,420 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
 2019-03-12 17:46:05,421 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
 2019-03-12 17:46:10,422 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:41:42,905 INFO wg.App [main] Start Workload Generator
+2019-03-22 11:41:44,491 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-22 11:41:49,498 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:41:54,501 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:41:59,502 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:42:04,504 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:44:11,096 INFO wg.App [main] Start Workload Generator
+2019-03-22 11:44:11,107 ERROR wg.workload.parser.WorkloadParser [main] JSON\SpecificationExanple.json (Das System kann die angegebene Datei nicht finden)
+2019-03-22 11:44:29,394 INFO wg.App [main] Start Workload Generator
+2019-03-22 11:44:30,918 INFO wg.Execution.Executor [main] Event: event1 executed at: 1000
+2019-03-22 11:44:35,924 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:44:40,927 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:44:45,928 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-22 11:44:50,929 ERROR wg.requests.UdpRequest [pool-2-thread-1] Socket timed out
+2019-03-28 16:54:00,074 INFO wg.App [main] Start Workload Generator
+2019-03-28 16:54:01,734 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-03-28 16:54:02,736 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-03-28 16:54:02,736 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-03-28 16:54:03,737 INFO wg.Execution.Executor [main] Event: event1 executed at: 1000
+2019-03-28 16:54:03,737 INFO wg.Execution.Executor [main] Event: event1 executed at: 1000
+2019-03-28 16:54:03,738 INFO wg.Execution.Executor [main] Event: event1 executed at: 1001
+2019-03-28 16:54:03,739 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002
+2019-03-28 16:54:04,748 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-28 16:54:04,748 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-28 16:54:04,749 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-28 16:54:04,749 INFO wg.Execution.Executor [main] Event: event1 executed at: 1010
+2019-03-28 16:54:04,749 INFO wg.Execution.Executor [main] Event: event1 executed at: 1010
+2019-03-28 16:54:04,750 INFO wg.Execution.Executor [main] Event: event1 executed at: 1011
+2019-03-28 16:54:04,750 INFO wg.Execution.Executor [main] Event: event1 executed at: 1011
+2019-03-28 16:54:04,751 INFO wg.Execution.Executor [main] Event: event1 executed at: 1012
+2019-03-28 16:54:05,756 INFO wg.Execution.Executor [main] Event: event1 executed at: 1005
+2019-03-28 16:54:05,756 INFO wg.Execution.Executor [main] Event: event1 executed at: 1005
+2019-03-28 16:54:05,757 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006
+2019-03-28 16:54:05,757 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006
+2019-03-28 16:54:05,757 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006
+2019-03-28 16:54:05,758 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007
+2019-03-28 16:54:05,758 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007
+2019-03-28 16:54:05,759 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-03-28 16:54:05,759 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-03-28 16:54:05,759 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-03-28 16:54:05,759 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008
+2019-03-28 16:54:05,760 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-28 16:54:05,760 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-28 16:54:05,760 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-28 16:54:05,761 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009
+2019-03-28 16:54:05,761 INFO wg.Execution.Executor [main] Event: event1 executed at: 1010
+2019-03-28 16:54:38,257 INFO wg.App [main] Start Workload Generator
+2019-03-28 16:54:39,827 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008 step: 0
+2019-03-28 16:54:40,837 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 1
+2019-03-28 16:54:40,837 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 1
+2019-03-28 16:54:41,846 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008 step: 2
+2019-03-28 16:54:41,846 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008 step: 2
+2019-03-28 16:54:41,847 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 2
+2019-03-28 16:54:41,847 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 2
+2019-03-28 16:54:42,857 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 3
+2019-03-28 16:54:42,857 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 3
+2019-03-28 16:54:42,858 INFO wg.Execution.Executor [main] Event: event1 executed at: 1010 step: 3
+2019-03-28 16:54:42,858 INFO wg.Execution.Executor [main] Event: event1 executed at: 1010 step: 3
+2019-03-28 16:54:42,858 INFO wg.Execution.Executor [main] Event: event1 executed at: 1010 step: 3
+2019-03-28 16:54:42,859 INFO wg.Execution.Executor [main] Event: event1 executed at: 1011 step: 3
+2019-03-28 16:54:42,859 INFO wg.Execution.Executor [main] Event: event1 executed at: 1011 step: 3
+2019-03-28 16:54:42,859 INFO wg.Execution.Executor [main] Event: event1 executed at: 1011 step: 3
+2019-03-28 16:54:43,865 INFO wg.Execution.Executor [main] Event: event1 executed at: 1005 step: 4
+2019-03-28 16:54:43,865 INFO wg.Execution.Executor [main] Event: event1 executed at: 1005 step: 4
+2019-03-28 16:54:43,865 INFO wg.Execution.Executor [main] Event: event1 executed at: 1005 step: 4
+2019-03-28 16:54:43,866 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006 step: 4
+2019-03-28 16:54:43,866 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006 step: 4
+2019-03-28 16:54:43,866 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006 step: 4
+2019-03-28 16:54:43,867 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007 step: 4
+2019-03-28 16:54:43,867 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007 step: 4
+2019-03-28 16:54:43,867 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007 step: 4
+2019-03-28 16:54:43,868 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008 step: 4
+2019-03-28 16:54:43,868 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008 step: 4
+2019-03-28 16:54:43,868 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008 step: 4
+2019-03-28 16:54:43,868 INFO wg.Execution.Executor [main] Event: event1 executed at: 1008 step: 4
+2019-03-28 16:54:43,869 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 4
+2019-03-28 16:54:43,869 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 4
+2019-03-28 16:54:43,869 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 4
+2019-03-28 16:57:39,955 INFO wg.App [main] Start Workload Generator
+2019-03-28 16:57:41,522 INFO wg.Execution.Executor [main] Event: event1 executed at: 1009 step: 0
+2019-03-28 16:57:42,525 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003 step: 1
+2019-03-28 16:57:43,526 INFO wg.Execution.Executor [main] Event: event1 executed at: 1001 step: 2
+2019-03-28 16:57:43,526 INFO wg.Execution.Executor [main] Event: event1 executed at: 1001 step: 2
+2019-03-28 16:57:44,533 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006 step: 3
+2019-03-28 16:57:44,533 INFO wg.Execution.Executor [main] Event: event1 executed at: 1006 step: 3
+2019-03-28 16:57:44,534 INFO wg.Execution.Executor [main] Event: event1 executed at: 1007 step: 3
+2019-03-28 16:57:45,536 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002 step: 4
+2019-03-28 16:57:45,536 INFO wg.Execution.Executor [main] Event: event1 executed at: 1002 step: 4
+2019-03-28 16:57:45,537 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003 step: 4
+2019-03-28 16:57:45,537 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003 step: 4
+2019-03-28 16:57:45,537 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003 step: 4
+2019-03-28 19:35:16,260 INFO wg.App [main] Start Workload Generator
+2019-03-28 19:35:16,269 ERROR wg.workload.parser.WorkloadParser [main] JSON\SpecificationExanple.json (Das System kann die angegebene Datei nicht finden)
+2019-03-28 19:35:41,921 INFO wg.App [main] Start Workload Generator
+2019-03-28 19:35:44,054 INFO wg.Execution.Executor [main] Event: event1 executed at: 1003
+2019-03-28 19:35:52,777 INFO wg.App [main] Start Workload Generator
+2019-03-28 19:35:54,382 INFO wg.Execution.Executor [main] Event: event1 executed at: 1001
