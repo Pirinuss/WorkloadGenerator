@@ -11,12 +11,12 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wg.Execution.Executor;
-import wg.Execution.WorkloadExecutionException;
-import wg.Execution.WorkloadResult;
-import wg.workload.Workload;
-import wg.workload.parser.WorkloadParser;
-import wg.workload.parser.WorkloadParserException;
+import wg.executor.Executor;
+import wg.executor.WorkloadExecutionException;
+import wg.executor.WorkloadResult;
+import wg.parser.WorkloadParser;
+import wg.parser.WorkloadParserException;
+import wg.parser.workload.Workload;
 
 public class App {
 
@@ -44,6 +44,7 @@ public class App {
 			try {
 				workload = workloadParser.parseWorkload(path);
 				result = executor.executeWorkload(workload);
+				result.printResponses(printInDetail);
 			} catch (WorkloadParserException e) {
 				throw new WorkloadGeneratorException(
 						"Error while parsing workload", e);
@@ -51,7 +52,6 @@ public class App {
 				throw new WorkloadGeneratorException(
 						"Error while executing workload!", e);
 			}
-			result.printResponses(printInDetail);
 		}
 		System.exit(0);
 		log.info("Stop Workload Generator");

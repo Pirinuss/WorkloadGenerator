@@ -23,7 +23,7 @@
           "command": {
              "type":"ObjectOutputStream",
              "content":"01:EnumObject,02:String,03:String",
-             "03":"Montagstest3",
+             "03":"Montagstest5",
              "02":"test",
              "01": {
                 "path":"C:\Users\Marc\Documents\Uni\Bachelorarbeit\Bachelorarbeit\BFT-SMaRt\library\bin",
@@ -47,13 +47,20 @@
                   "02":"hallo"
               } 
           }
+         },
+         {"id":"request4",
+          "protocol":"bftsmart-microbenchmark",
+          "type":"unordered",
+          "numberOfOperations":2,
+          "requestSize":1,
+          "interval":10
          }
   ],
   "schedule": {
         "frames": [
             { "id":"frame1", 
               "events": [
-                  {"id":"event1", "request":"request2", "target":"group1", "time":1000}
+                  {"id":"event1", "request":"request4", "target":"group1", "time":1000}
               ],
              "options": {
                   "transmissionType":"parallel",

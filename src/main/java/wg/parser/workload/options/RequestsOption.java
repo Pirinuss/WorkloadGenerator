@@ -1,6 +1,4 @@
-package wg.workload.options;
-
-import wg.workload.GrowthType;
+package wg.parser.workload.options;
 
 public class RequestsOption {
 

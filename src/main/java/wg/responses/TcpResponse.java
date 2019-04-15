@@ -1,6 +1,6 @@
 package wg.responses;
 
-import wg.workload.Target;
+import wg.parser.workload.Target;
 
 public class TcpResponse extends Response {
 

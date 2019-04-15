@@ -2,7 +2,7 @@ package wg.responses;
 
 import org.apache.http.HttpResponse;
 
-import wg.workload.Target;
+import wg.parser.workload.Target;
 
 public class HttpResponseObject extends Response {
 

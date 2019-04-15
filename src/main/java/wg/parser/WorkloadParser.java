@@ -1,4 +1,4 @@
-package wg.workload.parser;
+package wg.parser;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,23 +12,24 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import wg.parser.workload.EventDescriptor;
+import wg.parser.workload.Frame;
+import wg.parser.workload.Schedule;
+import wg.parser.workload.Target;
+import wg.parser.workload.Workload;
+import wg.parser.workload.options.FrequencyMode;
+import wg.parser.workload.options.FrequencyOption;
+import wg.parser.workload.options.GrowthType;
+import wg.parser.workload.options.Options;
+import wg.parser.workload.options.RequestsOption;
+import wg.parser.workload.options.TransmissionType;
 import wg.requests.FtpRequest;
 import wg.requests.HttpRequest;
 import wg.requests.Request;
 import wg.requests.TcpRequest;
 import wg.requests.UdpRequest;
+import wg.requests.bftsmart.BftsmartMicrobenchmarkRequest;
 import wg.requests.bftsmart.BftsmartRequest;
-import wg.workload.EventDescriptor;
-import wg.workload.Frame;
-import wg.workload.GrowthType;
-import wg.workload.Schedule;
-import wg.workload.Target;
-import wg.workload.Workload;
-import wg.workload.options.FrequencyMode;
-import wg.workload.options.FrequencyOption;
-import wg.workload.options.Options;
-import wg.workload.options.RequestsOption;
-import wg.workload.options.TransmissionType;
 
 public class WorkloadParser {
 
@@ -151,7 +152,7 @@ public class WorkloadParser {
 			throw new IllegalArgumentException("Protocol must not be null!");
 		}
 
-		//TODO Auslagern in ProtocolType
+		// TODO Auslagern in ProtocolType
 		switch (protocol.toLowerCase()) {
 
 		case "http":
@@ -164,6 +165,8 @@ public class WorkloadParser {
 			return new UdpRequest(requestContent);
 		case "bftsmart":
 			return new BftsmartRequest(requestContent);
+		case "bftsmart-microbenchmark":
+			return new BftsmartMicrobenchmarkRequest(requestContent);
 		default:
 			throw new IllegalArgumentException("Unknown protocol");
 		}

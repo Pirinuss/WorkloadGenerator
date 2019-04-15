@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
 
 import bftsmart.tom.AsynchServiceProxy;
 import bftsmart.tom.ServiceProxy;
-import wg.Execution.WorkloadExecutionException;
+import wg.executor.WorkloadExecutionException;
+import wg.parser.WorkloadParserException;
+import wg.parser.workload.Target;
 import wg.requests.Request;
 import wg.responses.BftsmartResponse;
 import wg.responses.Response;
-import wg.workload.Target;
-import wg.workload.parser.WorkloadParserException;
 
 public class BftsmartRequest extends Request implements Callable<Response[]> {
 
@@ -31,10 +31,10 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 	private final AsynchServiceProxy[] asynchClients;
 
 	/**
-	 * The time (in seconds) a BFTSMaRt client will wait for responses before
+	 * The time (in milliseconds) a BFTSMaRt client will wait for responses before
 	 * returning null
 	 */
-	private static final int BFTSMaRt_TIMEOUT = 20;
+	private static final int BFTSMaRt_TIMEOUT = 2000;
 
 	public BftsmartRequest(JSONObject object) throws WorkloadParserException {
 
@@ -158,7 +158,10 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 			log.error("No reply received for BFTSMaRt request!");
 			failed = true;
 			reply = null;
+		} else {
+			System.out.println(new String(reply));
 		}
+		
 
 		return new BftsmartResponse(startTime, endTime, targets, reply, failed);
 

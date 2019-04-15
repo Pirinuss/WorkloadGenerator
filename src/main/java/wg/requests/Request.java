@@ -4,9 +4,9 @@ import java.util.concurrent.Callable;
 
 import org.json.simple.JSONObject;
 
-import wg.Execution.WorkloadExecutionException;
+import wg.executor.WorkloadExecutionException;
+import wg.parser.workload.Target;
 import wg.responses.Response;
-import wg.workload.Target;
 
 public abstract class Request implements Callable<Response[]> {
 

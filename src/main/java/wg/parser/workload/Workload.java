@@ -1,4 +1,4 @@
-package wg.workload;
+package wg.parser.workload;
 
 import java.util.HashMap;
 import java.util.Map.Entry;

@@ -1,4 +1,4 @@
-package wg.workload.options;
+package wg.parser.workload.options;
 
 public class FrequencyOption {
 

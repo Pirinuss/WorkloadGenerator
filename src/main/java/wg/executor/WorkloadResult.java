@@ -1,12 +1,12 @@
-package wg.Execution;
+package wg.executor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import wg.parser.workload.Frame;
+import wg.parser.workload.options.GrowthType;
 import wg.responses.Response;
-import wg.workload.Frame;
-import wg.workload.GrowthType;
 
 public class WorkloadResult {
 

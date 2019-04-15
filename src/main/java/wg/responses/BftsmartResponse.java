@@ -2,7 +2,7 @@ package wg.responses;
 
 import java.util.Arrays;
 
-import wg.workload.Target;
+import wg.parser.workload.Target;
 
 public class BftsmartResponse extends Response {
 

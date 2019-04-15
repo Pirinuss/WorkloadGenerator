@@ -1,4 +1,4 @@
-package wg.Execution;
+package wg.executor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,16 +10,16 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import wg.parser.workload.EventDescriptor;
+import wg.parser.workload.Frame;
+import wg.parser.workload.Target;
+import wg.parser.workload.Workload;
+import wg.parser.workload.options.FrequencyMode;
+import wg.parser.workload.options.FrequencyOption;
+import wg.parser.workload.options.RequestsOption;
+import wg.parser.workload.options.TransmissionType;
 import wg.requests.Request;
 import wg.responses.Response;
-import wg.workload.EventDescriptor;
-import wg.workload.Frame;
-import wg.workload.Target;
-import wg.workload.Workload;
-import wg.workload.options.FrequencyMode;
-import wg.workload.options.FrequencyOption;
-import wg.workload.options.RequestsOption;
-import wg.workload.options.TransmissionType;
 
 public class Executor {
 
@@ -105,7 +105,7 @@ public class Executor {
 						frame.getOptions().getRequestsOption(), s);
 				for (int r = 0; r < repetitions; r++) {
 					long dif = System.currentTimeMillis() - startTime;
-					log.info("Event: " + nextEvent.getEventID()
+					log.debug("Event: " + nextEvent.getEventID()
 							+ " executed at: " + dif);
 
 					Future<Response[]> response = executeEvent(nextEvent);

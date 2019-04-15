@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wg.workload.parser.WorkloadParserException;
+import wg.parser.WorkloadParserException;
 
 public class BftsmartCommand {
 
@@ -113,6 +113,7 @@ public class BftsmartCommand {
 			throw new WorkloadParserException(
 					"Error while creating object output!", e);
 		}
+		
 		return byteOut;
 	}
 

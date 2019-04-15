@@ -1,6 +1,6 @@
-package wg.workload;
+package wg.parser.workload;
 
-import wg.workload.options.Options;
+import wg.parser.workload.options.Options;
 
 public class Frame {
 

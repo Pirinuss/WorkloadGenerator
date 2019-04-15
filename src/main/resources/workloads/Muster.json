@@ -1,135 +1,70 @@
 {
-  "targets": [
-         {"target1": {
-            "servername":"localhost",
-            "port":"4445"
-         }
-         },
-        {"target2": {
-            "servername":"www.wikipedia.org",
-            "port":"80"
-        }
+  "targetGroups": [
+    {
+      "id": "group1",
+      "targets": [
+        {
+          "server": "localhost",
+          "port": 11000
         },
-        {"target3": {
-            "servername":"www.httpbin.org"
-        } 
+        {
+          "server": "127.0.0.1",
+          "port": 11010
         },
-        {"target4": {
-            "servername":"www.aegee-passau.org"
-        } 
+        {
+          "server": "localhost",
+          "port": 11020
+        },
+        {
+          "server": "localhost",
+          "port": 11030
         }
+      ]
+    }
   ],
   "requests": [
-         {"request1": {
-            "protocol":"HTTP",
-            "method":"GET",
-            "resourcePath":"wiki/München"
-         }
-         },
-         {"request2" : {
-             "protocol":"HTTP",
-             "method":"PUT",
-             "resourcePath":"put",
-             "content":"Lorem Ipsum"
-         }
-         },
-         {"request3": {
-            "protocol":"FTP",
-            "method": "GET",
-            "localResource": "FTPTest",
-            "remoteResource": "wordpress/wp-admin/upload/upload.php?item=5843",
-             "username":"admin",
-             "password":"adminpassword"
-         }
-         },
-         {"request4" : {
-             "protocol":"UDP",
-             "content":"Lorem Ipsum"
-         }
-         },
-         {"request5" : {
-             "protocol":"TCP",
-             "content":"Lorem Ipsum"
-         }
-         },
-         {"request6" : {
-             "protocol":"BFT",
-             "sender":1,
-             "session":1,
-             "sequence":0,
-             "operationID":0,
-             "content":"test",
-             "view":0,
-             "requestType":"unordered"
-         }
-         }
+    {
+      "id": "request1",
+      "protocol": "BFTSMaRt",
+      "type": "ordered",
+      "command": {
+          "type": "ObjectOutputStream",
+          "content": "01:EnumObject,02:String,03:String",
+          "03": "mapDemo",
+          "02": "foo",
+          "01": {
+            "path": "src\main\resources\BFT-SMaRt\library\bin",
+            "classname": "bftsmart.demo.map.MapRequestType",
+            "type": "put"
+          }
+      }
+    }
   ],
-  "schedule": {
-        "frames": [
-            { "frame1": {
-                "events": [
-                    {"event1": {
-                      "target":"target1", "request":"request4", "time":100
-                    }
-                    },
-                    {"event2": {
-                        "target":"target1", "request":"request5", "time":100
-                    }
-                    },
-                    {"event3": {
-                      "target":"target1", "request":"request4", "time":200
-                    }
-                    },
-                    {"event4": {
-                      "target":"target1", "request":"request4", "time":200
-                    }
-                    }
-                ]
-            }},
-            { "frame2": {
-                "events": [
-                    {"event1": {
-                      "target":"target4", "request":"request3", "time":100
-                    }
-                    },
-                    {"event2": {
-                        "target":"target4", "request":"request3", "time":200
-                    }
-                    },
-                    {"event3": {
-                      "target":"target4", "request":"request4", "time":200
-                    }
-                    }
-                ]
-            }},
-            { "frame3": {
-                "events": [
-                    {"event1": {
-                      "target":"target2", "request":"request1", "time":1000
-                    }
-                    },
-                    {"event2": {
-                        "target":"target3", "request":"request1", "time":1000
-                    }
-                    },
-                    {"event3": {
-                        "target":"target2", "request":"request2", "time":3000
-                    }
-                    },
-                    {"event4": {
-                        "target":"target3", "request":"request2", "time":3000
-                    }
-                    }
-                ]
-            }},
-            { "frame4": {
-                "events": [
-                    {"event1": {
-                      "target":"target1", "request":"request6", "time":10
-                    }
-                    }
-                ]
-            }}
-        ]
+ "schedule": {
+    "frames": [
+      {
+        "id": "frame1",
+        "events": [
+          {
+             "id": "event1",
+             "request": "request1",
+             "target": "group1",
+             "time": 1000
+          }
+        ],
+        "options": {
+          "transmissionType": "parallel",
+          "iterations": 1,
+          "requestsNumber": {
+              "growth": "linear",
+              "linearGrowthFactor": 1
+          },
+          "frequency": {
+              "mode": "increase",
+              "factor": 1
+          }
+        }
+      }
+    ]
   }
 }

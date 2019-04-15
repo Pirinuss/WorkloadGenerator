@@ -1,4 +1,4 @@
-package wg.workload.parser;
+package wg.parser;
 
 import wg.WorkloadGeneratorException;
 

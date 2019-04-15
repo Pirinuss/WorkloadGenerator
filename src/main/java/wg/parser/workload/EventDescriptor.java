@@ -1,4 +1,4 @@
-package wg.workload;
+package wg.parser.workload;
 
 import wg.requests.Request;
 

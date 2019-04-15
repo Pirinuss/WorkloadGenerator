@@ -62,6 +62,17 @@
                   "requestsNumber": {"growth": "fibonacci"},
                   "frequency": {"mode":"increase", "factor": 1}
               }
+            },
+            { "id":"frame1", 
+              "events": [
+                  {"id":"event1", "target":"group3", "request":"request1", "time":1000},
+              ],
+              "options": {
+                  "transmissionType":"parallel",
+                  "iterations":1,
+                  "requestsNumber": {"growth": "fibonacci"},
+                  "frequency": {"mode":"increase", "factor": 1}
+              }
             }
         ]
   }

@@ -10,10 +10,10 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wg.Execution.WorkloadExecutionException;
+import wg.executor.WorkloadExecutionException;
+import wg.parser.workload.Target;
 import wg.responses.FtpResponse;
 import wg.responses.Response;
-import wg.workload.Target;
 
 public class FtpRequest extends Request implements Callable<Response[]> {
 
