@@ -1,84 +1,74 @@
 {
-	"targets": [
-		{
-			"id": "target1",
-			"server": "localhost",
-			"port": 11000
-		},
-		{
-			"id": "target2",
-			"server": "127.0.0.1",
-			"port": 11010
-		},
-		{
-			"id": "target3",
-			"server": "localhost",
-			"port": 11020
-		},
-		{
-			"id": "target4",
-			"server": "localhost",
-			"port": 11030
-		}
-	],
-	"requests": [
-		{
-			"id": "request1",
-			"protocol": "BFTSMaRt",
-			"command": {
-				"type": "ByteArray",
-				"content": "1nientiren"
-			},
-			"type": "ordered",
-			"targetGroup": [
-				"target1",
-				"target2",
-				"target3",
-				"target4"
-			]
-		},
-		{
-			"id": "request2",
-			"protocol": "BFTSMaRt",
-			"command": {
-				"type": "ByteObjectStream",
-				"content": "01:Int",
-				"01": 1
-			},
-			"type": "ordered",
-			"targetGroup": [
-				"target1",
-				"target2",
-				"target3",
-				"target4"
-			]
-		}
-	],
-	"schedule": {
-		"frames": [
-			{
-				"id": "frame1",
-				"events": [
-					{
-						"id": "event1",
-						"request": "request1",
-						"time": 1000
-					}
-				],
-				"options": {
-					"transmissionType": "parallel",
-					"requestsNumber": {
-						"growth": "linear",
-						"linearGrowthFactor": 50,
-						"steps": 10
-					},
-					"frequency": {
-						"mode": "increase",
-						"factor": 1,
-						"steps": 1
-					}
-				}
-			}
-		]
-	}
+  "targetGroups": [
+        {"id":"group1",
+         "targets": [
+             {"server":"localhost", "port":11000},
+             {"server":"127.0.0.1", "port":11010},
+             {"server":"localhost", "port":11020},
+             {"server":"localhost", "port":11030}
+         ]
+        }
+  ],     
+  "requests": [
+        {"id":"request1",
+         "protocol":"BFTSMaRt",
+         "command": {
+            "type":"DataOutputStream",
+            "content":"1"
+         },
+         "type":"ordered"
+         },
+         {"id":"request2",
+          "protocol":"BFTSMaRt",
+          "command": {
+             "type":"ObjectOutputStream",
+             "content":"01:EnumObject,02:String,03:String",
+             "03":"Montagstest5",
+             "02":"test",
+             "01": {
+                "path":"C:\Users\Marc\Documents\Uni\Bachelorarbeit\Bachelorarbeit\BFT-SMaRt\library\bin",
+                "classname":"bftsmart.demo.map.MapRequestType",
+                "type":"put"
+             }
+          },
+          "type":"ordered",
+         },
+         {"id":"request3",
+          "protocol":"BFTSMaRt",
+          "type":"ordered",
+          "command": {
+              "type":"ObjectOutputStream",
+              "content":"01:Object",
+              "01": {
+                  "path":"src/main/resources",
+                  "classname":"testInput",
+                  "constructor":"01:String,02:String",
+                  "01":4,
+                  "02":"hallo"
+              } 
+          }
+         },
+         {"id":"request4",
+          "protocol":"bftsmart-microbenchmark",
+          "type":"unordered",
+          "numberOfOperations":2,
+          "requestSize":1,
+          "interval":10
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "id":"frame1", 
+              "events": [
+                  {"id":"event1", "request":"request4", "target":"group1", "time":1000}
+              ],
+             "options": {
+                  "transmissionType":"parallel",
+                  "iterations":1,
+                  "requestsNumber": {"growth":"linear", "linearGrowthFactor":2},
+                  "frequency": {"mode":"increase", "factor": 3}
+              }
+            }
+        ]
+  }
 }

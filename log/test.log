@@ -6458,3 +6458,6 @@ java.lang.NullPointerException
 2019-04-12 11:49:13,316 ERROR wg.parser.WorkloadParser [main] No options found in JSON input
 2019-04-12 11:49:13,316 ERROR wg.parser.WorkloadParser [main] No options fround in JSON input!
 2019-04-12 11:49:39,974 INFO wg.App [main] Start Workload Generator
+2019-04-18 16:16:39,148 INFO wg.App [main] Start Workload Generator
+2019-04-18 16:16:39,179 ERROR wg.parser.WorkloadParser [main] src\main\resources\SpecificationExample.json (Das System kann die angegebene Datei nicht finden)
+2019-04-18 16:17:30,215 INFO wg.App [main] Start Workload Generator
