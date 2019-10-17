@@ -1,0 +1,53 @@
+{
+  "targetGroups": [
+        {"id":"group1",
+         "targets": [
+             {"server":"localhost", "port":11000},
+             {"server":"127.0.0.1", "port":11010},
+             {"server":"localhost", "port":11020},
+             {"server":"localhost", "port":11030}
+         ]
+        }
+  ],     
+  "requests": [
+        {"id":"request1",
+         "protocol":"BFTSMaRt",
+         "command": {
+            "type":"DataOutputStream",
+            "content":"HelloWorld"
+         },
+         "type":"ordered"
+         },
+         {"id":"request2",
+          "protocol":"BFTSMaRt",
+          "command": {
+             "type":"ObjectOutputStream",
+             "content":"01:EnumObject,02:String,03:String",
+             "03":"Hello World",
+             "02":"example",
+             "01": {
+                "path":"--Add the path of the class here-- ",
+                "classname":"--Add the name of the class here--",
+                "type":"--Add the enum type here--"
+             }
+          },
+          "type":"ordered",
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "id":"frame1", 
+              "events": [
+                  {"id":"simpleRequest", "request":"request1", "target":"group1", "time":1000},
+                  {"id":"enumTest", "request":"request2", "target":"group1", "time":5000}
+              ],
+             "options": {
+                  "transmissionType":"parallel",
+                  "iterations":3,
+                  "requestsNumber": {"growth":"linear", "linearGrowthFactor":2},
+                  "frequency": {"mode":"increase", "factor": 3}
+              }
+            }
+        ]
+  }
+}

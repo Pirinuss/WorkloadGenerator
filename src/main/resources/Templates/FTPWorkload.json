@@ -1,0 +1,33 @@
+{
+  "targetGroups": [
+        {"id":"group1",
+         "targets": [
+             {"server":"ftp.dlptest.com", "port":21}
+         ]
+        }
+  ],         
+  "requests": [
+         {"id":"request1",
+          "protocol":"FTP",
+          "method":"PUT",
+          "localResource": "--Add the local resource path here--",
+          "remoteResource": "FTPTest.txt",
+          "username":"dlpuser@dlptest.com",
+          "password":"5p2tvn92R0di8FdiLCfzeeT0b",
+          "numberOfClients":1
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "id":"FTPTest", 
+              "events": [
+                  {"id":"FTPTest1", "target":"group1", "request":"request1", "time":1000},
+              ],
+              "options": {
+                  "transmissionType":"parallel",
+                  "iterations":1
+              }
+            }
+        ]
+  }
+}

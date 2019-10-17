@@ -1,0 +1,82 @@
+{
+  "targetGroups": [
+        {"id":"group1",
+         "targets": [
+             {"server":"localhost", "port":11000},
+             {"server":"127.0.0.1", "port":11010},
+             {"server":"localhost", "port":11020},
+             {"server":"localhost", "port":11030}
+         ]
+        }
+  ],     
+  "requests": [
+        {"id":"request1",
+         "protocol":"BFTSMaRt",
+         "command": {
+            "type":"DataOutputStream",
+            "content":"HelloWorld"
+         },
+         "type":"ordered"
+         },
+         {"id":"request2",
+          "protocol":"BFTSMaRt",
+          "command": {
+             "type":"ObjectOutputStream",
+             "content":"01:EnumObject,02:String,03:String",
+             "03":"Hello World",
+             "02":"example",
+             "01": {
+                "path":"C:\Users\Marc\Documents\Uni\Bachelorarbeit\Bachelorarbeit\BFT-SMaRt\library\bin",
+                "classname":"bftsmart.demo.map.MapRequestType",
+                "type":"put"
+             }
+          },
+          "type":"ordered",
+         },
+        {"id":"request2.1",
+          "protocol":"BFTSMaRt",
+          "command": {
+             "type":"ObjectOutputStream",
+             "content":"01:EnumObject,02:String",
+             "02":"example",
+             "01": {
+                "path":"C:\Users\Marc\Documents\Uni\Bachelorarbeit\Bachelorarbeit\BFT-SMaRt\library\bin",
+                "classname":"bftsmart.demo.map.MapRequestType",
+                "type":"get"
+             }
+          },
+          "type":"unordered",
+         },
+         {"id":"request3",
+          "protocol":"BFTSMaRt",
+          "type":"ordered",
+          "command": {
+              "type":"ObjectOutputStream",
+              "content":"01:Object",
+              "01": {
+                  "path":"src/main/resources",
+                  "classname":"testInput",
+                  "constructor":"01:String,02:String",
+                  "01":4,
+                  "02":"hallo"
+              } 
+          }
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "id":"frame1", 
+              "events": [
+                  {"id":"putValue", "request":"request2", "target":"group1", "time":1000},
+                  {"id":"getValue", "request":"request2.1", "target":"group1", "time":5000}
+              ],
+             "options": {
+                  "transmissionType":"parallel",
+                  "iterations":1,
+                  "requestsNumber": {"growth":"linear", "linearGrowthFactor":2},
+                  "frequency": {"mode":"increase", "factor": 3}
+              }
+            }
+        ]
+  }
+}

@@ -1,0 +1,16 @@
+
+2019-05-06 17:55:34,494 INFO wg.App [main] Start Workload Generator
+2019-05-06 17:59:51,993 INFO wg.App [main] Start Workload Generator
+2019-05-06 18:00:03,224 ERROR wg.requests.FtpRequest [pool-2-thread-2] Socket closed
+2019-05-06 18:01:32,717 INFO wg.App [main] Start Workload Generator
+2019-05-06 18:01:32,754 ERROR wg.parser.WorkloadParser [main] No options found in JSON input
+2019-05-06 18:01:32,754 ERROR wg.parser.WorkloadParser [main] No options fround in JSON input!
+2019-05-06 18:01:54,048 INFO wg.App [main] Start Workload Generator
+2019-05-06 18:02:05,416 INFO wg.App [main] Start Workload Generator
+2019-05-06 19:19:17,444 INFO wg.App [main] Start Workload Generator
+2019-05-06 19:19:18,995 ERROR wg.requests.FtpRequest [pool-2-thread-1] --Add the local resource path here-- (Das System kann die angegebene Datei nicht finden)
+2019-05-06 19:19:33,748 INFO wg.App [main] Start Workload Generator
+2019-05-06 20:00:59,891 INFO wg.App [main] Start Workload Generator
+2019-10-17 19:51:29,937 INFO wg.App [main] Start Workload Generator
+2019-10-17 19:51:49,777 INFO wg.App [main] Start Workload Generator
+2019-10-17 19:53:29,037 INFO wg.App [main] Start Workload Generator
