@@ -29,7 +29,7 @@ public class WorkloadResult {
 		endTimes.put(frame, endTime);
 	}
 
-	public void printResponses(boolean printInDetail) {
+	public void printResults(boolean printInDetail) {
 		for (Entry<Frame, ArrayList<Response>> entry : results.entrySet()) {
 			Frame frame = entry.getKey();
 			ArrayList<Response> frameResults = entry.getValue();

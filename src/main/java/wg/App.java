@@ -44,7 +44,7 @@ public class App {
 			try {
 				workload = workloadParser.parseWorkload(path);
 				result = executor.executeWorkload(workload);
-				result.printResponses(printInDetail);
+				result.printResults(printInDetail);
 			} catch (WorkloadParserException e) {
 				throw new WorkloadGeneratorException(
 						"Error while parsing workload", e);

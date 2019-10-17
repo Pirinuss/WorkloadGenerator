@@ -1,0 +1,72 @@
+{
+  "targetGroups": [
+        {"id":"group1",
+         "targets": [
+             {"server":"localhost", "port":23}
+         ]
+        },
+        {"id":"group2",
+         "targets": [
+             {"server":"www.bridge2ppm.de"},
+             {"server":"httpbin.org", "port":8080}
+         ]
+        },
+        {"id":"group3",
+         "targets": [
+             {"server":"www.n-tv.de"}
+         ]
+        },
+        {"id":"group4",
+         "targets": [
+             {"server":"ftp.dlptest.com", "port":21}
+         ]
+        },
+        {"id":"group5",
+         "targets": [
+             {"server":"www.uni-passau.de"}
+         ]
+        }
+  ],         
+  "requests": [
+         {"id":"request1",
+          "protocol":"HTTP",
+          "method":"GET",
+          "resourcePath":"index.php?id=17434",
+          "numberOfClients":5
+         },
+         {"id":"request2",
+          "protocol":"HTTP",
+          "method":"GET",
+          "numberOfClients":1
+         },
+         {"id":"request3",
+          "protocol":"UDP",
+          "content":"Testnachricht",
+          "numberOfClients":4
+         },
+         {"id":"request4",
+          "protocol":"FTP",
+          "method":"PUT",
+          "localResource": "src/main/resources/testNeu.txt",
+          "remoteResource": "testNeu.txt",
+          "username":"dlpuser@dlptest.com",
+          "password":"puTeT3Yei1IJ4UYT7q0r",
+          "numberOfClients":2
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "id":"UniPassauWebsiteTest", 
+              "events": [
+                  {"id":"UniPassauWebsite", "target":"group5", "request":"request2", "time":1000},
+              ],
+              "options": {
+                  "transmissionType":"parallel",
+                  "iterations":5,
+                  "requestsNumber": {"growth": "fibonacci"},
+                  "frequency": {"mode":"increase", "factor": 2}
+              }
+            }
+        ]
+  }
+}

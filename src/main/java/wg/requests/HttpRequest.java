@@ -138,7 +138,8 @@ public class HttpRequest extends Request {
 					"Error while executing HTTP request!", e);
 		}
 		long endTime = System.currentTimeMillis();
-		return new HttpResponseObject(startTime, endTime, target, response, failed);
+		return new HttpResponseObject(startTime, endTime, target, response,
+				failed, uri);
 	}
 
 	private URI getUri(Target target) throws WorkloadExecutionException {

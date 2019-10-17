@@ -1,0 +1,38 @@
+{
+  "targetGroups": [
+        {"id":"group1",
+         "targets": [
+             {"server":"www.uni-passau.de"}
+         ]
+        }
+  ],         
+  "requests": [
+         {"id":"request1",
+          "protocol":"HTTP",
+          "method":"GET",
+          "resourcePath":"index.php?id=17434",
+          "numberOfClients":3
+         },
+         {"id":"request2",
+          "protocol":"HTTP",
+          "method":"GET",
+          "numberOfClients":1
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "id":"UniPassauWebsiteTest", 
+              "events": [
+                  {"id":"UniPassauWebsiteTest1", "target":"group1", "request":"request1", "time":1000},
+                  {"id":"UniPassauWebsiteTest2", "target":"group1", "request":"request2", "time":3000}
+              ],
+              "options": {
+                  "transmissionType":"parallel",
+                  "iterations":3,
+                  "requestsNumber": {"growth": "fibonacci"},
+                  "frequency": {"mode":"increase", "factor": 2}
+              }
+            }
+        ]
+  }
+}

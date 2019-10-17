@@ -105,8 +105,8 @@ public class Executor {
 						frame.getOptions().getRequestsOption(), s);
 				for (int r = 0; r < repetitions; r++) {
 					long dif = System.currentTimeMillis() - startTime;
-					log.debug("Event: " + nextEvent.getEventID()
-							+ " executed at: " + dif);
+					log.debug("Iteration: " + (s+1) + ", Event: " + nextEvent.getEventID()
+							+ ", executed at: " + dif);
 
 					Future<Response[]> response = executeEvent(nextEvent);
 					futures.add(response);

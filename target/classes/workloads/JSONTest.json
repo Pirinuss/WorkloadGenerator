@@ -1,0 +1,79 @@
+{
+  "targets": [
+         {"target1": {
+            "servername":"www.httpbin.org",
+            "port":"8080"
+         }
+         },
+         {"target2": {
+            "servername":"www.bridge2ppm.de",
+            "port":"8080"
+         }
+         },
+         {"target3": {
+             "servername":"localhost",
+             "port":"4567"
+         }
+         },
+         {"target4": {
+            "servername":"ftp.dlptest.com",
+             "port":"21"
+         } 
+         }
+  ],
+  "requests": [
+         {"request1": {
+            "protocol":"HTTP",
+            "method":"POST",
+            "resourcePath":"post"
+         }
+         },
+         {"request2": {
+            "protocol":"HTTP",
+            "method":"GET",
+            "resourcePath":"",
+            "content":"test"
+         }
+         },
+         {"request3": {
+            "protocol":"TCP",
+            "content":"Testnachricht"
+         }
+         },
+         {"request4": {
+            "protocol":"FTP",
+            "method": "PUT",
+            "localResource": "testNeu.txt",
+            "remoteResource": "testNeu.txt",
+             "username":"dlpuser@dlptest.com",
+             "password":"e73jzTRTNqCN9PYAAjjn" 
+         }
+         }
+  ],
+  "schedule": {
+        "frames": [
+            { "frame1": {
+                "mode": "repeat",
+                "events": [
+                    {"event1": {
+                      "target":"target4", "request":"request4", "time":1000
+                    }
+                    },
+                    {"event2": {
+                      "target":"target1", "request":"request1", "time":2000
+                    }
+                    },
+                    {"event3": {
+                      "target":"target1", "request":"request2", "time":3000, "repetitions":2
+                    }
+                    },
+                    {"event4": {
+                      "target":"target2", "request":"request2", "time":4000, "repetitions":2
+                    }
+                    }
+                ]
+            }
+            }
+        ]
+  }
+}

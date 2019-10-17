@@ -23,13 +23,7 @@ import wg.parser.workload.options.GrowthType;
 import wg.parser.workload.options.Options;
 import wg.parser.workload.options.RequestsOption;
 import wg.parser.workload.options.TransmissionType;
-import wg.requests.FtpRequest;
-import wg.requests.HttpRequest;
 import wg.requests.Request;
-import wg.requests.TcpRequest;
-import wg.requests.UdpRequest;
-import wg.requests.bftsmart.BftsmartMicrobenchmarkRequest;
-import wg.requests.bftsmart.BftsmartRequest;
 
 public class WorkloadParser {
 
@@ -152,24 +146,7 @@ public class WorkloadParser {
 			throw new IllegalArgumentException("Protocol must not be null!");
 		}
 
-		// TODO Auslagern in ProtocolType
-		switch (protocol.toLowerCase()) {
-
-		case "http":
-			return new HttpRequest(requestContent);
-		case "ftp":
-			return new FtpRequest(requestContent);
-		case "tcp":
-			return new TcpRequest(requestContent);
-		case "udp":
-			return new UdpRequest(requestContent);
-		case "bftsmart":
-			return new BftsmartRequest(requestContent);
-		case "bftsmart-microbenchmark":
-			return new BftsmartMicrobenchmarkRequest(requestContent);
-		default:
-			throw new IllegalArgumentException("Unknown protocol");
-		}
+		return ProtocolType.getRequestFromString(protocol, requestContent);
 
 	}
 

@@ -1,7 +1,5 @@
 package wg.responses;
 
-import java.util.Arrays;
-
 import wg.parser.workload.Target;
 
 public class BftsmartResponse extends Response {
@@ -21,13 +19,13 @@ public class BftsmartResponse extends Response {
 
 		// @formatter:off
 		System.out.println("     Number of targets: " + targetGroup.length);
-		System.out.println("     Execution time: " + getRTT());
+		System.out.println("     Execution time (in milliseconds): " + getRTT());
 		if (reply == null) {
 			System.out.println("     No reply received");
 		} else {
 			System.out.println("     Reply length: " + reply.length);
 			if (reply.length < MAX_LENGTH_FOR_PRINT) {
-				System.out.println("     Reply: " + Arrays.toString(reply));
+				System.out.println("     Reply: " + new String(reply));
 			}
 		}
 		// @formatter:on

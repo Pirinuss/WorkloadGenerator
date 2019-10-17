@@ -31,10 +31,10 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 	private final AsynchServiceProxy[] asynchClients;
 
 	/**
-	 * The time (in milliseconds) a BFTSMaRt client will wait for responses before
+	 * The time (seconds) a BFTSMaRt client will wait for responses before
 	 * returning null
 	 */
-	private static final int BFTSMaRt_TIMEOUT = 2000;
+	private static final int BFTSMaRt_TIMEOUT = 20;
 
 	public BftsmartRequest(JSONObject object) throws WorkloadParserException {
 
@@ -126,7 +126,15 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 
 	private Response executeSinlgeRequest(int clientIndex, Target[] targets)
 			throws WorkloadExecutionException {
-		
+
+		if (isSynch) {
+			synchClients[clientIndex] = new ServiceProxy(clientIndex);
+			synchClients[clientIndex].setInvokeTimeout(BFTSMaRt_TIMEOUT);
+		} else {
+			asynchClients[clientIndex] = new AsynchServiceProxy(clientIndex);
+			asynchClients[clientIndex].setInvokeTimeout(BFTSMaRt_TIMEOUT);
+		}
+
 		boolean failed = false;
 
 		byte[] reply = null;
@@ -138,30 +146,32 @@ public class BftsmartRequest extends Request implements Callable<Response[]> {
 			if (type.toUpperCase().equals("ORDERED")) {
 				if (isSynch) {
 					reply = synchClients[clientIndex].invokeOrdered(byteOut);
+					synchClients[clientIndex].close();
 				} else {
 					reply = asynchClients[clientIndex].invokeOrdered(byteOut);
+					asynchClients[clientIndex].close();
 				}
 			} else {
 				if (isSynch) {
 					reply = synchClients[clientIndex].invokeUnordered(byteOut);
+					synchClients[clientIndex].close();
 				} else {
 					reply = asynchClients[clientIndex].invokeUnordered(byteOut);
+					asynchClients[clientIndex].close();
 				}
 			}
+
 		} catch (RuntimeException e) {
 			throw new WorkloadExecutionException(
 					"Error while executing BFTSMaRt request!", e);
 		}
 		long endTime = System.currentTimeMillis();
 
-		if (reply == null || reply.length == 0) {
+		if (reply == null) {
 			log.error("No reply received for BFTSMaRt request!");
 			failed = true;
 			reply = null;
-		} else {
-			System.out.println(new String(reply));
 		}
-		
 
 		return new BftsmartResponse(startTime, endTime, targets, reply, failed);
 
